@@ -109,14 +109,20 @@ export default function TopNavbar({ onMenuToggle }: TopNavbarProps) {
                 <p className="text-[10px] text-gray-400">admin@keliri.com</p>
               </div>
               <div className="py-1">
-                <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                <button 
+                  onClick={() => { navigate('/profile'); setProfileOpen(false) }}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                >
                   <User size={14} /> Profile
                 </button>
-                <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                <button 
+                  onClick={() => { navigate('/settings'); setProfileOpen(false) }}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                >
                   <Settings size={14} /> Settings
                 </button>
                 <button
-                  onClick={() => navigate('/')}
+                  onClick={() => { navigate('/'); setProfileOpen(false) }}
                   className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
                 >
                   <LogOut size={14} /> Sign Out

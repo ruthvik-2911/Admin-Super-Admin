@@ -39,7 +39,7 @@ export default function Revenue() {
       </div>
 
       {/* ── KPI Grid ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 scroll-animate delay-75">
         <KpiCard
           title="Total Revenue"
           value="12,45,800"
@@ -81,7 +81,7 @@ export default function Revenue() {
       </div>
 
       {/* ── Charts Row ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6 scroll-animate delay-150">
         <div className="xl:col-span-2">
           {/* Re-use RevenueChart from Dashboard but as full block */}
           <RevenueChart />
@@ -92,7 +92,7 @@ export default function Revenue() {
       </div>
 
       {/* ── Transactions Table Row ── */}
-      <div className="grid grid-cols-1">
+      <div className="grid grid-cols-1 scroll-animate delay-200">
         <TransactionsTable />
       </div>
     </div>

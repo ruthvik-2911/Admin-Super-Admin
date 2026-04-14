@@ -55,9 +55,9 @@ export default function Transactions() {
   })
 
   return (
-    <div className="space-y-6 pb-6 max-w-[1400px] mx-auto animate-fade-in">
+    <div className="space-y-6 pb-6 max-w-[1400px] mx-auto">
       {/* ── Page Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 scroll-animate delay-75">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">All Transactions</h1>
           <p className="text-sm text-gray-500 mt-0.5">
@@ -73,7 +73,7 @@ export default function Transactions() {
       </div>
 
       {/* ── Filter Bar ── */}
-      <div className="glass-card p-4 flex flex-col md:flex-row gap-4 items-center justify-between relative z-20">
+      <div className="glass-card p-4 flex flex-col md:flex-row gap-4 items-center justify-between relative z-20 scroll-animate delay-150">
         {/* Search */}
         <div className="relative w-full md:max-w-xs">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -193,7 +193,7 @@ export default function Transactions() {
       </div>
 
       {/* ── Data Table ── */}
-      <div className="glass-card flex-1 overflow-hidden flex flex-col p-0">
+      <div className="glass-card flex-1 overflow-hidden flex flex-col p-0 scroll-animate delay-300">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead className="bg-gray-50/50">

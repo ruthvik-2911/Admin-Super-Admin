@@ -155,7 +155,7 @@ export default function Dashboard() {
     <div className="space-y-6 pb-6 max-w-[1400px] mx-auto">
 
       {/* ── Page Header ── */}
-      <div className="flex items-center justify-between pt-1">
+      <div className="flex items-center justify-between pt-1 scroll-animate delay-75 relative z-30">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
           <p className="text-sm text-gray-500 mt-0.5">
@@ -181,8 +181,8 @@ export default function Dashboard() {
           {visibleKpis.map((kpi, i) => (
             <div
               key={kpi.id}
-              className="animate-fade-in"
-              style={{ animationDelay: `${i * 50}ms` }}
+              className="scroll-animate"
+              style={{ transitionDelay: `${i * 50 + 100}ms` }}
             >
               <KpiCard
                 title={kpi.title}
@@ -206,7 +206,7 @@ export default function Dashboard() {
       )}
 
       {/* ── Charts Row ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6 scroll-animate delay-200">
         <div className="xl:col-span-2">
           <RevenueChart />
         </div>
@@ -216,7 +216,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── Bottom Row ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6 scroll-animate delay-300">
         <div className="xl:col-span-2">
           <TopAdminsTable />
         </div>

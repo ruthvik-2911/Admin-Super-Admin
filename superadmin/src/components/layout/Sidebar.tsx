@@ -44,10 +44,19 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const navigate = useNavigate()
 
   return (
-    <aside
-      className={`relative flex flex-col bg-white shadow-sidebar transition-all duration-300 ease-in-out h-full flex-shrink-0
-        ${collapsed ? 'w-[72px]' : 'w-[240px]'}`}
-    >
+    <>
+      {/* Mobile Backdrop */}
+      {!collapsed && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-30 animate-fade-in"
+          onClick={onToggle}
+        />
+      )}
+      
+      <aside
+        className={`fixed lg:relative flex flex-col bg-white shadow-sidebar transition-all duration-300 ease-in-out h-full flex-shrink-0 z-40
+          ${collapsed ? '-translate-x-full lg:translate-x-0 lg:w-[72px]' : 'translate-x-0 w-[240px]'}`}
+      >
       {/* Logo */}
       <div className={`flex items-center h-16 px-4 border-b border-gray-100 ${collapsed ? 'justify-center' : 'gap-3'}`}>
         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -64,8 +73,8 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Toggle button */}
       <button
         onClick={onToggle}
-        className="absolute -right-3 top-[72px] z-10 w-6 h-6 bg-white border border-gray-200 rounded-full
-                   flex items-center justify-center shadow-sm hover:bg-primary-50 hover:border-primary-200
+        className="hidden lg:flex absolute -right-3 top-[72px] z-10 w-6 h-6 bg-white border border-gray-200 rounded-full
+                   items-center justify-center shadow-sm hover:bg-primary-50 hover:border-primary-200
                    transition-all duration-200 text-gray-500 hover:text-primary-600"
       >
         {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
@@ -123,6 +132,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Footer */}
       <div className="border-t border-gray-100 p-2 space-y-1">
         <button
+          onClick={() => navigate('/settings')}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                      text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200
                      ${collapsed ? 'justify-center' : ''}`}
@@ -141,5 +151,6 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </button>
       </div>
     </aside>
+    </>
   )
 }

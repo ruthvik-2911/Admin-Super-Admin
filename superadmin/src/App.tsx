@@ -3,6 +3,8 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Revenue from './pages/Revenue'
 import Transactions from './pages/Transactions'
+import Profile from './pages/Profile'
+import Settings from './pages/Settings'
 import DashboardLayout from './components/layout/DashboardLayout'
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/revenue" element={<Revenue />} />
           <Route path="/transactions" element={<Transactions />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
