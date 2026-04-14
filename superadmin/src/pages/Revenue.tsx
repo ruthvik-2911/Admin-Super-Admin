@@ -19,7 +19,7 @@ export default function Revenue() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Revenue Management</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            Financial analytics and payouts · {today}
+            Complete financial analytics and revenue tracking · {today}
           </p>
         </div>
 
@@ -60,14 +60,14 @@ export default function Revenue() {
           changeLabel="vs last month"
         />
         <KpiCard
-          title="Pending Payouts"
-          value="45,000"
-          change={-2.1}
+          title="Projected Revenue"
+          value="1,85,000"
+          change={12.5}
           icon={Wallet}
-          iconBg="bg-yellow-100"
-          iconColor="text-yellow-600"
+          iconBg="bg-indigo-50"
+          iconColor="text-indigo-600"
           prefix="₹"
-          changeLabel="To be cleared"
+          changeLabel="Forecast for this month"
         />
         <KpiCard
           title="Total Transactions"

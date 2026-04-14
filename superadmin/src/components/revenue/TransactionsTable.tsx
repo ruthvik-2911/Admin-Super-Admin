@@ -18,7 +18,7 @@ export default function TransactionsTable() {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h3 className="text-sm font-semibold text-gray-900">Recent Transactions</h3>
-          <p className="text-xs text-gray-400 mt-0.5">Platform payments and payouts</p>
+          <p className="text-xs text-gray-400 mt-0.5">Detailed record of incoming revenue</p>
         </div>
         <div className="flex gap-2">
           <button className="bg-gray-50 border border-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-gray-100 transition-colors">

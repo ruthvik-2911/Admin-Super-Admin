@@ -11,6 +11,7 @@ import PublisherMonitoring from './pages/PublisherMonitoring'
 import AdvertisementMonitoring from './pages/AdvertisementMonitoring'
 import Analytics from './pages/Analytics'
 import Tickets from './pages/Tickets'
+import SubAdminManagement from './pages/SubAdminManagement'
 import DashboardLayout from './components/layout/DashboardLayout'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/ads" element={<AdvertisementMonitoring />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/tickets" element={<Tickets />} />
+          <Route path="/sub-admins" element={<SubAdminManagement />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

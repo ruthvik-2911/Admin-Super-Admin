@@ -219,17 +219,17 @@ export const mockTickets = [
   },
   {
     id: 'TKT-1002',
-    subject: 'Payout delayed for March cycle',
+    subject: 'Account verification delay',
     status: 'In Progress',
     priority: 'Urgent',
-    category: 'Payment',
+    category: 'Technical',
     userName: 'Metro Station Screens',
     userType: 'Publisher',
     lastUpdated: '15 mins ago',
     createdDate: '2024-04-13',
     messages: [
-      { id: 'm1', sender: 'Metro Station Screens', text: 'Our payout for the March advertisement cycle is still pending. Usually it is cleared by 5th. Please check.', timestamp: 'Yesterday', isMe: false },
-      { id: 'm2', sender: 'Super Admin', text: 'Checking with the finance department. Will update shortly.', timestamp: '9:00 AM', isMe: true },
+      { id: 'm1', sender: 'Metro Station Screens', text: 'Our account verification for the new location is still pending. We submitted the documents 3 days ago. Please check.', timestamp: 'Yesterday', isMe: false },
+      { id: 'm2', sender: 'Super Admin', text: 'Reviewing the documents now. Will update shortly.', timestamp: '9:00 AM', isMe: true },
       { id: 'm3', sender: 'Metro Station Screens', text: 'Thank you, waiting for the update.', timestamp: '9:15 AM', isMe: false }
     ]
   },
@@ -261,6 +261,69 @@ export const mockTickets = [
     messages: [
       { id: 'm1', sender: 'Sneha Gupta', text: 'Can we add support for carousel ads in the next update?', timestamp: '1 week ago', isMe: false },
       { id: 'm2', sender: 'Super Admin', text: 'Thank you for the feedback. We will consider this for the Q3 roadmap.', timestamp: '1 week ago', isMe: true }
+    ]
+  }
+];
+
+export const mockSubAdmins = [
+  {
+    id: 'SADM-001',
+    name: 'Karan Mehra',
+    email: 'karan@keliri.com',
+    status: 'Active',
+    lastLogin: '10 mins ago',
+    permissions: {
+      dashboard: true,
+      analytics: true,
+      admins: true,
+      publishers: true,
+      ads: true,
+      revenue: false,
+      tickets: true
+    },
+    loginActivity: [
+      { date: '2024-04-14', time: '11:20 AM', ip: '192.168.1.45', location: 'Mumbai, IN' },
+      { date: '2024-04-13', time: '09:45 PM', ip: '192.168.1.45', location: 'Mumbai, IN' },
+      { date: '2024-04-12', time: '10:15 AM', ip: '192.168.1.45', location: 'Mumbai, IN' }
+    ]
+  },
+  {
+    id: 'SADM-002',
+    name: 'Sneha Gupta',
+    email: 'sneha@keliri.com',
+    status: 'Active',
+    lastLogin: '2 hours ago',
+    permissions: {
+      dashboard: true,
+      analytics: false,
+      admins: false,
+      publishers: false,
+      ads: true,
+      revenue: false,
+      tickets: true
+    },
+    loginActivity: [
+      { date: '2024-04-14', time: '09:15 AM', ip: '103.24.12.56', location: 'Delhi, IN' },
+      { date: '2024-04-13', time: '02:30 PM', ip: '103.24.12.56', location: 'Delhi, IN' }
+    ]
+  },
+  {
+    id: 'SADM-003',
+    name: 'Rahul Sharma',
+    email: 'rahul@keliri.com',
+    status: 'Suspended',
+    lastLogin: '5 days ago',
+    permissions: {
+      dashboard: false,
+      analytics: false,
+      admins: false,
+      publishers: false,
+      ads: false,
+      revenue: false,
+      tickets: false
+    },
+    loginActivity: [
+      { date: '2024-04-09', time: '04:20 PM', ip: '172.16.0.8', location: 'Bangalore, IN' }
     ]
   }
 ];

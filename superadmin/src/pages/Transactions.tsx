@@ -8,14 +8,11 @@ import {
 const allTransactions = [
   { id: 'TXN-9021', date: '14 Apr 2026, 11:30 AM', admin: 'Arjun Mehta', type: 'Banner Ad', amount: '₹14,500', status: 'Completed', incoming: true },
   { id: 'TXN-9022', date: '14 Apr 2026, 10:15 AM', admin: 'Priya Sharma', type: 'Video Ad', amount: '₹8,200', status: 'Completed', incoming: true },
-  { id: 'TXN-9023', date: '13 Apr 2026, 04:45 PM', admin: 'Vishal Singh', type: 'Withdrawal', amount: '₹45,000', status: 'Pending', incoming: false },
   { id: 'TXN-9024', date: '13 Apr 2026, 02:20 PM', admin: 'Sneha Patel', type: 'Thumbnail Ad', amount: '₹3,400', status: 'Failed', incoming: true },
   { id: 'TXN-9025', date: '12 Apr 2026, 09:10 AM', admin: 'Ravi Kumar', type: 'Banner Ad', amount: '₹12,800', status: 'Completed', incoming: true },
   { id: 'TXN-9026', date: '11 Apr 2026, 01:05 PM', admin: 'Neha Gupta', type: 'Sponsored List', amount: '₹22,000', status: 'Completed', incoming: true },
   { id: 'TXN-9027', date: '10 Apr 2026, 05:30 PM', admin: 'Vikram Singh', type: 'Video Ad', amount: '₹16,500', status: 'Completed', incoming: true },
-  { id: 'TXN-9028', date: '10 Apr 2026, 11:10 AM', admin: 'Vishal Singh', type: 'Withdrawal', amount: '₹30,000', status: 'Completed', incoming: false },
   { id: 'TXN-9029', date: '09 Apr 2026, 03:22 PM', admin: 'Ankit Desai', type: 'Banner Ad', amount: '₹5,600', status: 'Completed', incoming: true },
-  { id: 'TXN-9030', date: '08 Apr 2026, 02:15 PM', admin: 'Arjun Mehta', type: 'Withdrawal', amount: '₹15,000', status: 'Failed', incoming: false },
 ]
 
 export default function Transactions() {
@@ -43,8 +40,8 @@ export default function Transactions() {
 
   // Simple filtering
   const filteredTx = allTransactions.filter(tx => {
-    const matchSearch = tx.id.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        tx.admin.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchSearch = tx.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tx.admin.toLowerCase().includes(searchTerm.toLowerCase())
     const matchStatus = filterStatus === 'All' || tx.status === filterStatus
     const matchType = filterType === 'All' || tx.type === filterType
     let matchDirection = true
@@ -61,7 +58,7 @@ export default function Transactions() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">All Transactions</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            Full history of platform payments and payouts
+            Full history of platform revenue and incoming payments
           </p>
         </div>
 
@@ -103,23 +100,10 @@ export default function Transactions() {
               <option value="Video Ad">Video Ad</option>
               <option value="Thumbnail Ad">Thumbnail Ad</option>
               <option value="Sponsored List">Sponsored List</option>
-              <option value="Withdrawal">Withdrawal</option>
             </select>
           </div>
 
-          {/* Direction Filter */}
-          <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5">
-            <Filter size={14} className="text-gray-400" />
-            <select
-              value={filterDirection}
-              onChange={(e) => setFilterDirection(e.target.value)}
-              className="bg-transparent text-sm text-gray-700 font-medium focus:outline-none cursor-pointer"
-            >
-              <option value="All">All Types & Payouts</option>
-              <option value="Incoming">Incoming (Revenue)</option>
-              <option value="Outgoing">Outgoing (Payouts)</option>
-            </select>
-          </div>
+
 
           {/* Status Filter */}
           <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5">
@@ -138,11 +122,11 @@ export default function Transactions() {
 
           {/* Date Filter */}
           <div className="relative" ref={datePickerRef}>
-            <button 
+            <button
               onClick={() => setShowDatePicker(!showDatePicker)}
               className={`flex items-center gap-2 border px-4 py-2.5 rounded-xl text-sm font-medium transition-colors
-                ${showDatePicker || dateRange !== 'Any Date' 
-                  ? 'bg-primary-50 border-primary-100 text-primary-600 shadow-sm' 
+                ${showDatePicker || dateRange !== 'Any Date'
+                  ? 'bg-primary-50 border-primary-100 text-primary-600 shadow-sm'
                   : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'}`}
             >
               <CalendarIcon size={14} className={showDatePicker || dateRange !== 'Any Date' ? 'text-primary-500' : 'text-gray-400'} />
@@ -168,12 +152,12 @@ export default function Transactions() {
                       {range}
                     </button>
                   ))}
-                  
+
                   <div className="h-px bg-gray-100 my-1 mx-2" />
-                  
+
                   <div className="p-2">
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Custom Date</p>
-                    <input 
+                    <input
                       type="date"
                       value={customDate}
                       onChange={(e) => {
