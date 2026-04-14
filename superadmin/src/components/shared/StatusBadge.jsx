@@ -18,6 +18,27 @@ const StatusBadge = ({ status }) => {
         return { style: 'bg-indigo-50 text-indigo-700 border-indigo-100', dot: 'bg-indigo-500' };
       case 'draft':
         return { style: 'bg-slate-50 text-slate-500 border-slate-200', dot: 'bg-slate-300' };
+      
+      /* Ticket Statuses */
+      case 'open':
+        return { style: 'bg-blue-50 text-blue-700 border-blue-100 glow-info', dot: 'bg-blue-500' };
+      case 'in progress':
+        return { style: 'bg-indigo-50 text-indigo-700 border-indigo-100', dot: 'bg-indigo-500' };
+      case 'resolved':
+        return { style: 'bg-emerald-50 text-emerald-700 border-emerald-100 glow-success', dot: 'bg-emerald-500' };
+      case 'closed':
+        return { style: 'bg-slate-100 text-slate-500 border-slate-200', dot: 'bg-slate-400' };
+
+      /* Priorities */
+      case 'urgent':
+        return { style: 'bg-rose-50 text-rose-700 border-rose-100 shadow-sm shadow-rose-100', dot: 'bg-rose-600 animate-pulse' };
+      case 'high':
+        return { style: 'bg-orange-50 text-orange-700 border-orange-100', dot: 'bg-orange-500' };
+      case 'medium':
+        return { style: 'bg-amber-50 text-amber-700 border-amber-100', dot: 'bg-amber-500' };
+      case 'low':
+        return { style: 'bg-emerald-50 text-emerald-600 border-emerald-100', dot: 'bg-emerald-500' };
+
       default:
         return { style: 'bg-slate-100 text-slate-700 border-slate-200', dot: 'bg-slate-400' };
     }

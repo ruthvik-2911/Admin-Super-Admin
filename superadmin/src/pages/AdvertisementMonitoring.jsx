@@ -124,14 +124,95 @@ const AdvertisementMonitoring = () => {
                 />
             </div>
 
-            <div className="card-floating p-0 overflow-hidden animate-fade-in-scale delay-200">
-                <DataTable 
-                    columns={columns} 
-                    data={filteredData} 
-                    isLoading={isLoading}
-                    onRowClick={(row) => { setSelectedAd(row); setIsDrawerOpen(true); }}
-                    className="hover-glow-border"
-                />
+            {/* Ads Grid View */}
+            <div className="animate-fade-in-scale delay-200">
+                {isLoading ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                            <div key={i} className="aspect-[4/5] bg-white rounded-[2.5rem] border border-gray-100 animate-pulse" />
+                        ))}
+                    </div>
+                ) : filteredData.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {filteredData.map((ad) => (
+                            <div 
+                                key={ad.id}
+                                onClick={() => { setSelectedAd(ad); setIsDrawerOpen(true); }}
+                                className="group relative bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-500 cursor-pointer overflow-hidden flex flex-col animate-fade-in"
+                            >
+                                {/* Image Preview Wrapper */}
+                                <div className="aspect-[4/3] w-full overflow-hidden relative">
+                                    <img 
+                                        src={ad.image || 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80'} 
+                                        alt={ad.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                    {/* Overlay Gradient */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                                    
+                                    {/* Status Badge Over Image */}
+                                    <div className="absolute top-4 right-4 z-10 transition-transform duration-300 group-hover:translate-x-1">
+                                        <StatusBadge status={ad.status} />
+                                    </div>
+
+                                    {/* Type Tag */}
+                                    <div className="absolute bottom-4 left-4 z-10">
+                                        <div className="px-3 py-1.5 bg-white/20 backdrop-blur-md border border-white/20 text-white text-[10px] font-black rounded-xl uppercase tracking-widest shadow-xl">
+                                            {ad.type}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Content Details */}
+                                <div className="p-6 flex-1 flex flex-col relative">
+                                    <div className="mb-1">
+                                        <span className="text-[10px] font-black text-gray-400 font-mono tracking-tighter bg-gray-50 px-2 py-0.5 rounded-md">ID: {ad.id}</span>
+                                    </div>
+                                    <h4 className="text-lg font-black text-gray-900 leading-tight mb-6 group-hover:text-primary-600 transition-colors line-clamp-2">
+                                        {ad.title}
+                                    </h4>
+
+                                    <div className="mt-auto pt-5 border-t border-gray-50 flex items-center justify-between">
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Impressions</p>
+                                            <p className="text-base font-black text-gray-900 tracking-tight">{ad.impressions.toLocaleString()}</p>
+                                        </div>
+                                        <div className="space-y-1 text-right">
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Avg CTR</p>
+                                            <p className="text-base font-black text-primary-500 tracking-tight">{ad.ctr}%</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Floating Hover Actions */}
+                                    <div className="absolute -top-6 right-6 flex gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-20">
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setSelectedAd(ad); setIsDrawerOpen(true); }}
+                                            className="w-12 h-12 bg-white shadow-xl rounded-2xl flex items-center justify-center text-primary-500 hover:bg-primary-500 hover:text-white transition-all active:scale-90 border border-gray-50"
+                                        >
+                                            <Eye size={20} />
+                                        </button>
+                                        {ad.status === 'Active' && (
+                                            <button 
+                                                onClick={(e) => { e.stopPropagation(); handleSuspend(ad); }}
+                                                className="w-12 h-12 bg-white shadow-xl rounded-2xl flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-90 border border-gray-50"
+                                            >
+                                                <AlertCircle size={20} />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="card-floating py-20 flex flex-col items-center justify-center text-center">
+                         <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mb-4">
+                            <Megaphone size={40} />
+                         </div>
+                         <h3 className="text-xl font-black text-gray-900">No campaigns found</h3>
+                         <p className="text-sm text-gray-400 mt-2">Try adjusting your filters or search criteria</p>
+                    </div>
+                )}
             </div>
 
             {/* Detail Drawer */}
