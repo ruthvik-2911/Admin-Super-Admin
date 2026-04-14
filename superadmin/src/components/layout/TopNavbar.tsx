@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Bell, Search, ChevronDown, User, Settings, LogOut, Menu } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { getAuthSession, logoutSuperAdmin } from '../../lib/auth'
 
 interface TopNavbarProps {
   onMenuToggle: () => void
@@ -17,15 +16,8 @@ export default function TopNavbar({ onMenuToggle }: TopNavbarProps) {
   const [notifOpen, setNotifOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const navigate = useNavigate()
-  const session = getAuthSession()
 
   const unreadCount = notifications.filter((n) => n.unread).length
-
-  const handleLogout = async () => {
-    await logoutSuperAdmin()
-    setProfileOpen(false)
-    navigate('/?reason=logged-out', { replace: true })
-  }
 
   return (
     <header className="h-16 bg-white shadow-navbar flex items-center px-6 gap-4 sticky top-0 z-20">
@@ -105,7 +97,7 @@ export default function TopNavbar({ onMenuToggle }: TopNavbarProps) {
             </div>
             <div className="text-left hidden sm:block">
               <p className="text-xs font-semibold text-gray-800">Super Admin</p>
-              <p className="text-[10px] text-gray-500">{session?.email ?? 'admin@keliri.com'}</p>
+              <p className="text-[10px] text-gray-500">admin@keliri.com</p>
             </div>
             <ChevronDown size={14} className={`text-gray-500 transition-transform duration-200 ${profileOpen ? 'rotate-180' : ''}`} />
           </button>
@@ -114,7 +106,7 @@ export default function TopNavbar({ onMenuToggle }: TopNavbarProps) {
             <div className="absolute right-0 top-12 w-48 bg-white rounded-2xl shadow-card-hover border border-gray-100 z-50 animate-fade-in overflow-hidden">
               <div className="px-4 py-3 border-b border-gray-100">
                 <p className="text-xs font-semibold text-gray-800">Super Admin</p>
-                <p className="text-[10px] text-gray-400">{session?.email ?? 'admin@keliri.com'}</p>
+                <p className="text-[10px] text-gray-400">admin@keliri.com</p>
               </div>
               <div className="py-1">
                 <button 
@@ -130,7 +122,7 @@ export default function TopNavbar({ onMenuToggle }: TopNavbarProps) {
                   <Settings size={14} /> Settings
                 </button>
                 <button
-                  onClick={handleLogout}
+                  onClick={() => { navigate('/'); setProfileOpen(false) }}
                   className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
                 >
                   <LogOut size={14} /> Sign Out
