@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import {
   Mail, Lock, Eye, EyeOff, Phone, ArrowRight,
   Shield, BarChart3, Megaphone, MapPin
 } from 'lucide-react'
 import logo from '../assets/lightmodelogo.png'
 import icon from '../assets/keliriicon.png'
+import { AuthError, getAuthSession, loginSuperAdmin, persistAuthSession } from '../lib/auth'
 
 type Tab = 'email' | 'phone'
 type OtpStep = 'phone' | 'otp'
@@ -19,6 +20,8 @@ const features = [
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const existingSession = getAuthSession()
 
   // Tab state
   const [activeTab, setActiveTab] = useState<Tab>('email')
@@ -38,6 +41,19 @@ export default function Login() {
   // Loading
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [authMessage, setAuthMessage] = useState('')
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const reason = params.get('reason')
+
+    if (reason === 'session-expired') {
+      setAuthMessage('Session expired. Please login again.')
+      return
+    }
+
+    setAuthMessage('')
+  }, [location.search])
 
   // Countdown timer
   useEffect(() => {
@@ -62,16 +78,29 @@ export default function Login() {
     return errs
   }
 
-  const handleEmailLogin = (e: React.FormEvent) => {
+  const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
     setErrors({})
+    setAuthMessage('')
     setLoading(true)
-    setTimeout(() => {
+
+    try {
+      const response = await loginSuperAdmin(email, password)
+      persistAuthSession(email, response.token, response.expiresInHours ?? 24)
       setLoading(false)
-      navigate('/dashboard')
-    }, 1400)
+      navigate('/dashboard', { replace: true })
+    } catch (error) {
+      setLoading(false)
+
+      if (error instanceof AuthError) {
+        setAuthMessage(error.message)
+        return
+      }
+
+      setAuthMessage('Unable to reach the server. Please try again.')
+    }
   }
 
   const handleSendOtp = (e: React.FormEvent) => {
@@ -118,6 +147,10 @@ export default function Login() {
     setCountdown(60)
     setOtp(['', '', '', '', '', ''])
     setTimeout(() => otpRefs.current[0]?.focus(), 100)
+  }
+
+  if (existingSession) {
+    return <Navigate to="/dashboard" replace />
   }
 
   return (
@@ -191,6 +224,12 @@ export default function Login() {
             <p className="text-gray-500 text-sm mt-1">Sign in to your Super Admin account</p>
           </div>
 
+          {authMessage && (
+            <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+              {authMessage}
+            </div>
+          )}
+
           {/* Tab Switcher */}
           <div className="flex bg-gray-100 rounded-xl p-1 mb-6 gap-1">
             {(['email', 'phone'] as Tab[]).map((tab) => (
@@ -221,7 +260,13 @@ export default function Login() {
                     type="email"
                     placeholder="admin@keliri.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                      if (errors.email || authMessage) {
+                        setErrors((prev) => ({ ...prev, email: '' }))
+                        setAuthMessage('')
+                      }
+                    }}
                     className={`input-field pl-10 ${errors.email ? 'border-red-400 ring-2 ring-red-100' : ''}`}
                   />
                 </div>
@@ -242,7 +287,13 @@ export default function Login() {
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value)
+                      if (errors.password || authMessage) {
+                        setErrors((prev) => ({ ...prev, password: '' }))
+                        setAuthMessage('')
+                      }
+                    }}
                     className={`input-field pl-10 pr-10 ${errors.password ? 'border-red-400 ring-2 ring-red-100' : ''}`}
                   />
                   <button
