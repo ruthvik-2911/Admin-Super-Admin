@@ -1,0 +1,143 @@
+import { NavLink, useNavigate } from 'react-router-dom'
+import {
+  LayoutDashboard,
+  BarChart3,
+  Users,
+  Megaphone,
+  DollarSign,
+  Ticket,
+  ShieldCheck,
+  ChevronLeft,
+  ChevronRight,
+  LogOut,
+  Settings,
+  Radio,
+} from 'lucide-react'
+
+interface NavItem {
+  id: string
+  label: string
+  icon: React.ElementType
+  path: string
+  badge?: string
+}
+
+const navItems: NavItem[] = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+  { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/analytics' },
+  { id: 'admins', label: 'Admin Management', icon: Users, path: '/admins' },
+  { id: 'publishers', label: 'Publishers', icon: Radio, path: '/publishers' },
+  { id: 'ads', label: 'Advertisements', icon: Megaphone, path: '/ads', badge: '12' },
+  { id: 'revenue', label: 'Revenue', icon: DollarSign, path: '/revenue' },
+  { id: 'tickets', label: 'Tickets & Support', icon: Ticket, path: '/tickets', badge: '3' },
+  { id: 'sub-admins', label: 'Sub-Admins', icon: ShieldCheck, path: '/sub-admins' },
+]
+
+interface SidebarProps {
+  collapsed: boolean
+  onToggle: () => void
+}
+
+export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
+  const navigate = useNavigate()
+
+  return (
+    <aside
+      className={`relative flex flex-col bg-white shadow-sidebar transition-all duration-300 ease-in-out h-screen sticky top-0
+        ${collapsed ? 'w-[72px]' : 'w-[240px]'}`}
+    >
+      {/* Logo */}
+      <div className={`flex items-center h-16 px-4 border-b border-gray-100 ${collapsed ? 'justify-center' : 'gap-3'}`}>
+        <div className="w-9 h-9 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+          <span className="text-white font-bold text-sm">K</span>
+        </div>
+        {!collapsed && (
+          <div className="animate-fade-in">
+            <p className="font-bold text-gray-900 text-base leading-none">KELIRI</p>
+            <p className="text-[10px] text-primary-500 font-medium tracking-widest uppercase">Super Admin</p>
+          </div>
+        )}
+      </div>
+
+      {/* Toggle button */}
+      <button
+        onClick={onToggle}
+        className="absolute -right-3 top-[72px] z-10 w-6 h-6 bg-white border border-gray-200 rounded-full
+                   flex items-center justify-center shadow-sm hover:bg-primary-50 hover:border-primary-200
+                   transition-all duration-200 text-gray-500 hover:text-primary-600"
+      >
+        {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
+      </button>
+
+      {/* Navigation */}
+      <nav className="flex-1 py-4 px-2 overflow-y-auto space-y-1">
+        {!collapsed && (
+          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest px-3 mb-2">Main Menu</p>
+        )}
+        {navItems.map((item) => {
+          const Icon = item.icon
+          return (
+            <NavLink
+              key={item.id}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer group relative
+                ${isActive
+                  ? 'bg-primary-50 text-primary-600'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                }
+                ${collapsed ? 'justify-center' : ''}`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary-500 rounded-r-full" />
+                  )}
+                  <Icon size={18} className="flex-shrink-0" />
+                  {!collapsed && (
+                    <span className="flex-1 animate-fade-in">{item.label}</span>
+                  )}
+                  {!collapsed && item.badge && (
+                    <span className="bg-primary-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                      {item.badge}
+                    </span>
+                  )}
+                  {/* Tooltip when collapsed */}
+                  {collapsed && (
+                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-lg
+                                   opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50
+                                   transition-opacity duration-200">
+                      {item.label}
+                    </div>
+                  )}
+                </>
+              )}
+            </NavLink>
+          )
+        })}
+      </nav>
+
+      {/* Footer */}
+      <div className="border-t border-gray-100 p-2 space-y-1">
+        <button
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                     text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200
+                     ${collapsed ? 'justify-center' : ''}`}
+        >
+          <Settings size={18} className="flex-shrink-0" />
+          {!collapsed && <span>Settings</span>}
+        </button>
+        <button
+          onClick={() => navigate('/')}
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                     text-red-500 hover:bg-red-50 transition-all duration-200
+                     ${collapsed ? 'justify-center' : ''}`}
+        >
+          <LogOut size={18} className="flex-shrink-0" />
+          {!collapsed && <span>Sign Out</span>}
+        </button>
+      </div>
+    </aside>
+  )
+}
