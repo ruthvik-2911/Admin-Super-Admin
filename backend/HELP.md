@@ -1,6 +1,51 @@
 # Getting Started
 
-### Reference Documentation
+## Prerequisites
+
+- Java 17+ installed
+- Maven installed
+- Internet access to reach MongoDB Atlas
+
+## Run Backend
+
+1. Open a terminal in the `backend` folder.
+
+```powershell
+cd "C:\path\to\keliri-main\backend"
+```
+
+2. Add Maven to `PATH` for the current terminal.
+
+```powershell
+$env:PATH += ";C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.14\bin"
+```
+
+3. Start the backend on port `8081`.
+
+```powershell
+mvn spring-boot:run '-Dspring-boot.run.jvmArguments=-Dserver.port=8081'
+```
+
+4. Verify the backend is running.
+
+Open:
+
+```text
+http://localhost:8081/api/health/check
+```
+
+Expected response:
+
+```text
+MongoDB connection is successful
+```
+
+## Notes
+
+- MongoDB is currently configured through [application.properties](/abs/path/C:/Users/preeti%20yadav/Downloads/keliri-main%20(1)/keliri-main/backend/src/main/resources/application.properties:1).
+- If port `8081` is busy, change the port value in the Maven run command.
+
+## Reference Documentation
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
@@ -25,4 +70,3 @@ Due to Maven's design, elements are inherited from the parent POM to the project
 While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
-

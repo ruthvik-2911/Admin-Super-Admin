@@ -187,7 +187,7 @@ private hitFileService hitFileService;
 private SessionActivityService sessionService;
 
 
-@Value("${apk.file.path}")
+@Value("${apk.file.path:}")
 private String apkFilePath;
 /*private static final Map<String, String> VERTICAL_MAP = Map.of(
         "gitagenabled", "giTag",
@@ -5978,10 +5978,10 @@ public ModelAndView responsiveprofile(HttpSession session,Model model)
 }
 
 
-@Value("${aws.s3.endpointUrl}")
+@Value("${aws.s3.endpointUrl:}")
 private String endpointUrl;
 
-@Value("${aws.s3.folder}")
+@Value("${aws.s3.folder:uploads}")
 private String uploadFolder;
 @PostMapping("/upload")
 public Map<String, String> uploadFile(@RequestParam("file") MultipartFile file) {
