@@ -13,25 +13,28 @@ import Analytics from './pages/Analytics'
 import Tickets from './pages/Tickets'
 import SubAdminManagement from './pages/SubAdminManagement'
 import DashboardLayout from './components/layout/DashboardLayout'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/revenue" element={<Revenue />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/audit-logs" element={<AuditLogs />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/admins" element={<AdminManagement />} />
-          <Route path="/publishers" element={<PublisherMonitoring />} />
-          <Route path="/ads" element={<AdvertisementMonitoring />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/tickets" element={<Tickets />} />
-          <Route path="/sub-admins" element={<SubAdminManagement />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/revenue" element={<Revenue />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/audit-logs" element={<AuditLogs />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/admins" element={<AdminManagement />} />
+            <Route path="/publishers" element={<PublisherMonitoring />} />
+            <Route path="/ads" element={<AdvertisementMonitoring />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/tickets" element={<Tickets />} />
+            <Route path="/sub-admins" element={<SubAdminManagement />} />
+          </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

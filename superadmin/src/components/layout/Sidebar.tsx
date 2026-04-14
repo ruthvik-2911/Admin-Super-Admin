@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import logo from '../../assets/lightmodelogo.png'
 import icon from '../../assets/keliriicon.png'
+import { logoutSuperAdmin } from '../../lib/auth'
 
 interface NavItem {
   id: string
@@ -44,6 +45,11 @@ interface SidebarProps {
 
 export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await logoutSuperAdmin()
+    navigate('/?reason=logged-out', { replace: true })
+  }
 
   return (
     <>
@@ -143,7 +149,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
           {!collapsed && <span>Settings</span>}
         </button>
         <button
-          onClick={() => navigate('/')}
+          onClick={handleLogout}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                      text-red-500 hover:bg-red-50 transition-all duration-200
                      ${collapsed ? 'justify-center' : ''}`}
