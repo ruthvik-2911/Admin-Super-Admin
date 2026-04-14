@@ -13,6 +13,7 @@ const AdminManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('Pending');
   
   // Dialog states
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, type: '', admin: null });
@@ -58,71 +59,80 @@ const AdminManagement = () => {
     }
   };
 
-  const columns = [
-    { key: 'id', label: 'Admin ID', className: 'font-mono text-xs font-bold' },
-    { key: 'name', label: 'Name', render: (val, row) => (
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold text-xs uppercase">
-          {val.charAt(0)}
-        </div>
-        <span className="font-semibold text-gray-900">{val}</span>
-      </div>
-    )},
-    { key: 'email', label: 'Email' },
-    { key: 'company', label: 'Company', render: (val) => <span className="font-medium text-gray-700">{val}</span> },
-    { key: 'registeredDate', label: 'Registered' },
-    { key: 'status', label: 'Status', render: (val) => <StatusBadge status={val} /> },
-    { key: 'actions', label: 'Actions', render: (_, row) => (
-      <div className="flex items-center gap-1">
-        <button 
-          onClick={(e) => { e.stopPropagation(); setSelectedAdmin(row); setIsDrawerOpen(true); }}
-          className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all"
-          title="View Details"
-        >
-          <Eye size={18} />
-        </button>
-        
-        {row.status === 'Pending' && (
-          <>
-            <button 
-              onClick={(e) => { e.stopPropagation(); handleAction('Approve', row); }}
-              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
-              title="Approve"
-            >
-              <CheckCircle2 size={18} />
-            </button>
-            <button 
-              onClick={(e) => { e.stopPropagation(); handleAction('Reject', row); }}
-              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-              title="Reject"
-            >
-              <XCircle size={18} />
-            </button>
-          </>
-        )}
-        
-        {row.status === 'Active' && (
-          <button 
-            onClick={(e) => { e.stopPropagation(); handleAction('Suspend', row); }}
-            className="p-2 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all"
-            title="Suspend"
-          >
-            <AlertCircle size={18} />
-          </button>
-        )}
-        
-        {row.status === 'Suspended' && (
-          <button 
-            onClick={(e) => { e.stopPropagation(); handleAction('Reinstate', row); }}
-            className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
-            title="Reinstate"
-          >
-            <RefreshCw size={18} />
-          </button>
-        )}
-      </div>
-    )}
+  const tabs = [
+    { id: 'Pending', label: 'Pending Admins', color: { bg: 'bg-amber-100', text: 'text-amber-600', active: 'bg-amber-600' } },
+    { id: 'Active', label: 'Active Admins', color: { bg: 'bg-green-100', text: 'text-green-600', active: 'bg-green-600' } },
+    { id: 'Suspended', label: 'Suspended Admins', color: { bg: 'bg-orange-100', text: 'text-orange-600', active: 'bg-orange-600' } },
+    { id: 'Rejected', label: 'Rejected Admins', color: { bg: 'bg-red-100', text: 'text-red-500', active: 'bg-red-600' } },
   ];
+
+  const getColumns = (status) => {
+    const baseColumns = [
+      { key: 'id', label: 'Admin ID', className: 'font-mono text-xs font-bold' },
+      { key: 'name', label: 'Name', render: (val, row) => (
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold text-xs uppercase">
+            {val.charAt(0)}
+          </div>
+          <span className="font-semibold text-gray-900">{val}</span>
+        </div>
+      )},
+      { key: 'email', label: 'Email' },
+      { key: 'company', label: 'Company', render: (val) => <span className="font-medium text-gray-700">{val}</span> },
+      { key: 'registeredDate', label: 'Registered Date' },
+      { key: 'actions', label: 'Actions', render: (_, row) => (
+        <div className="flex items-center gap-1">
+          <button 
+            onClick={(e) => { e.stopPropagation(); setSelectedAdmin(row); setIsDrawerOpen(true); }}
+            className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all"
+            title="View Details"
+          >
+            <Eye size={18} />
+          </button>
+          
+          {row.status === 'Pending' && (
+            <>
+              <button 
+                onClick={(e) => { e.stopPropagation(); handleAction('Approve', row); }}
+                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
+                title="Approve"
+              >
+                <CheckCircle2 size={18} />
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); handleAction('Reject', row); }}
+                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                title="Reject"
+              >
+                <XCircle size={18} />
+              </button>
+            </>
+          )}
+          
+          {row.status === 'Active' && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); handleAction('Suspend', row); }}
+              className="p-2 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all"
+              title="Suspend"
+            >
+              <AlertCircle size={18} />
+            </button>
+          )}
+          
+          {row.status === 'Suspended' && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); handleAction('Reinstate', row); }}
+              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
+              title="Reinstate"
+            >
+              <RefreshCw size={18} />
+            </button>
+          )}
+        </div>
+      )}
+    ];
+    return baseColumns;
+  };
 
   const adminPublishers = selectedAdmin 
     ? mockPublishers.filter(p => p.adminId === selectedAdmin.id)
@@ -137,14 +147,55 @@ const AdminManagement = () => {
         />
       </div>
 
-      <div className="card-floating p-0 overflow-hidden animate-fade-in-scale delay-100">
-        <DataTable 
-          columns={columns} 
-          data={admins} 
-          isLoading={isLoading}
-          onRowClick={(row) => { setSelectedAdmin(row); setIsDrawerOpen(true); }}
-          className="hover-glow-border"
-        />
+      <div className="flex bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-white/20 shadow-xl shadow-gray-200/50 relative z-10 animate-fade-in-scale delay-75">
+        {tabs.map((tab) => {
+          const count = admins.filter(a => a.status === tab.id).length;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 py-3 px-4 rounded-xl flex items-center justify-center gap-2.5 transition-all duration-300 relative group ${
+                isActive 
+                  ? 'bg-white shadow-lg shadow-gray-200/50 text-gray-900 translate-y-[-1px]' 
+                  : 'text-gray-500 hover:text-gray-900 hover:bg-white/40'
+              }`}
+            >
+              <span className={`text-sm font-bold tracking-tight ${isActive ? 'scale-105' : ''} transition-transform`}>
+                {tab.label}
+              </span>
+              <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black tracking-tighter ${tab.color.bg} ${tab.color.text} shadow-sm border border-black/5`}>
+                {count}
+              </span>
+              {isActive && (
+                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary-500 rounded-full shadow-[0_0_12px_rgba(var(--primary-rgb),0.6)] animate-pulse-subtle" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="relative min-h-[500px]">
+        {tabs.map((tab) => (
+          <div 
+            key={tab.id} 
+            className={`transition-all duration-500 absolute inset-0 ${
+              activeTab === tab.id 
+                ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                : 'opacity-0 translate-y-4 pointer-events-none'
+            }`}
+          >
+             <div className="card-floating p-0 overflow-hidden hover-glow-border h-full">
+                <DataTable 
+                  columns={getColumns(tab.id)} 
+                  data={admins.filter(a => a.status === tab.id)} 
+                  isLoading={isLoading}
+                  emptyMessage={`No ${tab.id.toLowerCase()} admins found`}
+                  onRowClick={(row) => { setSelectedAdmin(row); setIsDrawerOpen(true); }}
+                />
+             </div>
+          </div>
+        ))}
       </div>
 
       {/* Detail Drawer */}
@@ -299,8 +350,14 @@ const AdminManagement = () => {
           onClose={() => setConfirmDialog({ isOpen: false, type: '', admin: null })}
           onConfirm={executeAction}
           title={`${confirmDialog.type} Admin`}
-          message={`Are you sure you want to ${confirmDialog.type.toLowerCase()} ${confirmDialog.admin?.name}?`}
-          confirmText={`${confirmDialog.type} Account`}
+          message={
+            confirmDialog.type === 'Approve' ? "Approve this admin? An email will be sent to them." :
+            confirmDialog.type === 'Reject' ? "Reject this admin? This action cannot be undone." :
+            confirmDialog.type === 'Suspend' ? "Suspend this admin? They will lose platform access." :
+            confirmDialog.type === 'Reinstate' ? "Reinstate this admin? They will regain platform access." :
+            `Are you sure you want to ${confirmDialog.type.toLowerCase()} ${confirmDialog.admin?.name}?`
+          }
+          confirmText={confirmDialog.type === 'Reinstate' ? 'Reinstate Account' : `${confirmDialog.type} Account`}
           type={confirmDialog.type === 'Reject' || confirmDialog.type === 'Suspend' ? 'danger' : 'primary'}
           requireReason={confirmDialog.type === 'Reject'}
           reasonPlaceholder="Explain why this application is being rejected..."

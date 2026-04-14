@@ -10,7 +10,7 @@ export const mockAdmins = [
   { id: 'ADM008', name: 'Neha Reddy', email: 'neha@localconnect.in', company: 'Local Connect', registeredDate: '2023-10-05', status: 'Active', phone: '+91 98765 43217' },
   { id: 'ADM009', name: 'Siddharth Jain', email: 'sid@nexusmedia.co', company: 'Nexus Media', registeredDate: '2023-12-15', status: 'Suspended', phone: '+91 98765 43218' },
   { id: 'ADM010', name: 'Meera Kapoor', email: 'meera@elevate.in', company: 'Elevate Marketing', registeredDate: '2024-02-01', status: 'Pending', phone: '+91 98765 43219' },
-  { id: 'ADM011', name: 'Arjun Malhotra', email: 'arjun@velocity.com', company: 'Velocity Ads', registeredDate: '2023-07-22', status: 'Active', phone: '+91 98765 43220' },
+  { id: 'ADM011', name: 'Arjun Malhotra', email: 'arjun@velocity.com', company: 'Velocity Ads', registeredDate: '2023-07-22', status: 'Rejected', phone: '+91 98765 43220' },
   { id: 'ADM012', name: 'Ritu Saxena', email: 'ritu@creativeforce.in', company: 'Creative Force', registeredDate: '2023-09-30', status: 'Rejected', phone: '+91 98765 43221' },
   { id: 'ADM013', name: 'Sameer Joshi', email: 'sameer@impactmedia.co', company: 'Impact Media', registeredDate: '2023-11-12', status: 'Active', phone: '+91 98765 43222' },
   { id: 'ADM014', name: 'Pooja Bhatia', email: 'pooja@sparkads.in', company: 'Spark Advertising', registeredDate: '2024-01-25', status: 'Pending', phone: '+91 98765 43223' },
@@ -18,8 +18,8 @@ export const mockAdmins = [
   { id: 'ADM016', name: 'Tanvi Shah', email: 'tanvi@lumina.in', company: 'Lumina Digital', registeredDate: '2023-12-20', status: 'Active', phone: '+91 98765 43225' },
   { id: 'ADM017', name: 'Rohan Gupta', email: 'rohan@vortex.co', company: 'Vortex Solutions', registeredDate: '2023-10-18', status: 'Suspended', phone: '+91 98765 43226' },
   { id: 'ADM018', name: 'Ishani Roy', email: 'ishani@zenith.in', company: 'Zenith Ads', registeredDate: '2024-02-15', status: 'Pending', phone: '+91 98765 43227' },
-  { id: 'ADM019', name: 'Deepak Kumar', email: 'deepak@apex.com', company: 'Apex Marketing', registeredDate: '2023-09-05', status: 'Active', phone: '+91 98765 43228' },
-  { id: 'ADM020', name: 'Shweta Mishra', email: 'shweta@glance.in', company: 'Glance Media', registeredDate: '2023-11-30', status: 'Active', phone: '+91 98765 43229' },
+  { id: 'ADM019', name: 'Deepak Kumar', email: 'deepak@apex.com', company: 'Apex Marketing', registeredDate: '2023-09-05', status: 'Suspended', phone: '+91 98765 43228' },
+  { id: 'ADM020', name: 'Shweta Mishra', email: 'shweta@glance.in', company: 'Glance Media', registeredDate: '2023-11-30', status: 'Rejected', phone: '+91 98765 43229' },
 ];
 
 export const mockPublishers = [
