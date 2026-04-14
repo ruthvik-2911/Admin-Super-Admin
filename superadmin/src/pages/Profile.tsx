@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useNavigate } from 'react-router-dom'
 import { User, Mail, Shield, Calendar, Edit3, Key, Activity, Clock, X } from 'lucide-react'
 
 const activityLog = [
@@ -13,6 +14,7 @@ const activityLog = [
 export default function Profile() {
   const [showEditProfile, setShowEditProfile] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <div className="space-y-6 pb-6 max-w-5xl mx-auto scroll-animate delay-75">
@@ -110,7 +112,10 @@ export default function Profile() {
                 <Activity size={20} className="text-primary-500" />
                 Recent Administration Activity
               </div>
-              <button className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors">
+              <button 
+                onClick={() => navigate('/audit-logs')}
+                className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+              >
                 View Audit Logs
               </button>
             </div>

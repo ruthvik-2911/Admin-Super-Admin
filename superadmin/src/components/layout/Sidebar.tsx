@@ -11,7 +11,7 @@ import {
   ChevronRight,
   LogOut,
   Settings,
-  Radio,
+  Radio
 } from 'lucide-react'
 import logo from '../../assets/lightmodelogo.png'
 import icon from '../../assets/keliriicon.png'
