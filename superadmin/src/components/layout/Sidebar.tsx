@@ -43,7 +43,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
   return (
     <aside
-      className={`relative flex flex-col bg-white shadow-sidebar transition-all duration-300 ease-in-out h-screen sticky top-0
+      className={`relative flex flex-col bg-white shadow-sidebar transition-all duration-300 ease-in-out h-full flex-shrink-0
         ${collapsed ? 'w-[72px]' : 'w-[240px]'}`}
     >
       {/* Logo */}
