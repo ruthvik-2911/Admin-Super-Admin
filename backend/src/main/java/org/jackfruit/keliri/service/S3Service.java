@@ -62,9 +62,11 @@ System.out.println("s : " +s);
 	import org.springframework.stereotype.Service;
 	import org.springframework.web.multipart.MultipartFile;
 	import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+	import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 	import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 	import software.amazon.awssdk.regions.Region;
 	import software.amazon.awssdk.services.s3.S3Client;
+	import software.amazon.awssdk.services.s3.S3ClientBuilder;
 	import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.awt.image.BufferedImage;
@@ -79,37 +81,43 @@ import javax.imageio.ImageIO;
 	@Service
 	public class S3Service {
 
-		 @Value("${aws.accessKey}")
+		 @Value("${aws.accessKey:}")
 		    private String accessKey;
 
-		    @Value("${aws.secretKey}")
+		    @Value("${aws.secretKey:}")
 		    private String secretKey;
 
-		    @Value("${aws.region}")
+		    @Value("${aws.region:ap-south-1}")
 		    private String region;
 
-		    @Value("${aws.s3.bucketName}")
+		    @Value("${aws.s3.bucketName:}")
 		    private String bucketName;
 
-		    @Value("${aws.s3.endpointUrl}")
+		    @Value("${aws.s3.endpointUrl:}")
 		    private String endpointUrl;
 
-		    @Value("${aws.s3.folder}")
+		    @Value("${aws.s3.folder:uploads}")
 		    private String uploadFolder;
 
-		    @Value("${aws.s3.thumbnailFolder}")
+		    @Value("${aws.s3.thumbnailFolder:thumbnails}")
 		    private String thumbnailFolder;
 
 		    private S3Client getS3Client() {
-		        return S3Client.builder()
-		                .region(Region.of(region))
-		                .credentialsProvider(StaticCredentialsProvider.create(
-		                        AwsBasicCredentials.create(accessKey, secretKey)
-		                ))
-		                .build();
+		    	S3ClientBuilder builder = S3Client.builder().region(Region.of(region));
+
+		    	if (!accessKey.isBlank() && !secretKey.isBlank()) {
+		    		builder.credentialsProvider(StaticCredentialsProvider.create(
+		    				AwsBasicCredentials.create(accessKey, secretKey)
+		    		));
+		    	} else {
+		    		builder.credentialsProvider(DefaultCredentialsProvider.create());
+		    	}
+
+		        return builder.build();
 		    }
 
 		    public String uploadFile(MultipartFile file) throws IOException {
+		    	validateUploadConfiguration();
 		        S3Client s3Client = getS3Client();
 		        String fileName = UUID.randomUUID()+ "-" + file.getOriginalFilename();
 		        String filePath = uploadFolder +"/"+ fileName;
@@ -127,6 +135,12 @@ import javax.imageio.ImageIO;
 		        Files.delete(tempFile);
 
 		        return endpointUrl + "/"+filePath;
+		    }
+
+		    private void validateUploadConfiguration() {
+		    	if (bucketName.isBlank() || endpointUrl.isBlank()) {
+		    		throw new IllegalStateException("AWS S3 is not configured. Set aws.s3.bucketName and aws.s3.endpointUrl.");
+		    	}
 		    }
 
 		    private void uploadToS3(S3Client s3Client, byte[] fileData, String filePath, String contentType) throws IOException {
@@ -156,4 +170,3 @@ import javax.imageio.ImageIO;
 
 	
 	
-
