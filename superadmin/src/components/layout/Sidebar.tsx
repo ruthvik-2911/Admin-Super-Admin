@@ -13,6 +13,8 @@ import {
   Settings,
   Radio,
 } from 'lucide-react'
+import logo from '../../assets/lightmodelogo.png'
+import icon from '../../assets/keliriicon.png'
 
 interface NavItem {
   id: string
@@ -48,12 +50,12 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
     >
       {/* Logo */}
       <div className={`flex items-center h-16 px-4 border-b border-gray-100 ${collapsed ? 'justify-center' : 'gap-3'}`}>
-        <div className="w-9 h-9 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-          <span className="text-white font-bold text-sm">K</span>
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
+          <img src={icon} alt="KELIRI Logo" className="w-8 h-8 object-contain" />
         </div>
         {!collapsed && (
           <div className="animate-fade-in">
-            <p className="font-bold text-gray-900 text-base leading-none">KELIRI</p>
+            <img src={logo} alt="KELIRI Logo" className="w-24 h-10 object-contain" />
             <p className="text-[10px] text-primary-500 font-medium tracking-widest uppercase">Super Admin</p>
           </div>
         )}
