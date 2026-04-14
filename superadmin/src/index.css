@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,10 +15,9 @@
     overflow: hidden;
     margin: 0;
     padding: 0;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Outfit', sans-serif;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    @apply bg-gray-50 text-gray-800;
+    @apply bg-slate-50 text-slate-900;
   }
 
   #root {
@@ -26,28 +25,84 @@
     overflow: hidden;
   }
 
+  /* Premium Mesh Background */
+  .mesh-gradient-bg {
+    background-color: #f8fafc;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(255, 107, 0, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(255, 107, 0, 0.05) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+  }
+
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
   }
   ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
+    @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-primary-500 text-white font-semibold px-6 py-3 rounded-xl
-           hover:bg-primary-600 active:bg-primary-700
-           transition-all duration-200 ease-in-out
-           shadow-sm hover:shadow-md
-           focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
+  .btn-primary-premium {
+    @apply bg-gradient-to-br from-primary-500 to-orange-600 text-white font-bold px-6 py-3 rounded-2xl
+           hover:shadow-lg hover:shadow-primary-500/25 hover:scale-[1.02] active:scale-[0.98]
+           transition-all duration-300 ease-out;
+  }
+
+  .card-floating {
+    @apply bg-white/80 backdrop-blur-xl rounded-[2rem] border border-white/50 shadow-2xl shadow-slate-200/50 p-6;
+  }
+
+  .glass-panel {
+    @apply bg-white/40 backdrop-blur-2xl border border-white/20 shadow-xl;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Ultra-Premium Glows */
+  .glow-success {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+  }
+  .glow-warning {
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+  }
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+  }
+
+  /* 3D Tilt Effect Utilities */
+  .tilt-card {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease;
+    transform-style: preserve-3d;
+  }
+  .tilt-card:hover {
+    transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-5px);
+    @apply shadow-2xl;
+  }
+
+  /* Circular Progress Helpers */
+  .progress-ring {
+    transition: stroke-dashoffset 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+
+  /* Advanced Hover Borders */
+  .hover-glow-border {
+    @apply relative after:absolute after:inset-0 after:rounded-[inherit] after:border-2 after:border-transparent after:transition-all after:duration-500 hover:after:border-primary-500/50 hover:after:scale-105;
   }
 
   .btn-secondary {
@@ -101,5 +156,55 @@
 
   .nav-item-active {
     @apply nav-item bg-primary-50 text-primary-600;
+  }
+
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-fade-in-scale {
+    animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  }
+
+  .card-premium {
+    @apply bg-white rounded-3xl border border-gray-100/50 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-orange-500;
+  }
+
+  /* No Scrollbar Utility */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

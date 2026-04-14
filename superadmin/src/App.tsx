@@ -2,6 +2,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import DashboardLayout from './components/layout/DashboardLayout'
+import Analytics from './pages/Analytics'
+import AdminManagement from './pages/AdminManagement'
+import PublisherMonitoring from './pages/PublisherMonitoring'
+import AdvertisementMonitoring from './pages/AdvertisementMonitoring'
 
 function App() {
   return (
@@ -10,6 +14,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/admins" element={<AdminManagement />} />
+          <Route path="/publishers" element={<PublisherMonitoring />} />
+          <Route path="/ads" element={<AdvertisementMonitoring />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
