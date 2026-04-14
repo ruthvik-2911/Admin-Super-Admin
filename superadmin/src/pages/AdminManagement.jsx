@@ -91,22 +91,22 @@ const AdminManagement = () => {
           </button>
           
           {row.status === 'Pending' && (
-            <>
+            <div className="flex items-center gap-2 ml-2">
               <button 
                 onClick={(e) => { e.stopPropagation(); handleAction('Approve', row); }}
-                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
-                title="Approve"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white rounded-xl text-[11px] font-bold shadow-lg shadow-green-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                <CheckCircle2 size={18} />
+                <CheckCircle2 size={14} />
+                Approve
               </button>
               <button 
                 onClick={(e) => { e.stopPropagation(); handleAction('Reject', row); }}
-                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                title="Reject"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white rounded-xl text-[11px] font-bold shadow-lg shadow-red-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                <XCircle size={18} />
+                <XCircle size={14} />
+                Reject
               </button>
-            </>
+            </div>
           )}
           
           {row.status === 'Active' && (
