@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import Revenue from './pages/Revenue'
+import Transactions from './pages/Transactions'
 import DashboardLayout from './components/layout/DashboardLayout'
 import Analytics from './pages/Analytics'
 import AdminManagement from './pages/AdminManagement'
@@ -18,6 +20,8 @@ function App() {
           <Route path="/admins" element={<AdminManagement />} />
           <Route path="/publishers" element={<PublisherMonitoring />} />
           <Route path="/ads" element={<AdvertisementMonitoring />} />
+          <Route path="/revenue" element={<Revenue />} />
+          <Route path="/transactions" element={<Transactions />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

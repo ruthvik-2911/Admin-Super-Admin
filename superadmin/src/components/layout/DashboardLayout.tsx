@@ -18,7 +18,7 @@ export default function DashboardLayout() {
       {/* Main area */}
       <div className="flex flex-col flex-1 overflow-hidden relative z-10">
         <TopNavbar onMenuToggle={() => setCollapsed(!collapsed)} />
-        <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto p-8 custom-scrollbar relative z-10">
           <div className="max-w-[1600px] mx-auto animate-fade-in">
             <Outlet />
           </div>

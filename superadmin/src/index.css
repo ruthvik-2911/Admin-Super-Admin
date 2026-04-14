@@ -128,6 +128,14 @@
     @apply card hover:shadow-card-hover transition-shadow duration-300 cursor-pointer;
   }
 
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-2xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/80 transition-all duration-300;
+  }
+
+  .glass-card-hover {
+    @apply glass-card hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 hover:bg-white/80 cursor-pointer;
+  }
+
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }
@@ -173,12 +181,27 @@
     to { opacity: 1; transform: scale(1); }
   }
 
+  @keyframes floatOrb {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(20px, 30px) scale(1.05); }
+    100% { transform: translate(-10px, 10px) scale(0.97); }
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
   .animate-slide-in-right {
     animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .animate-fade-in-scale {
     animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
   }
 
   .shimmer {
@@ -207,4 +230,5 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+}
 }

@@ -13,6 +13,8 @@ import {
   Settings,
   Radio,
 } from 'lucide-react'
+import logo from '../../assets/lightmodelogo.png'
+import icon from '../../assets/keliriicon.png'
 
 interface NavItem {
   id: string
@@ -47,18 +49,18 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
         ${collapsed ? 'w-20' : 'w-64'}`}
     >
       {/* Logo Section */}
-      <div className={`flex items-center h-20 px-4 mb-4 relative ${collapsed ? 'justify-center' : 'gap-3 px-6'}`}>
-        <div className="relative group">
-           <div className="absolute -inset-1 bg-gradient-to-br from-primary-500 to-orange-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
-           <div className="relative w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center flex-shrink-0 shadow-xl overflow-hidden">
-             <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/20 to-transparent" />
-             <span className="text-white font-black text-xl italic tracking-tighter">K</span>
-           </div>
-        </div>
-        {!collapsed && (
-          <div className="animate-fade-in-scale">
-            <p className="font-black text-slate-900 text-lg tracking-tight leading-none">KELIRI</p>
-            <p className="text-[10px] text-primary-600 font-bold tracking-[0.2em] uppercase mt-0.5">Super Admin</p>
+      <div className={`flex items-center h-24 px-6 mb-2 relative ${collapsed ? 'justify-center px-4' : 'gap-3'}`}>
+        {!collapsed ? (
+          <div className="animate-fade-in-scale w-full">
+            <img src={logo} alt="KELIRI Logo" className="h-10 w-auto object-contain mb-1" />
+            <p className="text-[10px] text-primary-600 font-bold tracking-[0.2em] uppercase ml-1 opacity-80">Super Admin</p>
+          </div>
+        ) : (
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-br from-primary-500 to-orange-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
+            <div className="relative w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center shadow-xl overflow-hidden">
+              <img src={icon} alt="K" className="w-8 h-8 object-contain" />
+            </div>
           </div>
         )}
       </div>

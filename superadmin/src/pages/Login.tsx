@@ -4,6 +4,8 @@ import {
   Mail, Lock, Eye, EyeOff, Phone, ArrowRight,
   Shield, BarChart3, Megaphone, MapPin
 } from 'lucide-react'
+import logo from '../assets/lightmodelogo.png'
+import icon from '../assets/keliriicon.png'
 
 type Tab = 'email' | 'phone'
 type OtpStep = 'phone' | 'otp'
@@ -127,13 +129,12 @@ export default function Login() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/3 -translate-x-1/3" />
         <div className="absolute top-1/2 right-8 w-32 h-32 bg-white/5 rounded-3xl rotate-12" />
 
-        {/* Logo */}
         <div className="relative z-10 flex items-center gap-3 mb-16">
-          <div className="w-10 h-10 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
-            <span className="text-white font-bold text-lg">K</span>
+          <div className="w-10 h-10 bg-white/50 backdrop-blur rounded-xl flex items-center justify-center p-1.5 overflow-hidden">
+            <img src={icon} alt="KELIRI Logo" className="w-full h-full object-contain" />
           </div>
           <div>
-            <p className="text-white font-bold text-xl leading-none">KELIRI</p>
+            <img src={logo} alt="KELIRI Logo" className="w-24 h-10 object-contain" />
             <p className="text-orange-200 text-[11px] font-medium tracking-widest uppercase mt-0.5">Super Admin Panel</p>
           </div>
         </div>
@@ -179,8 +180,8 @@ export default function Login() {
         <div className="w-full max-w-md animate-fade-in">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-sm">K</span>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0">
+              <img src={icon} alt="KELIRI Logo" className="w-8 h-8 object-contain" />
             </div>
             <p className="font-bold text-gray-900">KELIRI</p>
           </div>
@@ -264,8 +265,8 @@ export default function Login() {
                 {loading ? (
                   <span className="flex items-center gap-2">
                     <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                     </svg>
                     Signing in...
                   </span>
@@ -307,8 +308,8 @@ export default function Login() {
                     {loading ? (
                       <span className="flex items-center gap-2">
                         <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                         </svg>
                         Sending OTP...
                       </span>
@@ -385,8 +386,8 @@ export default function Login() {
                     {loading ? (
                       <span className="flex items-center gap-2">
                         <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                         </svg>
                         Verifying...
                       </span>
