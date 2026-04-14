@@ -1,19 +1,27 @@
 import { TrendingUp, TrendingDown } from 'lucide-react'
 
 const topAdmins = [
-  { rank: 1, name: 'Arjun Mehta', email: 'arjun@keliri.com', revenue: '₹2,45,000', ads: 38, change: 12.5 },
-  { rank: 2, name: 'Priya Sharma', email: 'priya@keliri.com', revenue: '₹1,98,500', ads: 31, change: 8.2 },
-  { rank: 3, name: 'Ravi Kumar', email: 'ravi@keliri.com', revenue: '₹1,72,000', ads: 27, change: -3.1 },
-  { rank: 4, name: 'Sneha Patel', email: 'sneha@keliri.com', revenue: '₹1,45,200', ads: 22, change: 5.7 },
-  { rank: 5, name: 'Vikram Singh', email: 'vikram@keliri.com', revenue: '₹1,10,800', ads: 18, change: -1.4 },
+  { rank: 1, name: 'Arjun Mehta',   email: 'arjun@keliri.com',  revenue: '₹2,45,000', ads: 38, change: 12.5 },
+  { rank: 2, name: 'Priya Sharma',  email: 'priya@keliri.com',  revenue: '₹1,98,500', ads: 31, change: 8.2  },
+  { rank: 3, name: 'Ravi Kumar',    email: 'ravi@keliri.com',   revenue: '₹1,72,000', ads: 27, change: -3.1 },
+  { rank: 4, name: 'Sneha Patel',   email: 'sneha@keliri.com',  revenue: '₹1,45,200', ads: 22, change: 5.7  },
+  { rank: 5, name: 'Vikram Singh',  email: 'vikram@keliri.com', revenue: '₹1,10,800', ads: 18, change: -1.4 },
 ]
 
-const rankColors = [
+const rankBadge = [
   'bg-yellow-400 text-white',
-  'bg-gray-300 text-gray-800',
+  'bg-gray-300 text-gray-700',
   'bg-orange-300 text-white',
-  'bg-gray-100 text-gray-600',
-  'bg-gray-100 text-gray-600',
+  'bg-gray-100 text-gray-500',
+  'bg-gray-100 text-gray-500',
+]
+
+const avatarGradients = [
+  'from-orange-300 to-primary-500',
+  'from-blue-300 to-blue-500',
+  'from-purple-300 to-purple-500',
+  'from-teal-300 to-teal-500',
+  'from-indigo-300 to-indigo-500',
 ]
 
 function getInitials(name: string) {
@@ -22,10 +30,11 @@ function getInitials(name: string) {
 
 export default function TopAdminsTable() {
   return (
-    <div className="bg-white rounded-2xl shadow-card p-6 animate-fade-in">
+    <div className="glass-card p-6 animate-fade-in h-full overflow-hidden">
+      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="font-semibold text-gray-900">Top Admins by Revenue</h3>
+          <h3 className="text-sm font-semibold text-gray-900">Top Admins by Revenue</h3>
           <p className="text-xs text-gray-400 mt-0.5">This month's performance ranking</p>
         </div>
         <button className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors">
@@ -33,57 +42,63 @@ export default function TopAdminsTable() {
         </button>
       </div>
 
-      <div className="overflow-x-auto -mx-2">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto">
+        <table className="w-full">
           <thead>
-            <tr className="text-left">
-              <th className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider pb-3 px-2">#</th>
-              <th className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider pb-3 px-2">Admin</th>
-              <th className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider pb-3 px-2">Revenue</th>
-              <th className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider pb-3 px-2">Ads</th>
-              <th className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider pb-3 px-2">Trend</th>
+            <tr>
+              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-left w-8">#</th>
+              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-left">Admin</th>
+              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-right">Revenue</th>
+              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-center">Ads</th>
+              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-right">Trend</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
-            {topAdmins.map((admin) => (
+          <tbody>
+            {topAdmins.map((admin, i) => (
               <tr
                 key={admin.rank}
-                className="hover:bg-gray-50 transition-colors cursor-pointer group rounded-xl"
+                className="hover:bg-gray-50/70 transition-colors cursor-pointer group border-t border-gray-50"
               >
-                <td className="py-3 px-2">
-                  <span className={`w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center ${rankColors[admin.rank - 1]}`}>
+                {/* Rank */}
+                <td className="py-3 pr-2">
+                  <span className={`w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center ${rankBadge[i]}`}>
                     {admin.rank}
                   </span>
                 </td>
-                <td className="py-3 px-2">
+
+                {/* Avatar + name */}
+                <td className="py-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full
-                                    flex items-center justify-center text-primary-700 text-xs font-bold flex-shrink-0">
+                    <div className={`w-8 h-8 bg-gradient-to-br ${avatarGradients[i]} rounded-full
+                                     flex items-center justify-center text-white text-xs font-bold flex-shrink-0`}>
                       {getInitials(admin.name)}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-800 text-sm leading-none">{admin.name}</p>
+                      <p className="text-sm font-medium text-gray-800 leading-none">{admin.name}</p>
                       <p className="text-[11px] text-gray-400 mt-0.5">{admin.email}</p>
                     </div>
                   </div>
                 </td>
-                <td className="py-3 px-2">
-                  <span className="font-semibold text-gray-800">{admin.revenue}</span>
+
+                {/* Revenue */}
+                <td className="py-3 text-right">
+                  <span className="text-sm font-semibold text-gray-800">{admin.revenue}</span>
                 </td>
-                <td className="py-3 px-2">
-                  <span className="badge bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full font-medium">
-                    {admin.ads} ads
+
+                {/* Ads */}
+                <td className="py-3 text-center">
+                  <span className="text-xs bg-gray-100 text-gray-600 font-medium px-2 py-0.5 rounded-full">
+                    {admin.ads}
                   </span>
                 </td>
-                <td className="py-3 px-2">
-                  <div className={`flex items-center gap-1 text-xs font-semibold
+
+                {/* Trend */}
+                <td className="py-3 text-right">
+                  <span className={`inline-flex items-center gap-0.5 text-xs font-semibold
                     ${admin.change >= 0 ? 'text-green-600' : 'text-red-500'}`}>
-                    {admin.change >= 0
-                      ? <TrendingUp size={13} />
-                      : <TrendingDown size={13} />
-                    }
+                    {admin.change >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                     {Math.abs(admin.change)}%
-                  </div>
+                  </span>
                 </td>
               </tr>
             ))}

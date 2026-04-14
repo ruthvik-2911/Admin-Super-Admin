@@ -4,7 +4,7 @@ const activities = [
   {
     id: 1,
     action: 'Admin "Ravi Kumar" was approved',
-    time: '2 minutes ago',
+    time: '2 min ago',
     icon: ShieldCheck,
     iconBg: 'bg-green-100',
     iconColor: 'text-green-600',
@@ -12,7 +12,7 @@ const activities = [
   {
     id: 2,
     action: 'Ad campaign #1042 "Summer Sale Banner" expired',
-    time: '18 minutes ago',
+    time: '18 min ago',
     icon: Megaphone,
     iconBg: 'bg-yellow-100',
     iconColor: 'text-yellow-600',
@@ -20,7 +20,7 @@ const activities = [
   {
     id: 3,
     action: 'New publisher "TechNews Mumbai" registered',
-    time: '1 hour ago',
+    time: '1 hr ago',
     icon: Users,
     iconBg: 'bg-blue-100',
     iconColor: 'text-blue-600',
@@ -28,7 +28,7 @@ const activities = [
   {
     id: 4,
     action: 'Support ticket #302 resolved successfully',
-    time: '2 hours ago',
+    time: '2 hr ago',
     icon: CheckCircle,
     iconBg: 'bg-primary-50',
     iconColor: 'text-primary-500',
@@ -36,7 +36,7 @@ const activities = [
   {
     id: 5,
     action: 'Ad campaign #1058 rejected — policy violation',
-    time: '3 hours ago',
+    time: '3 hr ago',
     icon: AlertCircle,
     iconBg: 'bg-red-100',
     iconColor: 'text-red-500',
@@ -45,10 +45,11 @@ const activities = [
 
 export default function ActivityFeed() {
   return (
-    <div className="bg-white rounded-2xl shadow-card p-6 animate-fade-in">
+    <div className="glass-card p-6 animate-fade-in h-full flex flex-col">
+      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="font-semibold text-gray-900">Recent Activity</h3>
+          <h3 className="text-sm font-semibold text-gray-900">Recent Activity</h3>
           <p className="text-xs text-gray-400 mt-0.5">Latest platform events</p>
         </div>
         <button className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors">
@@ -56,27 +57,25 @@ export default function ActivityFeed() {
         </button>
       </div>
 
-      <div className="space-y-4">
+      {/* Activity list */}
+      <div className="flex flex-col gap-0 flex-1">
         {activities.map((item, index) => {
           const Icon = item.icon
+          const isLast = index === activities.length - 1
           return (
-            <div
-              key={item.id}
-              className="flex items-start gap-3 group"
-              style={{ animationDelay: `${index * 60}ms` }}
-            >
-              <div className={`w-8 h-8 ${item.iconBg} rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5
-                              group-hover:scale-110 transition-transform duration-200`}>
-                <Icon size={14} className={item.iconColor} />
+            <div key={item.id} className="flex gap-3">
+              {/* Left: icon + connector line */}
+              <div className="flex flex-col items-center">
+                <div className={`w-8 h-8 ${item.iconBg} rounded-lg flex items-center justify-center flex-shrink-0 z-10`}>
+                  <Icon size={14} className={item.iconColor} />
+                </div>
+                {!isLast && <div className="w-px flex-1 bg-gray-100 my-1" />}
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-700 leading-relaxed">{item.action}</p>
+              {/* Right: text */}
+              <div className={`flex-1 min-w-0 ${!isLast ? 'pb-4' : ''}`}>
+                <p className="text-xs text-gray-700 leading-relaxed">{item.action}</p>
                 <p className="text-[11px] text-gray-400 mt-0.5">{item.time}</p>
               </div>
-              {/* Timeline dot */}
-              {index < activities.length - 1 && (
-                <div className="absolute left-[27px] mt-9 w-px h-4 bg-gray-100" />
-              )}
             </div>
           )
         })}

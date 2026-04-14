@@ -25,25 +25,27 @@ export default function KpiCard({
   const isPositive = change >= 0
 
   return (
-    <div className="bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 p-5 group cursor-pointer animate-fade-in">
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-11 h-11 ${iconBg} rounded-xl flex items-center justify-center
-                        group-hover:scale-110 transition-transform duration-300`}>
-          <Icon size={20} className={iconColor} />
+    <div className="glass-card-hover p-5 group animate-fade-in flex flex-col justify-between h-full min-h-[140px]">
+      {/* Top row: icon + badge */}
+      <div className="flex items-center justify-between mb-4">
+        <div className={`w-10 h-10 ${iconBg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
+          <Icon size={18} className={iconColor} />
         </div>
-        <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold
-                        ${isPositive ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'}`}>
-          {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+        <div className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] font-semibold
+                         ${isPositive ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'}`}>
+          {isPositive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
           {Math.abs(change)}%
         </div>
       </div>
-      <div>
-        <p className="text-2xl font-bold text-gray-900 tracking-tight">
-          {prefix}{value}
-        </p>
-        <p className="text-sm text-gray-500 mt-1">{title}</p>
-        <p className="text-[11px] text-gray-400 mt-1">{changeLabel}</p>
-      </div>
+
+      {/* Value */}
+      <p className="text-[22px] font-bold text-gray-900 tracking-tight leading-none">
+        {prefix}{value}
+      </p>
+
+      {/* Labels */}
+      <p className="text-[13px] font-medium text-gray-600 mt-1.5">{title}</p>
+      <p className="text-[11px] text-gray-400 mt-0.5 truncate">{changeLabel}</p>
     </div>
   )
 }
