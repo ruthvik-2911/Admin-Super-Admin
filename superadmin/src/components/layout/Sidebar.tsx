@@ -11,7 +11,8 @@ import {
   ChevronRight,
   LogOut,
   Settings,
-  Radio
+  Radio,
+  ClipboardList
 } from 'lucide-react'
 import logo from '../../assets/lightmodelogo.png'
 import icon from '../../assets/keliriicon.png'
@@ -55,40 +56,36 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       )}
       
       <aside
-        className={`fixed lg:relative flex flex-col glass-panel shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] h-full flex-shrink-0 z-40
-          ${collapsed ? '-translate-x-full lg:translate-x-0 lg:w-20' : 'translate-x-0 w-64'}`}
+        className={`fixed lg:relative flex flex-col bg-white shadow-sidebar transition-all duration-300 ease-in-out h-full flex-shrink-0 z-40
+          ${collapsed ? '-translate-x-full lg:translate-x-0 lg:w-[72px]' : 'translate-x-0 w-[240px]'}`}
       >
-        {/* Logo Section */}
-        <div className={`flex items-center h-24 px-6 mb-2 relative ${collapsed ? 'justify-center px-4' : 'gap-3'}`}>
-          {!collapsed ? (
-            <div className="animate-fade-in-scale w-full">
-              <img src={logo} alt="KELIRI Logo" className="h-10 w-auto object-contain mb-1" />
-              <p className="text-[10px] text-primary-600 font-bold tracking-[0.2em] uppercase ml-1 opacity-80">Super Admin</p>
-            </div>
-          ) : (
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-br from-primary-500 to-orange-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
-              <div className="relative w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center shadow-xl overflow-hidden">
-                <img src={icon} alt="K" className="w-8 h-8 object-contain" />
-              </div>
-            </div>
-          )}
+      {/* Logo */}
+      <div className={`flex items-center h-16 px-4 border-b border-gray-100 ${collapsed ? 'justify-center' : 'gap-3'}`}>
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
+          <img src={icon} alt="KELIRI Logo" className="w-8 h-8 object-contain" />
         </div>
+        {!collapsed && (
+          <div className="animate-fade-in">
+            <img src={logo} alt="KELIRI Logo" className="w-24 h-10 object-contain" />
+            <p className="text-[10px] text-primary-500 font-medium tracking-widest uppercase">Super Admin</p>
+          </div>
+        )}
+      </div>
 
       {/* Toggle button */}
       <button
         onClick={onToggle}
-        className="hidden lg:flex absolute -right-3 top-24 z-10 w-6 h-6 bg-white border border-gray-200 rounded-full
-                   items-center justify-center shadow-lg hover:bg-primary-50 hover:border-primary-200
-                   transition-all duration-200 text-gray-500 hover:text-primary-600 active:scale-90"
+        className="hidden lg:flex absolute -right-3 top-[72px] z-10 w-6 h-6 bg-white border border-gray-200 rounded-full
+                   items-center justify-center shadow-sm hover:bg-primary-50 hover:border-primary-200
+                   transition-all duration-200 text-gray-500 hover:text-primary-600"
       >
         {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
       </button>
 
-      {/* Nav Section */}
-      <nav className="flex-1 px-3 space-y-2 overflow-y-auto no-scrollbar">
+      {/* Navigation */}
+      <nav className="flex-1 py-4 px-2 overflow-y-auto space-y-1">
         {!collapsed && (
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-4 mb-3">Core Modules</p>
+          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest px-3 mb-2">Main Menu</p>
         )}
         {navItems.map((item) => {
           const Icon = item.icon
@@ -97,37 +94,33 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
               key={item.id}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 group relative overflow-hidden
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer group relative
                 ${isActive
-                  ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20'
-                  : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-lg hover:shadow-slate-200/50'
+                  ? 'bg-primary-50 text-primary-600'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }
                 ${collapsed ? 'justify-center' : ''}`
               }
             >
               {({ isActive }) => (
                 <>
-                  <Icon 
-                    size={20} 
-                    className={`flex-shrink-0 transition-all duration-300 ${isActive ? 'scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]' : 'group-hover:scale-110 group-hover:text-primary-500'}`} 
-                  />
+                  {isActive && (
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary-500 rounded-r-full" />
+                  )}
+                  <Icon size={18} className="flex-shrink-0" />
                   {!collapsed && (
-                    <span className="flex-1 truncate tracking-tight">{item.label}</span>
+                    <span className="flex-1 animate-fade-in">{item.label}</span>
                   )}
-                  {isActive && !collapsed && (
-                    <div className="w-1 h-1 bg-primary-500 rounded-full animate-pulse" />
-                  )}
-                  {item.badge && !collapsed && (
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-black tracking-tighter
-                      ${isActive ? 'bg-primary-500 text-white' : 'bg-slate-100 text-slate-600'}
-                    `}>
+                  {!collapsed && item.badge && (
+                    <span className="bg-primary-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
                       {item.badge}
                     </span>
                   )}
+                  {/* Tooltip when collapsed */}
                   {collapsed && (
-                    <div className="absolute left-full ml-4 px-3 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl
-                                   opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100]
-                                   shadow-2xl transition-all duration-300 -translate-x-2 group-hover:translate-x-0">
+                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-lg
+                                   opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50
+                                   transition-opacity duration-200">
                       {item.label}
                     </div>
                   )}
@@ -138,38 +131,26 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
         })}
       </nav>
 
-      {/* Footer / User Profile */}
-      <div className="p-4 mt-auto space-y-2">
-        <div className={`p-4 bg-slate-50 rounded-3xl border border-slate-100 ${collapsed ? 'px-2' : ''}`}>
-           {!collapsed && (
-             <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center cursor-pointer" onClick={() => navigate('/profile')}>
-                   <Users size={20} className="text-slate-400" />
-                </div>
-                <div className="flex-1 overflow-hidden">
-                   <p className="text-sm font-black text-slate-900 truncate">Aman Gupta</p>
-                   <p className="text-[10px] font-bold text-slate-400 truncate uppercase mt-[-2px]">Root Access</p>
-                </div>
-                <button 
-                  onClick={() => navigate('/settings')}
-                  className="p-1.5 text-slate-400 hover:text-primary-500 transition-colors"
-                >
-                  <Settings size={16} />
-                </button>
-             </div>
-           )}
-           <button 
-             onClick={() => navigate('/')}
-             className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-black
-                        transition-all duration-300
-                        ${collapsed ? 'justify-center text-red-500' : 'bg-red-50 text-red-600 hover:bg-red-600 hover:text-white shadow-sm hover:shadow-red-200'}
-             `}
-           >
-             <LogOut size={16} />
-             {!collapsed && <span>System Exit</span>}
-           </button>
-        </div>
-      </div>
+      {/* Footer */}
+      <div className="border-t border-gray-100 p-2 space-y-1">
+        <button
+          onClick={() => navigate('/settings')}
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                     text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200
+                     ${collapsed ? 'justify-center' : ''}`}
+        >
+          <Settings size={18} className="flex-shrink-0" />
+          {!collapsed && <span>Settings</span>}
+        </button>
+        <button
+          onClick={() => navigate('/')}
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                     text-red-500 hover:bg-red-50 transition-all duration-200
+                     ${collapsed ? 'justify-center' : ''}`}
+        >
+          <LogOut size={18} className="flex-shrink-0" />
+          {!collapsed && <span>Sign Out</span>}
+        </button>
       </div>
     </aside>
     </>
