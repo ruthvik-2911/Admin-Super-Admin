@@ -12,7 +12,7 @@ export function PaymentSummary({ ad, cost }: PaymentSummaryProps) {
     <div className="space-y-6">
       <div className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-          <Package className="w-5 h-5 text-brand-500" />
+          <Package className="w-5 h-5 text-primary-500" />
           Campaign Recap
         </h2>
 
@@ -22,7 +22,7 @@ export function PaymentSummary({ ad, cost }: PaymentSummaryProps) {
               <p className="text-sm font-bold text-gray-900 dark:text-white">{ad.title}</p>
               <p className="text-xs text-gray-500">{ad.id}</p>
             </div>
-            <span className="px-2 py-1 bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400 text-[10px] font-black rounded uppercase">
+            <span className="px-2 py-1 bg-primary-50 text-primary-600 dark:bg-primary-500/10 dark:text-primary-400 text-[10px] font-black rounded uppercase">
               Draft
             </span>
           </div>
@@ -69,7 +69,7 @@ export function PaymentSummary({ ad, cost }: PaymentSummaryProps) {
           
           <div className="pt-4 mt-2 border-t border-gray-100 dark:border-gray-800 flex justify-between items-baseline">
             <span className="text-lg font-bold text-gray-900 dark:text-white">Total Amount</span>
-            <span className="text-2xl font-black text-brand-600 dark:text-brand-400">₹{cost}</span>
+            <span className="text-2xl font-black text-primary-600 dark:text-primary-400">₹{cost}</span>
           </div>
         </div>
 

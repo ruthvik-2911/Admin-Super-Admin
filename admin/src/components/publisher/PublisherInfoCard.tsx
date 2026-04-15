@@ -17,7 +17,7 @@ export function PublisherInfoCard({ publisher }: PublisherInfoCardProps) {
     >
       <div className="flex items-start justify-between mb-6 pb-6 border-b border-gray-100 dark:border-gray-800">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-brand-50 dark:bg-brand-500/10 rounded-xl flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-xl shadow-inner uppercase">
+          <div className="w-14 h-14 bg-primary-50 dark:bg-primary-500/10 rounded-xl flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-xl shadow-inner uppercase">
             {publisher.name.charAt(0)}
           </div>
           <div>
@@ -74,7 +74,7 @@ export function PublisherInfoCard({ publisher }: PublisherInfoCardProps) {
           <div>
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Location Data</p>
             <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5 truncate max-w-[200px]" title={publisher.address}>{publisher.address || "N/A"}</p>
-            <p className="text-xs text-brand-500 font-medium mt-1">Lat: {publisher.latitude?.toFixed(4) || "0.0"}, Lng: {publisher.longitude?.toFixed(4) || "0.0"}</p>
+            <p className="text-xs text-primary-500 font-medium mt-1">Lat: {publisher.latitude?.toFixed(4) || "0.0"}, Lng: {publisher.longitude?.toFixed(4) || "0.0"}</p>
           </div>
         </div>
       </div>

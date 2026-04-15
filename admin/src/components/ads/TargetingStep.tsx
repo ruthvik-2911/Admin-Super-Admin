@@ -48,7 +48,7 @@ export function TargetingStep() {
             <input type="radio" value="manual" {...register("locationMode")} className="hidden" />
             <Map className="w-4 h-4" /> Manual Entry
           </label>
-          <label className={`cursor-pointer px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center gap-2 ${locationMode === 'auto' ? 'bg-white dark:bg-[#1A1D24] text-brand-600 dark:text-brand-400 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'}`}>
+          <label className={`cursor-pointer px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center gap-2 ${locationMode === 'auto' ? 'bg-white dark:bg-[#1A1D24] text-primary-600 dark:text-primary-400 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'}`}>
              <input 
                type="radio" 
                value="auto" 
@@ -77,7 +77,7 @@ export function TargetingStep() {
                 className={`w-full pl-9 pr-4 py-3 rounded-xl border bg-white dark:bg-[#1A1D24] text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                   errors.latitude 
                     ? "border-red-300 focus:border-red-500 focus:ring-red-500/20 dark:border-red-900/50" 
-                    : "border-gray-200 dark:border-gray-800 focus:border-brand-500 focus:ring-brand-500/20"
+                    : "border-gray-200 dark:border-gray-800 focus:border-primary-500 focus:ring-primary-500/20"
                 }`}
               />
             </div>
@@ -97,7 +97,7 @@ export function TargetingStep() {
                 className={`w-full pl-9 pr-4 py-3 rounded-xl border bg-white dark:bg-[#1A1D24] text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                   errors.longitude 
                     ? "border-red-300 focus:border-red-500 focus:ring-red-500/20 dark:border-red-900/50" 
-                    : "border-gray-200 dark:border-gray-800 focus:border-brand-500 focus:ring-brand-500/20"
+                    : "border-gray-200 dark:border-gray-800 focus:border-primary-500 focus:ring-primary-500/20"
                 }`}
               />
             </div>
@@ -109,10 +109,10 @@ export function TargetingStep() {
         <div>
            <div className="flex items-center justify-between mb-4">
              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-               <Crosshair className="w-4 h-4 text-brand-500" />
+               <Crosshair className="w-4 h-4 text-primary-500" />
                Broadcast Radius (KM)
              </label>
-             <span className="text-brand-600 dark:text-brand-400 font-bold text-lg bg-brand-50 dark:bg-brand-500/10 px-3 py-1 rounded-lg">
+             <span className="text-primary-600 dark:text-primary-400 font-bold text-lg bg-primary-50 dark:bg-primary-500/10 px-3 py-1 rounded-lg">
                {radius} km
              </span>
            </div>
@@ -124,7 +124,7 @@ export function TargetingStep() {
                max="100"
                step="1"
                {...register("radius")}
-               className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-brand-500 relative z-10"
+               className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500 relative z-10"
              />
              <div className="flex justify-between text-xs text-gray-400 mt-2 absolute w-full top-8 -z-10 px-1">
                <span>1 km (Hyperlocal)</span>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,5 +7,73 @@
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900 dark:bg-[#0E1117] dark:text-gray-100 antialiased;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 text-white font-semibold px-6 py-3 rounded-xl
+           hover:bg-primary-600 active:bg-primary-700
+           transition-all duration-200 ease-in-out
+           shadow-sm hover:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
+  }
+
+  .glass-card {
+    @apply bg-white/60 dark:bg-[#1A1D24]/60 backdrop-blur-2xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/80 dark:border-white/5 transition-all duration-300;
+  }
+
+  .glass-card-hover {
+    @apply glass-card hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 hover:bg-white/80 dark:hover:bg-[#1A1D24]/80 cursor-pointer;
+  }
+
+  /* Background design layer */
+  .dashboard-bg {
+    position: relative;
+    background-color: #F5F6FA;
+    background-image:
+      radial-gradient(circle, #d1d5db 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .dark .dashboard-bg {
+    background-color: #0E1117;
+    background-image:
+      radial-gradient(circle, #1e293b 1px, transparent 1px);
+  }
+
+  .dashboard-bg::before {
+    content: '';
+    position: fixed;
+    top: -120px;
+    right: -80px;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(255, 107, 0, 0.09) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatOrb 9s ease-in-out infinite alternate;
+  }
+
+  .dashboard-bg::after {
+    content: '';
+    position: fixed;
+    bottom: -100px;
+    left: 200px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatOrb 12s ease-in-out infinite alternate-reverse;
+  }
+}
+
+@keyframes floatOrb {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(20px, 30px) scale(1.05); }
+  100% { transform: translate(-10px, 10px) scale(0.97); }
 }

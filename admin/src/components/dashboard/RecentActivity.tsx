@@ -39,7 +39,7 @@ export function RecentActivity({ data, delay = 0 }: RecentActivityProps) {
       <Card className="overflow-hidden">
         <div className="p-6 border-b border-gray-100 dark:border-gray-800">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <Clock className="w-5 h-5 text-brand-500" />
+            <Clock className="w-5 h-5 text-primary-500" />
             Recent Activity
           </h3>
         </div>
@@ -62,7 +62,7 @@ export function RecentActivity({ data, delay = 0 }: RecentActivityProps) {
                   key={item.id}
                   className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer group last:border-b-0"
                 >
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white group-hover:text-brand-500 transition-colors">
+                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white group-hover:text-primary-500 transition-colors">
                     {item.title}
                   </td>
                   <td className="px-6 py-4">

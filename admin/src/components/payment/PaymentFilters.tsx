@@ -29,7 +29,7 @@ export function PaymentFilters({
             placeholder="Search by Ad Name or Transaction ID..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#1C1F26] border border-gray-200 dark:border-gray-800 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all"
+            className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#1C1F26] border border-gray-200 dark:border-gray-800 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all"
           />
         </div>
 
@@ -39,7 +39,7 @@ export function PaymentFilters({
           <select
             value={status}
             onChange={(e) => onStatusChange(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#1C1F26] border border-gray-200 dark:border-gray-800 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all appearance-none cursor-pointer"
+            className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#1C1F26] border border-gray-200 dark:border-gray-800 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all appearance-none cursor-pointer"
           >
             <option value="All">All Statuses</option>
             <option value="Success">Success</option>
@@ -59,7 +59,7 @@ export function PaymentFilters({
         </button>
         <button
           onClick={onExport}
-          className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-gray-900 dark:bg-brand-500 text-white text-sm font-bold rounded-xl hover:bg-gray-800 dark:hover:bg-brand-600 transition-all active:scale-95 shadow-lg shadow-gray-900/10 dark:shadow-brand-500/20"
+          className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-gray-900 dark:bg-primary-500 text-white text-sm font-bold rounded-xl hover:bg-gray-800 dark:hover:bg-primary-600 transition-all active:scale-95 shadow-lg shadow-gray-900/10 dark:shadow-primary-500/20"
         >
           <Download className="w-4 h-4" />
           Export CSV

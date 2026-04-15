@@ -62,8 +62,8 @@ export function PerformanceChart({ data, title, delay = 0 }: ChartProps) {
               <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
               <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#6B7280', strokeWidth: 1, strokeDasharray: '3 3' }} />
               <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-              <Line type="monotone" dataKey="impressions" stroke="#3b82f6" strokeWidth={3} dot={false} activeDot={{ r: 6, strokeWidth: 0 }} />
-              <Line type="monotone" dataKey="clicks" stroke="#22c55e" strokeWidth={3} dot={false} activeDot={{ r: 6, strokeWidth: 0 }} />
+              <Line type="monotone" dataKey="impressions" stroke="#FF6B00" strokeWidth={3} dot={false} activeDot={{ r: 6, strokeWidth: 0 }} />
+              <Line type="monotone" dataKey="clicks" stroke="#6366f1" strokeWidth={3} dot={false} activeDot={{ r: 6, strokeWidth: 0 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -123,8 +123,8 @@ export function SpendPerformanceChart({ data, title, delay = 0 }: ChartProps) {
                     <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
                     <Tooltip content={<CustomTooltip />} cursor={{ fill: '#374151', opacity: 0.1 }} />
                     <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-                    <Bar yAxisId="left" dataKey="spend" fill="#8b5cf6" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                    <Bar yAxisId="right" dataKey="clicks" fill="#f97316" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                    <Bar yAxisId="left" dataKey="spend" fill="#FF6B00" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                    <Bar yAxisId="right" dataKey="clicks" fill="#6366f1" radius={[4, 4, 0, 0]} maxBarSize={40} />
                 </BarChart>
             </ResponsiveContainer>
         </div>

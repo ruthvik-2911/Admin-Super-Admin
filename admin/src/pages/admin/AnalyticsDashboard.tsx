@@ -74,7 +74,7 @@ export default function AnalyticsDashboard() {
             exit={{ opacity: 0 }}
             className="h-[60vh] flex flex-col items-center justify-center gap-4"
           >
-             <Loader2 className="w-12 h-12 text-brand-500 animate-spin" />
+             <Loader2 className="w-12 h-12 text-primary-500 animate-spin" />
              <p className="text-sm font-black text-gray-400 uppercase tracking-widest italic">Syncing Performance Data...</p>
           </motion.div>
         ) : data ? (
@@ -86,7 +86,7 @@ export default function AnalyticsDashboard() {
             className="pb-20"
           >
             <KpiGrid data={data.kpis} />
-            <ChartsContainer data={data.trends} />
+            <ChartsContainer data={data.trends} breakdowns={data.breakdowns} />
             <AnalyticsInsights data={data} />
             
             {/* Footer Trust */}

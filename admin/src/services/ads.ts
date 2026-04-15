@@ -1,4 +1,4 @@
-export type AdStatus = "Draft" | "Pending" | "Active" | "Expired" | "Suspended"
+export type AdStatus = "Pending" | "Active" | "Expired"
 export type PaymentStatus = "Paid" | "Pending" | "Failed"
 
 export interface Advertisement {
@@ -19,28 +19,21 @@ const generateMockAds = (count: number): Advertisement[] => {
   const pubs = ["Phoenix Mall", "High Street Branch", "Global Hub", "Downtown Store", "Airport Outlet"]
   
   return Array.from({ length: count }).map((_, index) => {
-    const isDraft = Math.random() > 0.8
-    const isSuspended = Math.random() > 0.95
-    const isExpired = Math.random() > 0.85
+    const isExpired = Math.random() > 0.8
+    const isPending = Math.random() > 0.7
     
     let status: AdStatus = "Active"
     let paymentStatus: PaymentStatus = "Paid"
     
-    if (isDraft) {
-      status = "Draft"
-      paymentStatus = "Pending"
-    } else if (isSuspended) {
-      status = "Suspended"
-      paymentStatus = "Failed"
-    } else if (isExpired) {
+    if (isExpired) {
       status = "Expired"
-    } else if (Math.random() > 0.7) {
+    } else if (isPending) {
       status = "Pending"
       paymentStatus = "Pending"
     }
 
-    const impressions = status === "Draft" || status === "Pending" ? 0 : Math.floor(1000 + Math.random() * 50000)
-    const clicks = status === "Draft" || status === "Pending" ? 0 : Math.floor(impressions * (Math.random() * 0.05))
+    const impressions = status === "Pending" ? 0 : Math.floor(1000 + Math.random() * 50000)
+    const clicks = status === "Pending" ? 0 : Math.floor(impressions * (Math.random() * 0.05))
     const ctr = impressions > 0 ? parseFloat(((clicks / impressions) * 100).toFixed(1)) : 0
 
     // Random startDate spanning roughly around today
@@ -73,7 +66,7 @@ export interface FetchAdsArgs {
   page: number
   limit: number
   search?: string
-  status?: string
+  status?: string | string[]
   publisher?: string
   dateRange?: { start?: string; end?: string }
 }
@@ -99,7 +92,13 @@ export const fetchAds = async ({ page, limit, search, status, publisher, dateRan
   }
 
   if (status && status !== "All") {
-    filtered = filtered.filter(ad => ad.status === status)
+    if (Array.isArray(status)) {
+      if (status.length > 0) {
+        filtered = filtered.filter(ad => status.includes(ad.status))
+      }
+    } else {
+      filtered = filtered.filter(ad => ad.status === status)
+    }
   }
 
   if (publisher && publisher !== "All") {
@@ -135,7 +134,7 @@ export const publishAd = async (id: string): Promise<Advertisement> => {
   await new Promise(resolve => setTimeout(resolve, 800))
   const idx = mockAds.findIndex(ad => ad.id === id)
   if (idx === -1) throw new Error("Ad not found")
-  if (mockAds[idx].status !== "Draft") throw new Error("Only Draft ads can be published")
+  if (mockAds[idx].status !== "Pending") throw new Error("Only Pending ads can be published")
   
   mockAds[idx] = { ...mockAds[idx], status: "Pending", paymentStatus: "Pending" }
   return mockAds[idx]
@@ -150,7 +149,7 @@ export const duplicateAd = async (id: string): Promise<Advertisement> => {
     ...target,
     id: `AD${2000 + mockAds.length}`,
     title: `${target.title} (Copy)`,
-    status: "Draft",
+    status: "Pending",
     paymentStatus: "Pending",
     impressions: 0,
     clicks: 0,
@@ -184,7 +183,7 @@ export const createAd = async (data: any): Promise<Advertisement> => {
     id: `AD${2000 + mockAds.length}`,
     title: data.title,
     publishers: ["System Default"], // Mocks
-    status: "Draft",
+    status: "Pending",
     startDate: new Date().toISOString().split("T")[0],
     endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     impressions: 0,

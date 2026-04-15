@@ -71,11 +71,11 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
                 <td className="px-6 py-4 text-right font-medium text-gray-900 dark:text-white">
                   {campaign.clicks > 0 ? campaign.clicks.toLocaleString() : "-"}
                 </td>
-                <td className="px-6 py-4 text-right font-medium text-brand-600 dark:text-brand-400">
+                <td className="px-6 py-4 text-right font-medium text-primary-600 dark:text-primary-400">
                   {campaign.ctr > 0 ? `${campaign.ctr}%` : "-"}
                 </td>
                 <td className="px-6 py-4 text-center">
-                  <button className="p-2 text-gray-400 hover:text-brand-500 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500/50">
+                  <button className="p-2 text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/50">
                     <Eye className="w-5 h-5" />
                   </button>
                 </td>

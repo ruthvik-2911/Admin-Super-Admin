@@ -70,17 +70,15 @@ export function AdsTable({
         const s = row.original.status
         if (s === "Active") return <Badge variant="success">Active</Badge>
         if (s === "Pending") return <Badge variant="warning">Pending</Badge>
-        if (s === "Suspended") return <Badge variant="error" className="bg-red-800 text-red-100">Suspended</Badge>
-        if (s === "Expired") return <Badge variant="error">Expired</Badge>
-        return <Badge variant="neutral">Draft</Badge>
+        return <Badge variant="danger">Expired</Badge>
       }
     },
     {
       header: "Timeline",
       cell: ({ row }) => (
-        <div className="text-sm text-gray-600 dark:text-gray-300">
-          <div>{row.original.startDate}</div>
-          <div className="text-gray-400">- {row.original.endDate}</div>
+        <div className="flex flex-col">
+          <span className="text-xs font-black text-gray-900 dark:text-gray-100">{row.original.startDate}</span>
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Until {row.original.endDate}</span>
         </div>
       )
     },
@@ -89,21 +87,16 @@ export function AdsTable({
       header: "Metrics",
       cell: ({ row }) => {
         const imp = row.original.impressions
-        const clk = row.original.clicks
         const ctr = row.original.ctr
         return (
-          <div className="text-right flex items-center gap-4">
-             <div>
-                <p className="text-xs text-gray-500">Imp.</p>
-                <p className="font-medium text-gray-900 dark:text-gray-200">{imp > 0 ? imp.toLocaleString() : "-"}</p>
+          <div className="flex items-center gap-6">
+             <div className="flex flex-col">
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Reach</span>
+                <span className="text-sm font-black text-gray-900 dark:text-gray-200">{imp > 0 ? imp.toLocaleString() : "—"}</span>
              </div>
-             <div>
-                <p className="text-xs text-gray-500">Clicks</p>
-                <p className="font-medium text-gray-900 dark:text-gray-200">{clk > 0 ? clk.toLocaleString() : "-"}</p>
-             </div>
-             <div>
-                <p className="text-xs text-brand-500">CTR</p>
-                <p className="font-bold text-brand-600 dark:text-brand-400">{ctr > 0 ? `${ctr}%` : "-"}</p>
+             <div className="flex flex-col">
+                <span className="text-[10px] font-black text-primary-400 uppercase tracking-widest">CTR</span>
+                <span className="text-sm font-black text-primary-600 dark:text-primary-400">{ctr > 0 ? `${ctr}%` : "—"}</span>
              </div>
           </div>
         )
@@ -115,10 +108,10 @@ export function AdsTable({
       cell: ({ row }) => {
         const ps = row.original.paymentStatus
         return (
-           <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold
-             ${ps === "Paid" ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400' :
-               ps === "Pending" ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400' :
-               'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400'
+           <span className={`inline-flex items-center px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider
+             ${ps === "Paid" ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400' :
+               ps === "Pending" ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400' :
+               'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400'
              }
            `}>
               {ps}
@@ -131,55 +124,42 @@ export function AdsTable({
       header: "Actions",
       cell: ({ row }) => {
         const ad = row.original
-        const isDraft = ad.status === "Draft"
+        const isPending = ad.status === "Pending"
         
         return (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-1.5">
             <button
                onClick={() => onView(ad.id)}
-               className="p-1.5 text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-md transition-colors"
+               className="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-xl transition-all active:scale-95"
                title="View Details"
             >
-              <Eye className="w-[18px] h-[18px]" />
+              <Eye className="w-4 h-4" />
             </button>
+            
             <button
-               onClick={() => isDraft && onEdit(ad.id)}
-               disabled={!isDraft}
-               className={`p-1.5 rounded-md transition-colors ${
-                 isDraft 
-                  ? "text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:text-blue-400 dark:hover:bg-blue-500/10" 
-                  : "text-gray-300 dark:text-gray-700 cursor-not-allowed"
+               onClick={() => isPending && onEdit(ad.id)}
+               disabled={!isPending}
+               className={`p-2 rounded-xl transition-all active:scale-95 ${
+                 isPending 
+                  ? "text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10" 
+                  : "text-gray-300 dark:text-gray-800 cursor-not-allowed opacity-30"
                }`}
-               title={isDraft ? "Edit Ad" : "Cannot edit non-draft ads"}
             >
-              <Edit2 className="w-[18px] h-[18px]" />
-            </button>
-            <button
-               onClick={() => isDraft && onPublish(ad.id, ad.title)}
-               disabled={!isDraft}
-               className={`p-1.5 rounded-md transition-colors ${
-                 isDraft 
-                  ? "text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:text-emerald-400 dark:hover:bg-emerald-500/10" 
-                  : "text-gray-300 dark:text-gray-700 cursor-not-allowed"
-               }`}
-               title={isDraft ? "Publish Ad" : "Ad already active or expired"}
-            >
-              <Send className="w-[18px] h-[18px]" />
+              <Edit2 className="w-4 h-4" />
             </button>
 
             <button
                onClick={() => onDuplicate(ad.id, ad.title)}
-               className="p-1.5 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-md transition-colors"
-               title="Duplicate Ad"
+               className="p-2 text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all active:scale-95"
             >
-              <Copy className="w-[18px] h-[18px]" />
+              <Copy className="w-4 h-4" />
             </button>
+
             <button
                onClick={() => onArchive(ad.id, ad.title)}
-               className="p-1.5 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors"
-               title="Archive Ad"
+               className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all active:scale-95"
             >
-              <Archive className="w-[18px] h-[18px]" />
+              <Archive className="w-4 h-4" />
             </button>
           </div>
         )

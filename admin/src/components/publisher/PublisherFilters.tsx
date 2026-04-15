@@ -45,7 +45,7 @@ export function PublisherFilters({
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="h-10 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-800 dark:bg-[#1A1D24] focus-visible:dark:ring-brand-500 transition-colors dark:text-white"
+          className="h-10 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-800 dark:bg-[#1A1D24] focus-visible:dark:ring-primary-500 transition-colors dark:text-white"
         >
           <option value="All">All Status</option>
           <option value="Active">Active</option>

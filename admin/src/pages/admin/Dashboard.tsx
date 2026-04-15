@@ -8,6 +8,7 @@ import {
   MousePointerClick
 } from "lucide-react"
 import { KpiCard } from "../../components/dashboard/KpiCard"
+import { QuickActions } from "../../components/dashboard/QuickActions"
 import { PerformanceChart, EngagementChart, SpendPerformanceChart } from "../../components/dashboard/Charts"
 import { RecentActivity } from "../../components/dashboard/RecentActivity"
 import { Skeleton } from "../../components/ui/Skeleton"
@@ -49,23 +50,33 @@ export default function Dashboard() {
   return (
     <>
       <div className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
-          <div className="flex items-center gap-3 bg-white dark:bg-[#1C1F26] p-1 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div className="flex flex-col">
+             <h1 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Performance Overview</h1>
+             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Real-time statistics & ad performance</p>
+          </div>
+          
+          <div className="flex items-center gap-1.5 bg-gray-200/50 dark:bg-gray-800/50 p-1.5 rounded-2xl border border-gray-100 dark:border-gray-800/50 backdrop-blur-sm transition-colors">
              {['Today', '7', '30'].map((f) => (
                <button
                  key={f}
                  onClick={() => setFilter(f)}
-                 className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                 className={`px-5 py-2 text-xs font-black uppercase tracking-wider rounded-xl transition-all ${
                    filter === f 
-                     ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400 shadow-sm' 
-                     : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                     ? 'bg-white dark:bg-gray-900 text-primary-600 dark:text-primary-400 shadow-xl scale-[1.05] z-10' 
+                     : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
                  }`}
                >
-                 {f === 'Today' ? f : `Last ${f} Days`}
+                 {f === 'Today' ? f : `${f} Days`}
                </button>
              ))}
           </div>
         </div>
+
+        {/* Quick Actions */}
+        <section className="mb-8">
+           <QuickActions />
+        </section>
 
 
         {/* KPI Grid */}

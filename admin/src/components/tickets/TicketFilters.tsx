@@ -31,7 +31,7 @@ export function TicketFilters({ onFilterChange }: TicketFiltersProps) {
             placeholder="Search by ID or Subject..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-[#0E1117] border border-gray-100 dark:border-gray-800 rounded-2xl text-sm focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none transition-all placeholder:text-gray-400 dark:text-gray-200"
+            className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-[#0E1117] border border-gray-100 dark:border-gray-800 rounded-2xl text-sm focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 dark:text-gray-200"
           />
         </div>
 
@@ -43,7 +43,7 @@ export function TicketFilters({ onFilterChange }: TicketFiltersProps) {
                onClick={() => setStatus(s)}
                className={`px-4 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${
                  status === s 
-                   ? "bg-white dark:bg-[#1C1F26] text-brand-600 dark:text-brand-400 shadow-sm" 
+                   ? "bg-white dark:bg-[#1C1F26] text-primary-600 dark:text-primary-400 shadow-sm" 
                    : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                }`}
              >
@@ -56,7 +56,7 @@ export function TicketFilters({ onFilterChange }: TicketFiltersProps) {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="px-4 py-2.5 bg-gray-50 dark:bg-[#0E1117] border border-gray-100 dark:border-gray-800 rounded-xl text-xs font-bold text-gray-700 dark:text-gray-300 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all cursor-pointer appearance-none min-w-[160px]"
+          className="px-4 py-2.5 bg-gray-50 dark:bg-[#0E1117] border border-gray-100 dark:border-gray-800 rounded-xl text-xs font-bold text-gray-700 dark:text-gray-300 focus:ring-4 focus:ring-primary-500/10 outline-none transition-all cursor-pointer appearance-none min-w-[160px]"
         >
           <option value="All">All Categories</option>
           <option value="Technical Issue">Technical Issue</option>
@@ -68,7 +68,7 @@ export function TicketFilters({ onFilterChange }: TicketFiltersProps) {
 
       <button
         onClick={handleReset}
-        className="flex items-center gap-2 px-5 py-2.5 text-gray-400 hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-xl transition-all group"
+        className="flex items-center gap-2 px-5 py-2.5 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-xl transition-all group"
         title="Reset Filters"
       >
         <RotateCcw className="w-4 h-4 transition-transform group-hover:-rotate-90" />

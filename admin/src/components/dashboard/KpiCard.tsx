@@ -23,34 +23,35 @@ export function KpiCard({ title, value, trend, icon, delay = 0 }: KpiCardProps) 
       whileHover={{ y: -4, scale: 1.02 }}
       className="h-full"
     >
-      <Card className="p-6 h-full flex flex-col justify-between hover:shadow-md transition-shadow">
+      <div className="glass-card p-7 h-full flex flex-col justify-between hover:bg-white dark:hover:bg-white/5 transition-all duration-300 group">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 tracking-wide">{title}</p>
-            <h3 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{value}</h3>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-2">{title}</p>
+            <h3 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">{value}</h3>
           </div>
-          <div className="p-3 bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400 rounded-xl">
+          <div className="p-4 bg-primary-100/50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 rounded-2xl group-hover:scale-110 group-hover:bg-primary-500 group-hover:text-white transition-all duration-500 shadow-lg shadow-primary-500/10">
             {icon}
           </div>
         </div>
+        
         {trend && (
-          <div className="mt-4 flex items-center text-sm">
-            <span
-              className={`flex items-center font-medium ${
-                trend.isPositive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
-              }`}
-            >
+          <div className="mt-6 flex items-center justify-between">
+            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-black ${
+               trend.isPositive 
+                ? "bg-green-100/80 text-green-700 dark:bg-green-500/10 dark:text-green-400" 
+                : "bg-red-100/80 text-red-700 dark:bg-red-500/10 dark:text-red-400"
+            }`}>
               {trend.isPositive ? (
-                <ArrowUpRight className="mr-1 h-4 w-4" />
+                <ArrowUpRight className="h-3 w-3" />
               ) : (
-                <ArrowDownRight className="mr-1 h-4 w-4" />
+                <ArrowDownRight className="h-3 w-3" />
               )}
               {trend.value}%
-            </span>
-            <span className="ml-2 text-gray-500 dark:text-gray-400">vs last month</span>
+            </div>
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Growth rate</span>
           </div>
         )}
-      </Card>
+      </div>
     </motion.div>
   )
 }

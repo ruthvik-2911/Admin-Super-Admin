@@ -8,11 +8,12 @@ import {
   CheckCircle2, 
   History,
   AlertCircle,
-  MessageSquare
+  MessageSquare,
+  RefreshCcw
 } from "lucide-react"
 import toast, { Toaster } from "react-hot-toast"
 
-import { getTicketById, replyToTicket } from "../../services/tickets"
+import { getTicketById, replyToTicket, reopenTicket } from "../../services/tickets"
 import type { Ticket } from "../../types/ticket"
 import { MessageBubble } from "../../components/tickets/MessageBubble"
 import { ReplySection } from "../../components/tickets/ReplySection"
@@ -23,6 +24,7 @@ export default function TicketDetails() {
   const navigate = useNavigate()
   const [ticket, setTicket] = React.useState<Ticket | null>(null)
   const [loading, setLoading] = React.useState(true)
+  const [reopening, setReopening] = React.useState(false)
   
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
@@ -63,10 +65,24 @@ export default function TicketDetails() {
     }
   }
 
+  const handleReopen = async () => {
+    if (!id) return
+    setReopening(true)
+    try {
+      await reopenTicket(id)
+      await loadTicket()
+      toast.success("Ticket re-opened")
+    } catch (err) {
+      toast.error("Failed to re-open ticket")
+    } finally {
+      setReopening(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-10 h-10 text-brand-500 animate-spin" />
+        <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
       </div>
     )
   }
@@ -100,6 +116,17 @@ export default function TicketDetails() {
               </div>
             </div>
           </div>
+
+          {isResolved && (
+            <button 
+              onClick={handleReopen}
+              disabled={reopening}
+              className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 disabled:opacity-50 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-primary-500/20 transition-all"
+            >
+              <RefreshCcw className={`w-3.5 h-3.5 ${reopening ? "animate-spin" : ""}`} />
+              {reopening ? "Working..." : "Re-open Ticket"}
+            </button>
+          )}
         </div>
 
         {/* Conversation Area */}
@@ -108,7 +135,6 @@ export default function TicketDetails() {
           className="flex-1 overflow-y-auto px-8 py-10 scroll-smooth"
         >
           <div className="max-w-4xl mx-auto">
-            {/* Initial Request Indicator */}
             <div className="flex items-center gap-4 mb-12 opacity-40">
                <div className="h-px bg-gray-200 dark:bg-gray-800 flex-1" />
                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Conversation Started</p>
@@ -131,16 +157,14 @@ export default function TicketDetails() {
                     <CheckCircle2 className="w-8 h-8" />
                  </div>
                  <h3 className="text-xl font-black text-emerald-900 dark:text-emerald-100 tracking-tight mb-2">Issue Resolved</h3>
-                 <p className="text-emerald-700 dark:text-emerald-400 font-medium text-sm leading-relaxed">This ticket has been marked as resolved. If you still need help, simply send a message below to re-open the conversation.</p>
+                 <p className="text-emerald-700 dark:text-emerald-400 font-medium text-sm leading-relaxed">This ticket has been marked as resolved. If you still need help, simply send a message below to re-open the conversation or click the button above.</p>
               </motion.div>
             )}
 
-            {/* Spacer to prevent content overlap with reply box */}
             <div className="h-20" />
           </div>
         </main>
 
-        {/* Reply Footer */}
         <ReplySection onReply={handleReply} disabled={false} />
       </div>
     </>

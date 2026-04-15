@@ -25,7 +25,7 @@ export function AdSummaryCard({
     <div className="sticky top-24 bg-white dark:bg-[#1A1D24] shadow-xl border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden transition-all duration-300">
       <div className="p-6">
         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          <CreditCard className="w-5 h-5 text-brand-500" />
+          <CreditCard className="w-5 h-5 text-primary-500" />
           Publication Summary
         </h3>
 
@@ -38,7 +38,7 @@ export function AdSummaryCard({
           <div className="overflow-hidden">
             <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{ad.title}</p>
             <p className="text-xs text-gray-500">{ad.status} Advertisement</p>
-            <span className="mt-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400 border border-brand-100 dark:border-brand-500/20 uppercase tracking-wider">
+            <span className="mt-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-primary-50 text-primary-600 dark:bg-primary-500/10 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20 uppercase tracking-wider">
               {ad.id}
             </span>
           </div>
@@ -62,7 +62,7 @@ export function AdSummaryCard({
           <div className="pt-4 border-t border-gray-100 dark:border-gray-800">
             <div className="flex justify-between items-baseline mb-1">
               <span className="text-gray-900 dark:text-white font-bold text-lg">Total Amount</span>
-              <span className="text-brand-600 dark:text-brand-400 font-black text-2xl">
+              <span className="text-primary-600 dark:text-primary-400 font-black text-2xl">
                 ₹{Math.ceil(totalCost)}
               </span>
             </div>
@@ -76,7 +76,7 @@ export function AdSummaryCard({
         <button
           onClick={onPublish}
           disabled={isSubmitting || numPublishers === 0 || days <= 0}
-          className="w-full bg-brand-500 hover:bg-brand-600 disabled:bg-gray-200 dark:disabled:bg-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20 active:scale-95 transition-all text-sm uppercase tracking-widest"
+          className="w-full bg-primary-500 hover:bg-primary-600 disabled:bg-gray-200 dark:disabled:bg-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary-500/20 active:scale-95 transition-all text-sm uppercase tracking-widest"
         >
           {isSubmitting ? (
             <span className="flex items-center gap-2">

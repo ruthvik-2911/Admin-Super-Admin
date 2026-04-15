@@ -60,14 +60,14 @@ export function MultiSelect({ label, options, selectedIds, onChange, error }: Mu
         className={`relative min-h-[52px] w-full px-4 py-2 rounded-xl border bg-gray-50 dark:bg-[#1C1F26] cursor-pointer flex flex-wrap gap-2 items-center transition-all ${
           error 
             ? "border-red-300 focus:border-red-500 ring-2 ring-red-500/10 dark:border-red-900/50" 
-            : "border-gray-200 dark:border-gray-800 hover:border-brand-500/50"
+            : "border-gray-200 dark:border-gray-800 hover:border-primary-500/50"
         }`}
       >
         {selectedObjects.length > 0 ? (
           selectedObjects.map(opt => (
             <span 
               key={opt.id} 
-              className="flex items-center gap-1.5 px-3 py-1 bg-brand-500 text-white text-xs font-bold rounded-full group hover:bg-brand-600 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1 bg-primary-500 text-white text-xs font-bold rounded-full group hover:bg-primary-600 transition-colors"
             >
               {opt.name}
               <X 
@@ -94,7 +94,7 @@ export function MultiSelect({ label, options, selectedIds, onChange, error }: Mu
                 placeholder="Search publishers..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-[#1C1F26] text-sm text-gray-900 dark:text-white rounded-lg border-none focus:ring-2 focus:ring-brand-500/20"
+                className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-[#1C1F26] text-sm text-gray-900 dark:text-white rounded-lg border-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
           </div>
@@ -109,7 +109,7 @@ export function MultiSelect({ label, options, selectedIds, onChange, error }: Mu
                     onClick={() => toggleOption(opt.id)}
                     className={`flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
                       isSelected 
-                        ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400" 
+                        ? "bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400" 
                         : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     }`}
                   >

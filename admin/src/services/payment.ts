@@ -1,5 +1,5 @@
-import type { RazorpayOrder, PaymentTransaction } from "../../types/payment"
-import type { Invoice } from "../../types/invoice"
+import type { RazorpayOrder, PaymentTransaction } from "../types/payment"
+import type { Invoice } from "../types/invoice"
 
 export const createOrder = async (adId: string, amount: number): Promise<RazorpayOrder> => {
   // Mock backend call to POST /api/admin/payment/create-order

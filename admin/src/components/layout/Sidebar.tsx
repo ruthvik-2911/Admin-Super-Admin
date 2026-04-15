@@ -42,33 +42,32 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       {/* Mobile Toggle */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed bottom-6 right-6 z-50 p-4 bg-brand-500 text-white rounded-2xl shadow-2xl"
+        className="lg:hidden fixed bottom-6 right-6 z-50 p-4 bg-primary-500 text-white rounded-2xl shadow-2xl"
       >
         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
 
       <aside className={cn(
-        "fixed left-0 top-0 h-screen bg-[#0E1117] border-r border-gray-800 transition-all duration-300 z-40 flex flex-col",
-        isOpen ? "w-72" : "w-20 overflow-hidden lg:overflow-visible"
+        "fixed left-0 top-0 h-screen bg-white transition-all duration-300 z-40 flex flex-col border-r border-gray-100",
+        isOpen ? "w-64" : "w-20 overflow-hidden lg:overflow-visible"
       )}>
         {/* Logo Section */}
-        <div className="p-6 pb-12 flex items-center justify-between">
-          <div className="flex items-center gap-4 min-w-0 overflow-hidden">
-            <img src="/logo.png" alt="" className="h-10 w-auto object-contain" />
+        <div className="p-6 pb-6 flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0 overflow-hidden">
+            <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center flex-shrink-0 border border-primary-100 shadow-sm">
+               <img src="/logo.png" alt="" className="h-6 w-auto object-contain" />
+            </div>
+            {isOpen && (
+              <div className="flex flex-col">
+                <span className="text-sm font-black text-gray-900 leading-tight">KELIRI</span>
+                <span className="text-[10px] font-black text-primary-500 uppercase tracking-widest leading-none">Admin Panel</span>
+              </div>
+            )}
           </div>
-          
-          {isOpen && (
-            <button 
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl transition-all active:scale-90"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-          )}
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 space-y-2">
+        <nav className="flex-1 px-3 space-y-1 pt-4">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path
             return (
@@ -76,25 +75,18 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group relative",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group relative",
                   isActive 
-                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/20" 
-                    : "text-gray-400 hover:text-white hover:bg-gray-800/50"
+                    ? "bg-primary-50 text-primary-600 font-bold" 
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                 )}
               >
-                <item.icon className={cn("w-5 h-5", isActive ? "text-white" : "group-hover:text-brand-400")} />
+                {isActive && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary-500 rounded-r-full" />
+                )}
+                <item.icon className={cn("w-[18px] h-[18px]", isActive ? "text-primary-600" : "group-hover:text-primary-500")} />
                 {isOpen && (
-                  <span className="text-sm font-bold animate-in fade-in duration-300">{item.label}</span>
-                )}
-                {isActive && isOpen && (
-                   <ChevronRight className="absolute right-4 w-4 h-4 opacity-50" />
-                )}
-                
-                {/* Tooltip for collapsed mode */}
-                {!isOpen && (
-                  <div className="absolute left-full ml-4 px-3 py-1 bg-gray-900 text-white text-[10px] font-black uppercase rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
-                    {item.label}
-                  </div>
+                  <span className="text-sm tracking-tight">{item.label}</span>
                 )}
               </Link>
             )
@@ -102,30 +94,22 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         </nav>
 
         {/* Bottom Actions */}
-        <div className="p-4 border-t border-gray-800/50">
+        <div className="p-3 border-t border-gray-50">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-gray-400 hover:text-red-400 hover:bg-red-500/5 transition-all group relative"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all group"
           >
-            <LogOut className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
-            {isOpen && (
-               <span className="text-sm font-bold">Logout</span>
-            )}
-
-            {!isOpen && (
-              <div className="absolute left-full ml-4 px-3 py-1 bg-red-500 text-white text-[10px] font-black uppercase rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
-                Logout
-              </div>
-            )}
+            <LogOut className="w-[18px] h-[18px]" />
+            {isOpen && <span className="text-xs font-bold">Logout</span>}
           </button>
           
           {isOpen && (
-            <div className="mt-4 px-4 py-4 bg-gray-800/20 rounded-2xl border border-gray-800/50 animate-in fade-in zoom-in duration-500">
-               <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-500 to-amber-500" />
-                 <div>
-                    <p className="text-xs font-black text-white">System Admin</p>
-                    <p className="text-[10px] font-medium text-gray-500">Pro License</p>
+            <div className="mt-4 px-3 py-3 bg-gray-50 rounded-2xl border border-gray-100">
+               <div className="flex items-center gap-2.5 text-left">
+                 <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-500 to-amber-500 flex-shrink-0" />
+                 <div className="min-w-0">
+                    <p className="text-[11px] font-black text-gray-900 truncate">System Admin</p>
+                    <p className="text-[9px] font-bold text-primary-500 uppercase tracking-wide">Pro Account</p>
                  </div>
                </div>
             </div>

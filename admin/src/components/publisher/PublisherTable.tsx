@@ -93,7 +93,7 @@ export function PublisherTable({
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate(`/admin/publishers/${publisher.id}`)}
-                className="p-1.5 text-gray-400 hover:text-brand-600 dark:text-gray-500 dark:hover:text-brand-400 rounded-md hover:bg-brand-50 dark:hover:bg-brand-500/10 transition-colors"
+                className="p-1.5 text-gray-400 hover:text-primary-600 dark:text-gray-500 dark:hover:text-primary-400 rounded-md hover:bg-primary-50 dark:hover:bg-primary-500/10 transition-colors"
                 title="View Details"
               >
                 <Eye className="w-[18px] h-[18px]" />
@@ -206,7 +206,7 @@ export function PublisherTable({
               onPageChange(1) // reset to page 1 on limit change
               onLimitChange(Number(e.target.value))
             }}
-            className="h-8 rounded-md border border-gray-200 bg-white px-2 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:border-gray-800 dark:bg-[#1C1F26] dark:text-white"
+            className="h-8 rounded-md border border-gray-200 bg-white px-2 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-gray-800 dark:bg-[#1C1F26] dark:text-white"
           >
             {[10, 25, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>

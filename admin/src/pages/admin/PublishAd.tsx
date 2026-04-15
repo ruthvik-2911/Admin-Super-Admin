@@ -77,7 +77,7 @@ export default function PublishAd() {
   if (loading || !ad) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] flex items-center justify-center">
-        <Loader2 className="w-10 h-10 text-brand-500 animate-spin" />
+        <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
       </div>
     )
   }
@@ -110,7 +110,7 @@ export default function PublishAd() {
               {/* 1. Assignment */}
               <section className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
                 <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                   <span className="flex items-center justify-center w-5 h-5 rounded-full bg-brand-500 text-white text-[10px]">1</span>
+                   <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white text-[10px]">1</span>
                    Network Assignment
                 </h2>
                 <Controller 
@@ -127,7 +127,7 @@ export default function PublishAd() {
                   )}
                 />
                 <p className="mt-4 text-xs text-gray-500 leading-relaxed italic bg-gray-50 dark:bg-[#1C1F26] p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-                  <HelpCircle className="w-3.5 h-3.5 inline mr-1 mb-0.5 text-brand-500" />
+                  <HelpCircle className="w-3.5 h-3.5 inline mr-1 mb-0.5 text-primary-500" />
                   Selected publishers will receive this ad content for their allocated slots. You can add more publishers later from the dashboard.
                 </p>
               </section>
@@ -135,7 +135,7 @@ export default function PublishAd() {
               {/* 2. Duration */}
               <section className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
                 <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                   <span className="flex items-center justify-center w-5 h-5 rounded-full bg-brand-500 text-white text-[10px]">2</span>
+                   <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white text-[10px]">2</span>
                    Campaign Duration
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

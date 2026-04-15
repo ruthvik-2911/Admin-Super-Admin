@@ -38,10 +38,9 @@ export function Header() {
   const currentTitle = getPageTitle(location.pathname)
 
   React.useEffect(() => {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true)
-      document.documentElement.classList.add('dark')
-    }
+    // Default to light mode for the premium slate look
+    setIsDarkMode(false)
+    document.documentElement.classList.remove('dark')
   }, [])
 
   const toggleDarkMode = () => {
@@ -55,7 +54,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1C1F26]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors">
+    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14">
           <div className="flex items-center gap-2.5">
@@ -83,12 +82,12 @@ export function Header() {
             </button>
             <div className="h-8 w-px bg-gray-200 dark:bg-gray-700 mx-2"></div>
             <div className="flex items-center gap-3 cursor-pointer group">
-              <div className="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-600 dark:text-brand-300 font-semibold group-hover:bg-brand-200 dark:group-hover:bg-brand-800 transition-colors">
+              <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-300 font-semibold group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors">
                 A
               </div>
               <div className="hidden md:block text-left">
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-200 leading-none mb-1">Admin User</p>
-                <p className="text-[10px] text-brand-500 font-bold uppercase tracking-widest leading-none">System Admin</p>
+                <p className="text-[10px] text-primary-500 font-bold uppercase tracking-widest leading-none">System Admin</p>
               </div>
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </div>

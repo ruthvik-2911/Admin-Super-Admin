@@ -93,7 +93,7 @@ export default function PaymentPage() {
   if (loading || !ad) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] flex items-center justify-center">
-        <Loader2 className="w-10 h-10 text-brand-500 animate-spin" />
+        <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
       </div>
     )
   }
@@ -130,10 +130,10 @@ export default function PaymentPage() {
             <div className="order-1 lg:order-2 space-y-6">
               <div className="bg-white dark:bg-[#1A1D24] rounded-3xl p-8 border border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden relative">
                 {/* Decorative Glow */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 blur-3xl -z-10" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 blur-3xl -z-10" />
 
                 <div className="flex justify-between items-start mb-8">
-                   <div className="w-12 h-12 bg-brand-500/10 rounded-2xl flex items-center justify-center text-brand-500">
+                   <div className="w-12 h-12 bg-primary-500/10 rounded-2xl flex items-center justify-center text-primary-500">
                      <CreditCard className="w-6 h-6" />
                    </div>
                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay" className="h-6 opacity-80" />
@@ -147,7 +147,7 @@ export default function PaymentPage() {
                 <button
                   onClick={handlePay}
                   disabled={processing}
-                  className="w-full bg-brand-500 hover:bg-brand-600 dark:bg-brand-500 dark:hover:bg-brand-400 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-brand-500/30 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-wait"
+                  className="w-full bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-400 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-primary-500/30 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-wait"
                 >
                   {processing ? (
                      <span className="flex items-center justify-center gap-3">

@@ -1,67 +1,62 @@
 import * as React from "react"
 import { motion } from "framer-motion"
-import { PlusCircle, Rocket, UserPlus, CreditCard, BarChart3 } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { PlusCircle, Rocket, UserPlus, CreditCard, BarChart3, ChevronRight } from "lucide-react"
 
 export function QuickActions() {
+  const navigate = useNavigate()
+  
   const actions = [
     {
       title: "Create New Ad",
-      icon: <PlusCircle className="w-6 h-6" />,
-      color: "from-orange-500 to-amber-500 dark:from-orange-600 dark:to-orange-500",
+      icon: <PlusCircle className="w-5 h-5" />,
+      color: "from-primary-500 to-primary-600 shadow-primary-500/20",
+      path: "/admin/ads/new",
       delay: 0.1,
     },
     {
       title: "Publish Ad",
-      icon: <Rocket className="w-6 h-6" />,
-      color: "from-blue-500 to-cyan-500 dark:from-blue-600 dark:to-blue-500",
+      icon: <Rocket className="w-5 h-5" />,
+      color: "from-primary-600 to-primary-700 shadow-primary-600/20",
+      path: "/admin/ads",
       delay: 0.2,
     },
     {
       title: "Add Publisher",
-      icon: <UserPlus className="w-6 h-6" />,
-      color: "from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-emerald-500",
+      icon: <UserPlus className="w-5 h-5" />,
+      color: "from-primary-500 to-amber-500 shadow-primary-500/20",
+      path: "/admin/publishers/new",
       delay: 0.3,
     },
     {
       title: "View Payments",
-      icon: <CreditCard className="w-6 h-6" />,
-      color: "from-purple-500 to-indigo-500 dark:from-purple-600 dark:to-indigo-500",
+      icon: <CreditCard className="w-5 h-5" />,
+      color: "from-orange-600 to-primary-600 shadow-orange-500/20",
+      path: "/admin/payments",
       delay: 0.4,
-    },
-    {
-      title: "View Analytics",
-      icon: <BarChart3 className="w-6 h-6" />,
-      color: "from-rose-500 to-red-500 dark:from-rose-600 dark:to-rose-500",
-      delay: 0.5,
     },
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {actions.map((action, index) => (
         <motion.button
           key={index}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: action.delay }}
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ y: -4 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => {
-            if (action.title === "Add Publisher") {
-              window.location.href = "/admin/publishers"
-            } else if (action.title === "Create New Ad" || action.title === "Publish Ad") {
-              window.location.href = "/admin/ads"
-            } else if (action.title === "View Payments") {
-              window.location.href = "/admin/payments"
-            } else if (action.title === "View Analytics") {
-              window.location.href = "/admin/analytics"
-            }
-          }}
-          className={`relative overflow-hidden flex items-center justify-center gap-3 p-6 rounded-2xl text-white font-semibold text-lg shadow-lg bg-gradient-to-r ${action.color} transition-all hover:shadow-xl`}
+          onClick={() => navigate(action.path)}
+          className={`flex items-center justify-between p-5 rounded-2xl text-white font-bold bg-gradient-to-br ${action.color} shadow-lg transition-all border border-white/10 group`}
         >
-          {action.icon}
-          {action.title}
-          <div className="absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition-opacity rounded-2xl pointer-events-none" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform">
+              {action.icon}
+            </div>
+            <span className="text-sm tracking-tight">{action.title}</span>
+          </div>
+          <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
         </motion.button>
       ))}
     </div>

@@ -48,7 +48,7 @@ export default function TicketsList() {
         <div className="flex justify-end mb-6">
           <button
             onClick={() => navigate("/admin/tickets/new")}
-            className="flex items-center gap-2 px-6 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold text-sm transition-all active:scale-95 shadow-sm shadow-brand-500/20"
+            className="flex items-center gap-2 px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-xl font-semibold text-sm transition-all active:scale-95 shadow-sm shadow-primary-500/20"
           >
             <Plus className="w-5 h-5" />
             Create New Ticket

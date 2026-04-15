@@ -22,8 +22,8 @@ export function KpiGrid({ data }: KpiGridProps) {
       value: data.clicks.toLocaleString(), 
       trend: data.trends.clicks, 
       icon: MousePointer2, 
-      color: "text-brand-500", 
-      bg: "bg-brand-50 dark:bg-brand-500/10" 
+      color: "text-primary-500", 
+      bg: "bg-primary-50 dark:bg-primary-500/10" 
     },
     { 
       label: "Click Through Rate", 

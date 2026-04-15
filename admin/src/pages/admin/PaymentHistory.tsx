@@ -79,7 +79,7 @@ export default function PaymentHistory() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {[
-            { label: "Total Platform Spent", value: `₹${stats.totalRevenue.toLocaleString()}`, icon: Wallet, color: "text-brand-500", bg: "bg-brand-50 dark:bg-brand-500/10" },
+            { label: "Total Platform Spent", value: `₹${stats.totalRevenue.toLocaleString()}`, icon: Wallet, color: "text-primary-500", bg: "bg-primary-50 dark:bg-primary-500/10" },
             { label: "Success Rate", value: `${stats.successRate}%`, icon: TrendingUp, color: "text-green-500", bg: "bg-green-50 dark:bg-green-500/10" },
             { label: "Recent Settlements", value: "84 Settlements", icon: CreditCard, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/10" }
           ].map((stat, i) => (
@@ -125,7 +125,7 @@ export default function PaymentHistory() {
           {!loading && data.length > 0 && (
             <div className="flex items-center justify-between px-2">
               <p className="text-xs text-gray-500 font-medium tracking-wide font-mono uppercase">
-                Showing page <span className="text-brand-500 font-black">{page}</span> of {totalPages}
+                Showing page <span className="text-primary-500 font-black">{page}</span> of {totalPages}
               </p>
               <div className="flex gap-2">
                 <button

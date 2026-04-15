@@ -10,7 +10,7 @@ import {
 import { FileText, MoreHorizontal, ArrowUpDown, ExternalLink, Download } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
-import type { PaymentTransaction } from "../../services/payment"
+import type { PaymentTransaction } from "../../types/payment"
 import { 
   Table, 
   TableBody, 
@@ -44,7 +44,7 @@ export function PaymentTable({ data, isLoading }: PaymentTableProps) {
     columnHelper.accessor("amount", {
       header: ({ column }) => (
         <button
-          className="flex items-center gap-1 hover:text-brand-500 transition-colors"
+          className="flex items-center gap-1 hover:text-primary-500 transition-colors"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Amount
@@ -56,7 +56,7 @@ export function PaymentTable({ data, isLoading }: PaymentTableProps) {
     columnHelper.accessor("date", {
       header: ({ column }) => (
         <button
-          className="flex items-center gap-1 hover:text-brand-500 transition-colors"
+          className="flex items-center gap-1 hover:text-primary-500 transition-colors"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Date
@@ -83,7 +83,7 @@ export function PaymentTable({ data, isLoading }: PaymentTableProps) {
       cell: info => (
         <button 
           onClick={() => navigate(`/admin/invoice/${info.row.original.id}`)}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-brand-500 hover:text-white dark:hover:bg-brand-500 dark:hover:text-white transition-all group"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-primary-500 hover:text-white dark:hover:bg-primary-500 dark:hover:text-white transition-all group"
         >
           <Download className="w-3 h-3 transition-transform group-hover:-translate-y-0.5" />
           PDF
@@ -94,7 +94,7 @@ export function PaymentTable({ data, isLoading }: PaymentTableProps) {
       id: "actions",
       header: "",
       cell: () => (
-        <button className="p-2 text-gray-400 hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg transition-colors">
+        <button className="p-2 text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 rounded-lg transition-colors">
           <MoreHorizontal className="w-5 h-5" />
         </button>
       ),

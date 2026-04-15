@@ -78,7 +78,7 @@ export default function Publishers() {
         <div className="flex flex-col md:flex-row md:items-end justify-end mb-6 gap-4">
           <button 
             onClick={() => navigate('/admin/publishers/new')}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl shadow-sm shadow-brand-500/20 transition-all active:scale-95"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-sm shadow-primary-500/20 transition-all active:scale-95"
           >
             <Plus className="w-5 h-5" />
             Add Publisher

@@ -69,7 +69,7 @@ export const InvoiceLayout = React.forwardRef<HTMLDivElement, InvoiceLayoutProps
             </div>
             <div className="flex justify-between border-t-2 border-gray-900 pt-4">
               <span className="text-base font-black uppercase">Amount Paid</span>
-              <span className="text-xl font-black text-brand-600 tabular-nums">₹{invoice.total.toLocaleString()}</span>
+              <span className="text-xl font-black text-primary-600 tabular-nums">₹{invoice.total.toLocaleString()}</span>
             </div>
           </div>
         </div>

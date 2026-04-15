@@ -88,7 +88,7 @@ export default function PublisherForm() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-brand-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-primary-500 animate-spin" />
       </div>
     )
   }
@@ -123,7 +123,7 @@ export default function PublisherForm() {
             <button
               onClick={handleSubmit(onSubmit)}
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-6 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-sm font-semibold shadow-sm shadow-brand-500/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg text-sm font-semibold shadow-sm shadow-primary-500/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {isSubmitting ? "Saving..." : "Save Publisher"}

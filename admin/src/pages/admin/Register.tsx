@@ -44,7 +44,7 @@ export default function AdminRegister() {
   };
 
   const inputClass =
-    'block w-full pl-10 px-4 py-3 bg-white dark:bg-[#1C1F26] border border-gray-200 dark:border-gray-800 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors shadow-sm text-sm';
+    'block w-full pl-10 px-4 py-3 bg-white dark:bg-[#1C1F26] border border-gray-200 dark:border-gray-800 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors shadow-sm text-sm';
   const errorClass = 'text-xs text-red-500 mt-1 font-medium';
   const labelClass = 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5';
 
@@ -67,19 +67,19 @@ export default function AdminRegister() {
       <label className={labelClass}>
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <label className="group flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer bg-gray-50 dark:bg-[#1C1F26] hover:border-brand-400 hover:bg-brand-50/30 dark:hover:border-brand-500 transition-all">
+      <label className="group flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer bg-gray-50 dark:bg-[#1C1F26] hover:border-primary-400 hover:bg-primary-50/30 dark:hover:border-primary-500 transition-all">
         <div className="flex flex-col items-center gap-1.5 text-center px-4">
           {file ? (
             <>
-              <FileText className="w-6 h-6 text-brand-500" />
-              <p className="text-sm font-semibold text-brand-600 dark:text-brand-400 truncate max-w-[200px]">{file.name}</p>
+              <FileText className="w-6 h-6 text-primary-500" />
+              <p className="text-sm font-semibold text-primary-600 dark:text-primary-400 truncate max-w-[200px]">{file.name}</p>
               <p className="text-xs text-gray-400">Click to change</p>
             </>
           ) : (
             <>
-              <Upload className="w-6 h-6 text-gray-400 group-hover:text-brand-500 transition-colors" />
+              <Upload className="w-6 h-6 text-gray-400 group-hover:text-primary-500 transition-colors" />
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                <span className="text-brand-500 font-semibold">Click to upload</span> or drag & drop
+                <span className="text-primary-500 font-semibold">Click to upload</span> or drag & drop
               </p>
               <p className="text-xs text-gray-400">{hint || 'PDF, JPG, PNG accepted'}</p>
             </>
@@ -100,9 +100,9 @@ export default function AdminRegister() {
       <Toaster position="top-right" />
 
       {/* ── Left Panel ── */}
-      <div className="hidden lg:flex lg:w-5/12 relative bg-gradient-to-br from-brand-500 via-brand-600 to-brand-700 overflow-hidden text-white p-12 flex-col justify-between">
-        <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-brand-400 rounded-full blur-[100px] opacity-60" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[30rem] h-[30rem] bg-brand-800 rounded-full blur-[120px] opacity-60" />
+      <div className="hidden lg:flex lg:w-5/12 relative bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 overflow-hidden text-white p-12 flex-col justify-between">
+        <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-primary-400 rounded-full blur-[100px] opacity-60" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[30rem] h-[30rem] bg-primary-800 rounded-full blur-[120px] opacity-60" />
 
         <div className="relative z-10">
           <div className="flex items-center gap-3">
@@ -113,7 +113,7 @@ export default function AdminRegister() {
             <h2 className="text-4xl font-bold leading-tight mb-5 tracking-tight">
               Manage Your Advertising<br />Network From One<br />Unified Dashboard
             </h2>
-            <p className="text-brand-100 text-lg font-medium leading-relaxed mb-10">
+            <p className="text-primary-100 text-lg font-medium leading-relaxed mb-10">
               Take complete control of your business advertising ecosystem — create campaigns, manage branch-level publishers, monitor performance, and track spending — all from a single, powerful admin platform.
             </p>
 
@@ -129,14 +129,14 @@ export default function AdminRegister() {
                     <div className="p-2 bg-white/10 rounded-lg">{f.icon}</div>
                     <span className="font-semibold text-sm">{f.title}</span>
                   </div>
-                  <p className="text-xs text-brand-200 leading-relaxed">{f.desc}</p>
+                  <p className="text-xs text-primary-200 leading-relaxed">{f.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="relative z-10 text-xs text-brand-200 font-medium tracking-wide">© 2026 Keliri</div>
+        <div className="relative z-10 text-xs text-primary-200 font-medium tracking-wide">© 2026 Keliri</div>
       </div>
 
       {/* ── Right Panel ── */}
@@ -321,7 +321,7 @@ export default function AdminRegister() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-lg shadow-primary-500/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <><Loader2 className="w-5 h-5 animate-spin" /> Submitting...</>
@@ -334,7 +334,7 @@ export default function AdminRegister() {
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Already have an account?{' '}
-              <a href="/admin/login" className="text-brand-600 dark:text-brand-400 font-semibold hover:underline">
+              <a href="/admin/login" className="text-primary-600 dark:text-primary-400 font-semibold hover:underline">
                 Sign in
               </a>
             </p>

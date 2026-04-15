@@ -12,7 +12,7 @@ export function AdDetailsStep() {
       {/* Ad Title */}
       <div>
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-          <Type className="w-4 h-4 text-brand-500" />
+          <Type className="w-4 h-4 text-primary-500" />
           Ad Title
         </label>
         <input 
@@ -21,7 +21,7 @@ export function AdDetailsStep() {
           className={`w-full px-4 py-3 rounded-xl border bg-gray-50 dark:bg-[#1C1F26] text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors ${
             errors.title 
               ? "border-red-300 focus:border-red-500 focus:ring-red-500/20 dark:border-red-900/50" 
-              : "border-gray-200 dark:border-gray-800 focus:border-brand-500 focus:ring-brand-500/20"
+              : "border-gray-200 dark:border-gray-800 focus:border-primary-500 focus:ring-primary-500/20"
           }`}
         />
         {errors.title && <p className="mt-1.5 text-sm text-red-500">{errors.title.message as string}</p>}
@@ -30,7 +30,7 @@ export function AdDetailsStep() {
       {/* Ad Type */}
       <div>
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-          <LayoutTemplate className="w-4 h-4 text-brand-500" />
+          <LayoutTemplate className="w-4 h-4 text-primary-500" />
           Ad Format Type
         </label>
         <select 
@@ -38,7 +38,7 @@ export function AdDetailsStep() {
           className={`w-full px-4 py-3 rounded-xl border bg-gray-50 dark:bg-[#1C1F26] text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors cursor-pointer appearance-none ${
             errors.type 
               ? "border-red-300 focus:border-red-500 focus:ring-red-500/20 dark:border-red-900/50" 
-              : "border-gray-200 dark:border-gray-800 focus:border-brand-500 focus:ring-brand-500/20"
+              : "border-gray-200 dark:border-gray-800 focus:border-primary-500 focus:ring-primary-500/20"
           }`}
         >
           <option value="Banner">Banner Ad (Image)</option>
@@ -51,7 +51,7 @@ export function AdDetailsStep() {
       {/* Ad Description */}
       <div>
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-          <AlignLeft className="w-4 h-4 text-brand-500" />
+          <AlignLeft className="w-4 h-4 text-primary-500" />
           Ad Description
         </label>
         <textarea 
@@ -61,7 +61,7 @@ export function AdDetailsStep() {
           className={`w-full px-4 py-3 rounded-xl border bg-gray-50 dark:bg-[#1C1F26] text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors resize-none ${
             errors.description 
               ? "border-red-300 focus:border-red-500 focus:ring-red-500/20 dark:border-red-900/50" 
-              : "border-gray-200 dark:border-gray-800 focus:border-brand-500 focus:ring-brand-500/20"
+              : "border-gray-200 dark:border-gray-800 focus:border-primary-500 focus:ring-primary-500/20"
           }`}
         />
         {errors.description && <p className="mt-1.5 text-sm text-red-500">{errors.description.message as string}</p>}

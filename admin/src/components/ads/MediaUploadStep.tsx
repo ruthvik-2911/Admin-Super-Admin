@@ -76,7 +76,7 @@ export function MediaUploadStep() {
         <div 
           className={`relative border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center text-center transition-all ${
             dragActive 
-              ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10" 
+              ? "border-primary-500 bg-primary-50 dark:bg-primary-500/10" 
               : errors.mediaFile 
                 ? "border-red-300 bg-red-50 dark:border-red-900/50 dark:bg-red-500/10" 
                 : "border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#1C1F26] hover:border-gray-400 dark:hover:border-gray-600"
@@ -86,7 +86,7 @@ export function MediaUploadStep() {
           onDragOver={(e) => { e.preventDefault(); e.stopPropagation() }}
           onDrop={handleDrop}
         >
-          <div className="w-16 h-16 bg-white dark:bg-[#1A1D24] shadow-sm rounded-full flex items-center justify-center mb-4 text-brand-500">
+          <div className="w-16 h-16 bg-white dark:bg-[#1A1D24] shadow-sm rounded-full flex items-center justify-center mb-4 text-primary-500">
             {isVideo ? <Video className="w-8 h-8" /> : <ImageIcon className="w-8 h-8" />}
           </div>
           

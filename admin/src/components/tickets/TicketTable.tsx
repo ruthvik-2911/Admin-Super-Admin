@@ -36,7 +36,7 @@ export function TicketTable({ data, isLoading, onReopen }: TicketTableProps) {
     columnHelper.accessor("id", {
       header: ({ column }) => (
         <button 
-          className="flex items-center gap-1 hover:text-brand-500 transition-colors"
+          className="flex items-center gap-1 hover:text-primary-500 transition-colors"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Ticket ID
@@ -94,7 +94,7 @@ export function TicketTable({ data, isLoading, onReopen }: TicketTableProps) {
         <div className="flex items-center gap-2">
            <button
              onClick={() => navigate(`/admin/tickets/${info.row.original.id}`)}
-             className="p-2 hover:bg-brand-50 dark:hover:bg-brand-500/10 text-brand-600 transition-all rounded-xl group"
+             className="p-2 hover:bg-primary-50 dark:hover:bg-primary-500/10 text-primary-600 transition-all rounded-xl group"
              title="View Conversation"
            >
              <Eye className="w-4 h-4 transition-transform group-hover:scale-110" />

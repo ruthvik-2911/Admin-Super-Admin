@@ -11,6 +11,7 @@ import PublisherForm from "./pages/admin/PublisherForm";
 import AdsList from "./pages/admin/AdsList";
 import AdForm from "./pages/admin/AdForm";
 import PublishAd from "./pages/admin/PublishAd";
+import AdDetails from "./pages/admin/AdDetails";
 import PaymentPage from "./pages/admin/PaymentPage";
 import PaymentHistory from "./pages/admin/PaymentHistory";
 import InvoicePage from "./pages/admin/InvoicePage";
@@ -35,6 +36,7 @@ function App() {
           <Route path="/admin/tickets/:id" element={<TicketDetails />} />
           <Route path="/admin/ads" element={<AdsList />} />
           <Route path="/admin/ads/new" element={<AdForm />} />
+          <Route path="/admin/ads/:id" element={<AdDetails />} />
           <Route path="/admin/ads/:id/edit" element={<AdForm />} />
           <Route path="/admin/ads/:id/publish" element={<PublishAd />} />
           <Route path="/admin/ads/:id/pay" element={<PaymentPage />} />

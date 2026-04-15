@@ -30,7 +30,7 @@ const statusConfig = {
     message: 'Your business account has been verified and approved. You can now log in to your Keliri Admin dashboard.',
     ctaLabel: 'Go to Login',
     ctaIcon: <ArrowRight className="w-[18px] h-[18px]" />,
-    ctaStyle: 'bg-brand-500 hover:bg-brand-600 text-white shadow-lg shadow-brand-500/20',
+    ctaStyle: 'bg-primary-500 hover:bg-primary-600 text-white shadow-lg shadow-primary-500/20',
     bgAccent: 'bg-emerald-50 dark:bg-emerald-500/5 border-emerald-100 dark:border-emerald-500/10',
   },
   pending: {
@@ -80,7 +80,7 @@ export default function RegistrationStatus() {
   }, []);
 
   // Hardcoded approved status for demo
-  const status: RegistrationStatus = 'approved';
+  const status = 'approved' as RegistrationStatus;
   const reason = undefined;
 
   const handleGoToLogin = () => {
@@ -99,9 +99,9 @@ export default function RegistrationStatus() {
     <div className="flex min-h-screen bg-gray-50 md:bg-white dark:bg-[#0E1117]">
 
       {/* ── Left Panel ── */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-brand-500 via-brand-600 to-brand-700 overflow-hidden text-white p-12 flex-col justify-between">
-        <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-brand-400 rounded-full blur-[100px] opacity-60" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[30rem] h-[30rem] bg-brand-800 rounded-full blur-[120px] opacity-60" />
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 overflow-hidden text-white p-12 flex-col justify-between">
+        <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-primary-400 rounded-full blur-[100px] opacity-60" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[30rem] h-[30rem] bg-primary-800 rounded-full blur-[120px] opacity-60" />
 
         <div className="relative z-10">
           <div className="flex items-center gap-3">
@@ -116,7 +116,7 @@ export default function RegistrationStatus() {
             <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6 tracking-tight">
               Manage Your Advertising<br />Network From One<br />Unified Dashboard
             </h2>
-            <p className="text-brand-100 text-lg md:text-xl font-medium leading-relaxed mb-12">
+            <p className="text-primary-100 text-lg md:text-xl font-medium leading-relaxed mb-12">
               Take complete control of your business advertising ecosystem — create campaigns, manage branch-level publishers, monitor performance, and track spending — all from a single, powerful admin platform.
             </p>
 
@@ -132,14 +132,14 @@ export default function RegistrationStatus() {
                     <div className="p-2 bg-white/10 rounded-lg">{f.icon}</div>
                     <span className="font-semibold text-sm">{f.title}</span>
                   </div>
-                  <p className="text-xs text-brand-200 leading-relaxed">{f.desc}</p>
+                  <p className="text-xs text-primary-200 leading-relaxed">{f.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="relative z-10 text-xs text-brand-200 font-medium tracking-wide">© 2026 Keliri</div>
+        <div className="relative z-10 text-xs text-primary-200 font-medium tracking-wide">© 2026 Keliri</div>
       </div>
 
       {/* ── Right Panel ── */}
@@ -153,7 +153,7 @@ export default function RegistrationStatus() {
 
           {isLoading ? (
             <div className="flex flex-col items-center justify-center gap-4 py-20">
-              <Loader2 className="w-10 h-10 text-brand-500 animate-spin" />
+              <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Checking application status...</p>
             </div>
           ) : (
@@ -223,7 +223,7 @@ export default function RegistrationStatus() {
                   </button>
                   <button
                     onClick={() => window.location.reload()}
-                    className="flex items-center justify-center gap-1.5 mx-auto text-sm text-gray-500 dark:text-gray-400 hover:text-brand-500 transition-colors"
+                    className="flex items-center justify-center gap-1.5 mx-auto text-sm text-gray-500 dark:text-gray-400 hover:text-primary-500 transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                     Refresh status
@@ -234,7 +234,7 @@ export default function RegistrationStatus() {
               {/* Help text */}
               <p className="text-center text-xs text-gray-400 mt-8">
                 Need help?{' '}
-                <a href="mailto:support@keliri.com" className="text-brand-500 font-semibold hover:underline">
+                <a href="mailto:support@keliri.com" className="text-primary-500 font-semibold hover:underline">
                   Contact support
                 </a>
               </p>

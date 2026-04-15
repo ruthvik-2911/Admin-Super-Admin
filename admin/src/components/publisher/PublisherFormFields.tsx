@@ -32,7 +32,7 @@ export function PublisherFormFields() {
       {/* Basic Info Section */}
       <div className="bg-white dark:bg-[#1A1D24] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
-          <div className="p-2 bg-brand-50 dark:bg-brand-500/10 rounded-lg text-brand-600 dark:text-brand-400">
+          <div className="p-2 bg-primary-50 dark:bg-primary-500/10 rounded-lg text-primary-600 dark:text-primary-400">
             <Building2 className="w-5 h-5" />
           </div>
           <div>
@@ -118,7 +118,7 @@ export function PublisherFormFields() {
                 <MapPin className="w-[18px] h-[18px]" />
               </div>
               <textarea
-                className="flex w-full rounded-lg border border-gray-200 bg-white pl-10 pr-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-800 dark:bg-[#1C1F26] dark:ring-offset-gray-950 dark:placeholder:text-gray-400 focus-visible:dark:ring-brand-500 transition-colors shadow-sm min-h-[100px] resize-y"
+                className="flex w-full rounded-lg border border-gray-200 bg-white pl-10 pr-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-800 dark:bg-[#1C1F26] dark:ring-offset-gray-950 dark:placeholder:text-gray-400 focus-visible:dark:ring-primary-500 transition-colors shadow-sm min-h-[100px] resize-y"
                 placeholder="Enter complete business address..."
                 {...register("address")}
               />

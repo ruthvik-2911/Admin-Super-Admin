@@ -56,11 +56,11 @@ export function PublisherStats({ stats }: PublisherStatsProps) {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3, delay: 0.4 }}
-        className="bg-gradient-to-br from-brand-50 to-brand-100 dark:from-brand-900/40 dark:to-brand-900/10 rounded-2xl p-5 shadow-sm border border-brand-200 dark:border-brand-800/50 flex flex-col justify-between"
+        className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-900/10 rounded-2xl p-5 shadow-sm border border-primary-200 dark:border-primary-800/50 flex flex-col justify-between"
       >
-        <h3 className="text-sm font-medium text-brand-700 dark:text-brand-300">Click-Through Rate</h3>
+        <h3 className="text-sm font-medium text-primary-700 dark:text-primary-300">Click-Through Rate</h3>
         <div className="flex items-center justify-between mt-2">
-          <p className="text-3xl font-extrabold text-brand-600 dark:text-brand-400">
+          <p className="text-3xl font-extrabold text-primary-600 dark:text-primary-400">
             {stats.ctr.toFixed(1)}%
           </p>
           <div className="relative w-12 h-12">
@@ -73,7 +73,7 @@ export function PublisherStats({ stats }: PublisherStatsProps) {
                 stroke="currentColor"
                 strokeWidth="4"
                 fill="transparent"
-                className="text-brand-200 dark:text-brand-800/50"
+                className="text-primary-200 dark:text-primary-800/50"
               />
               {/* Progress Circle */}
               <motion.circle
@@ -88,7 +88,7 @@ export function PublisherStats({ stats }: PublisherStatsProps) {
                 animate={{ strokeDashoffset }}
                 transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
                 strokeLinecap="round"
-                className="text-brand-500 dark:text-brand-400 drop-shadow-sm"
+                className="text-primary-500 dark:text-primary-400 drop-shadow-sm"
               />
             </svg>
           </div>
