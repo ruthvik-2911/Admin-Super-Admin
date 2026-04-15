@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   AreaChart,
   Area,
@@ -8,39 +7,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts'
+import type { TrendPoint } from '../../lib/dashboard'
 
-const dailyData = [
-  { name: 'Mon', revenue: 4200 },
-  { name: 'Tue', revenue: 5800 },
-  { name: 'Wed', revenue: 4900 },
-  { name: 'Thu', revenue: 7200 },
-  { name: 'Fri', revenue: 6800 },
-  { name: 'Sat', revenue: 8500 },
-  { name: 'Sun', revenue: 7100 },
-]
-
-const weeklyData = [
-  { name: 'Wk 1', revenue: 28000 },
-  { name: 'Wk 2', revenue: 35000 },
-  { name: 'Wk 3', revenue: 31000 },
-  { name: 'Wk 4', revenue: 42000 },
-]
-
-const monthlyData = [
-  { name: 'Jan', revenue: 95000 },
-  { name: 'Feb', revenue: 112000 },
-  { name: 'Mar', revenue: 98000 },
-  { name: 'Apr', revenue: 135000 },
-  { name: 'May', revenue: 128000 },
-  { name: 'Jun', revenue: 156000 },
-]
-
-type Period = 'daily' | 'weekly' | 'monthly'
-
-const dataMap: Record<Period, typeof dailyData> = {
-  daily: dailyData,
-  weekly: weeklyData,
-  monthly: monthlyData,
+interface TrendChartProps {
+  data?: TrendPoint[]
 }
 
 interface CustomTooltipProps {
@@ -54,79 +24,54 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     return (
       <div className="bg-white border border-gray-100 rounded-xl shadow-card-hover px-3.5 py-2.5">
         <p className="text-[11px] text-gray-400 mb-1">{label}</p>
-        <p className="text-sm font-bold text-gray-900">₹{payload[0].value.toLocaleString()}</p>
+        <p className="text-sm font-bold text-gray-900">{payload[0].value.toLocaleString()} campaigns</p>
       </div>
     )
   }
   return null
 }
 
-export default function RevenueChart() {
-  const [period, setPeriod] = useState<Period>('daily')
-
-  const periods: { key: Period; label: string }[] = [
-    { key: 'daily', label: 'Daily' },
-    { key: 'weekly', label: 'Weekly' },
-    { key: 'monthly', label: 'Monthly' },
-  ]
-
+export default function RevenueChart({ data = [] }: TrendChartProps) {
   return (
     <div className="glass-card p-6 animate-fade-in h-full flex flex-col">
-      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">Revenue Trend</h3>
-          <p className="text-xs text-gray-400 mt-0.5">Total earnings over time</p>
-        </div>
-        <div className="flex bg-gray-100 rounded-xl p-1 gap-0.5">
-          {periods.map((p) => (
-            <button
-              key={p.key}
-              onClick={() => setPeriod(p.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
-                ${period === p.key
-                  ? 'bg-white text-primary-600 shadow-sm font-semibold'
-                  : 'text-gray-500 hover:text-gray-700'
-                }`}
-            >
-              {p.label}
-            </button>
-          ))}
+          <h3 className="text-sm font-semibold text-gray-900">Publishing Trend</h3>
+          <p className="text-xs text-gray-400 mt-0.5">Campaigns created from the live Keliri publish flow</p>
         </div>
       </div>
 
       <div className="flex-1 min-h-[280px] w-full mt-2">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={dataMap[period]} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-          <defs>
-            <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%"  stopColor="#FF6B00" stopOpacity={0.18} />
-              <stop offset="95%" stopColor="#FF6B00" stopOpacity={0.01} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
-          <XAxis
-            dataKey="name"
-            tick={{ fontSize: 11, fill: '#9CA3AF' }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            tick={{ fontSize: 11, fill: '#9CA3AF' }}
-            axisLine={false}
-            tickLine={false}
-            tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Area
-            type="monotone"
-            dataKey="revenue"
-            stroke="#FF6B00"
-            strokeWidth={2.5}
-            fill="url(#revenueGradient)"
-            dot={{ fill: '#FF6B00', strokeWidth: 2, r: 3.5, stroke: 'white' }}
-            activeDot={{ r: 6, fill: '#FF6B00', stroke: 'white', strokeWidth: 2 }}
-          />
+          <AreaChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+            <defs>
+              <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#FF6B00" stopOpacity={0.18} />
+                <stop offset="95%" stopColor="#FF6B00" stopOpacity={0.01} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
+            <XAxis
+              dataKey="label"
+              tick={{ fontSize: 11, fill: '#9CA3AF' }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fontSize: 11, fill: '#9CA3AF' }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke="#FF6B00"
+              strokeWidth={2.5}
+              fill="url(#revenueGradient)"
+              dot={{ fill: '#FF6B00', strokeWidth: 2, r: 3.5, stroke: 'white' }}
+              activeDot={{ r: 6, fill: '#FF6B00', stroke: 'white', strokeWidth: 2 }}
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>

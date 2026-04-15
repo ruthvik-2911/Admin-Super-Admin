@@ -18,6 +18,8 @@ public class users {
 	private phoneNumber phoneNumber;
 	
 	private String emailAddress;
+	
+	private String userType;
 
     private String profilePicPath;
     private int givendor;
@@ -66,6 +68,14 @@ public class users {
 		this.emailAddress = emailAddress;
 	}
 
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
 
 	public phoneNumber getPhoneNumber() {
 		return phoneNumber;
@@ -86,7 +96,7 @@ public class users {
 	@Override
 	public String toString() {
 		return "users [id=" + id + ", lastKnownLocation=" + lastKnownLocation + ", fullName=" + fullName
-				+ ", phoneNumber=" + phoneNumber + ", emailAddress=" + emailAddress + ", profilePicPath="
+				+ ", phoneNumber=" + phoneNumber + ", emailAddress=" + emailAddress + ", userType=" + userType + ", profilePicPath="
 				+ profilePicPath + ", givendor=" + givendor + ", latitude=" + latitude + ", longitude=" + longitude
 				+ "]";
 	}

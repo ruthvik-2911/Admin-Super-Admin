@@ -53,4 +53,7 @@ List<advertisements> searchByCompanyId(List<ObjectId> list2);
 
 @Query(value="{'$and':[{'createdBy':?0},{'gitagnumber':?1}]}",fields="{'_id':1}")
 ArrayList<advertisements> showvendorsfindByCreatedBy(ObjectId id, int gitagnumber);
+
+@Query(value = "{'_id': { '$in': ?0 }}", fields = "{'_id':1,'title':1,'company':1,'adType':1}")
+List<advertisements> findDashboardAdsByIds(List<String> ids);
 }
