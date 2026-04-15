@@ -1,20 +1,19 @@
 import * as React from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { 
   LayoutDashboard, 
   Megaphone, 
   Globe, 
   BarChart3, 
-  CreditCard, 
-  LogOut,
+  HelpCircle, 
+  CreditCard,
   ChevronRight,
   Menu,
-  X,
-  HelpCircle
+  X
 } from "lucide-react"
 import { cn } from "../../lib/utils"
 
-const menuItems = [
+const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
   { label: "Ads Manager", icon: Megaphone, path: "/admin/ads" },
   { label: "Publishers", icon: Globe, path: "/admin/publishers" },
@@ -26,118 +25,87 @@ const menuItems = [
 interface SidebarProps {
   isOpen: boolean
   setIsOpen: (open: boolean) => void
+  activeItem?: string
 }
 
-export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
+export function Sidebar({ isOpen, setIsOpen, activeItem }: SidebarProps) {
   const location = useLocation()
-  const navigate = useNavigate()
-
-  const handleLogout = () => {
-    // Mock logout logic
-    navigate("/admin/login")
-  }
 
   return (
     <>
-      {/* Mobile Toggle */}
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed bottom-6 right-6 z-50 p-4 bg-brand-500 text-white rounded-2xl shadow-2xl"
-      >
-        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-      </button>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden transition-opacity"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
+      {/* Sidebar Container */}
       <aside className={cn(
-        "fixed left-0 top-0 h-screen bg-[#0E1117] border-r border-gray-800 transition-all duration-300 z-40 flex flex-col",
-        isOpen ? "w-72" : "w-20 overflow-hidden lg:overflow-visible"
+        "fixed top-0 left-0 h-screen bg-[#1a1a1a] z-50 w-[280px] flex flex-col transition-transform duration-300 border-r border-[#2a2a2a] shadow-2xl lg:shadow-none",
+        !isOpen ? "-translate-x-full lg:translate-x-0" : "translate-x-0"
       )}>
-        {/* Logo Section */}
-        <div className="p-6 pb-12 flex items-center justify-between">
-          <div className="flex items-center gap-4 min-w-0 overflow-hidden">
-            <div className="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-brand-500/20 flex-shrink-0">
-              K
+        {/* Top Section */}
+        <div className="flex items-center justify-between p-6">
+          <div className="flex items-center gap-3">
+            <img 
+              src="/src/assets/keliri-logo.png" 
+              alt="Keliri Logo" 
+              className="w-[36px] h-[36px] object-contain shrink-0 bg-white rounded-lg p-1" 
+            />
+            <div className="flex flex-col">
+              <span className="text-white font-bold text-base leading-tight tracking-wide">KELIRI</span>
+              <span className="text-gray-400 text-[10px] font-semibold uppercase tracking-[0.15em] mt-0.5">ADMIN PORTAL</span>
             </div>
-            {isOpen && (
-               <div className="animate-in fade-in slide-in-from-left-2 duration-300 truncate">
-                  <h1 className="text-xl font-black text-white tracking-tighter">KELIRI</h1>
-                  <p className="text-[10px] uppercase font-bold text-gray-500 tracking-[0.2em]">Admin Portal</p>
-               </div>
-            )}
           </div>
           
-          {/* Dashboard Toggle (Three Lines) */}
+          {/* Mobile close button */}
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl transition-all active:scale-90"
+            className="text-gray-400 hover:text-white transition lg:hidden"
           >
-            <Menu className="w-5 h-5" />
+            <X className="w-5 h-5" />
           </button>
+          
+          {/* Desktop pure decorative icon as specified (A hamburger/menu icon top right of sidebar) */}
+          <div className="hidden lg:flex text-gray-400 cursor-pointer hover:text-white transition">
+            <Menu className="w-5 h-5" />
+          </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 space-y-2">
-          {menuItems.map((item) => {
-            const isActive = location.pathname === item.path
+        <nav className="flex-1 px-4 py-3 space-y-1.5 overflow-y-auto mt-2">
+          {navItems.map((item) => {
+            const isActive = activeItem 
+              ? activeItem === item.label 
+              : location.pathname.startsWith(item.path);
+
             return (
               <Link
-                key={item.path}
+                key={item.label}
                 to={item.path}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group relative",
+                  "flex items-center justify-between px-4 py-3.5 rounded-full transition-all group font-sans w-full",
                   isActive 
-                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/20" 
-                    : "text-gray-400 hover:text-white hover:bg-gray-800/50"
+                    ? "bg-[#E8640C] text-white shadow-md shadow-[#E8640C]/20" 
+                    : "text-gray-400 hover:bg-[#2a2a2a] hover:text-gray-100"
                 )}
+                onClick={() => setIsOpen(false)} // Close sidebar on mobile navigation
               >
-                <item.icon className={cn("w-5 h-5", isActive ? "text-white" : "group-hover:text-brand-400")} />
-                {isOpen && (
-                  <span className="text-sm font-bold animate-in fade-in duration-300">{item.label}</span>
-                )}
-                {isActive && isOpen && (
-                   <ChevronRight className="absolute right-4 w-4 h-4 opacity-50" />
-                )}
-                
-                {/* Tooltip for collapsed mode */}
-                {!isOpen && (
-                  <div className="absolute left-full ml-4 px-3 py-1 bg-gray-900 text-white text-[10px] font-black uppercase rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
+                <div className="flex items-center gap-3.5">
+                  <item.icon className={cn("w-[22px] h-[22px] transition-colors", isActive ? "text-white" : "group-hover:text-gray-100")} strokeWidth={isActive ? 2.5 : 2} />
+                  <span className={cn("text-[15px] transition-all", isActive ? "font-bold" : "font-medium")}>
                     {item.label}
-                  </div>
+                  </span>
+                </div>
+                {isActive && (
+                  <ChevronRight className="w-5 h-5 text-white" strokeWidth={2.5} />
                 )}
               </Link>
             )
           })}
         </nav>
-
-        {/* Bottom Actions */}
-        <div className="p-4 border-t border-gray-800/50">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-gray-400 hover:text-red-400 hover:bg-red-500/5 transition-all group relative"
-          >
-            <LogOut className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
-            {isOpen && (
-               <span className="text-sm font-bold">Logout</span>
-            )}
-
-            {!isOpen && (
-              <div className="absolute left-full ml-4 px-3 py-1 bg-red-500 text-white text-[10px] font-black uppercase rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
-                Logout
-              </div>
-            )}
-          </button>
-          
-          {isOpen && (
-            <div className="mt-4 px-4 py-4 bg-gray-800/20 rounded-2xl border border-gray-800/50 animate-in fade-in zoom-in duration-500">
-               <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-500 to-amber-500" />
-                 <div>
-                    <p className="text-xs font-black text-white">System Admin</p>
-                    <p className="text-[10px] font-medium text-gray-500">Pro License</p>
-                 </div>
-               </div>
-            </div>
-          )}
-        </div>
       </aside>
     </>
   )

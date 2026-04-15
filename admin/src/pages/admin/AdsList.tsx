@@ -155,40 +155,7 @@ export default function AdsList() {
     <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] transition-colors duration-200">
       <Toaster position="top-right" />
       
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1C1F26]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors">
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white font-bold shadow-sm">K</div>
-              <h1 className="text-xl font-bold tracking-wide text-gray-900 dark:text-white">
-                KELIRI <span className="text-sm font-semibold text-brand-500 uppercase tracking-widest ml-1">Admin</span>
-              </h1>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <button onClick={toggleDarkMode} className="p-2 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors">
-                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-              <button className="p-2 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 relative transition-colors">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-[#1C1F26]"></span>
-              </button>
-              <div className="h-8 w-px bg-gray-200 dark:bg-gray-700 mx-2"></div>
-              <div className="flex items-center gap-3 cursor-pointer group">
-                <div className="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-600 dark:text-brand-300 font-semibold group-hover:bg-brand-200 dark:group-hover:bg-brand-800 transition-colors">
-                  A
-                </div>
-                <div className="hidden md:block">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Admin User</p>
-                  <p className="text-xs text-brand-500 font-semibold">Admin</p>
-                </div>
-                <ChevronDown className="w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      
 
       {/* Main Content */}
       <main className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-8 max-w-[1600px] mx-auto">

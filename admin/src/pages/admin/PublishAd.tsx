@@ -86,21 +86,7 @@ export default function PublishAd() {
     <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] pb-16 transition-colors duration-200">
       <Toaster position="top-right" />
       
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1C1F26]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-[1200px] mx-auto px-4 py-4 flex items-center gap-4">
-          <button
-            onClick={() => navigate(`/admin/ads/${id}/edit`)}
-            className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-             <h1 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">Publish Advertisement</h1>
-             <p className="text-xs text-gray-500 font-medium">Step 4 of 4: Finalize & Pay</p>
-          </div>
-        </div>
-      </header>
+      
 
       <main className="max-w-[1200px] mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

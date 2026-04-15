@@ -1,32 +1,37 @@
 import * as React from "react"
-import { Outlet } from "react-router-dom"
-import { Sidebar } from "./Sidebar"
+import { Outlet, useLocation } from "react-router-dom"
+import DashboardLayout from "./DashboardLayout"
+
+const routeMap: Record<string, string> = {
+  "/admin/dashboard": "Dashboard",
+  "/admin/ads": "Ads Manager",
+  "/admin/publishers": "Publishers",
+  "/admin/analytics": "Analytics",
+  "/admin/tickets": "Support Hub",
+  "/admin/payments": "Payments",
+};
 
 export default function AdminLayout() {
-  const [isOpen, setIsOpen] = React.useState(true)
+  const location = useLocation();
+  
+  // Determine active item from the route map
+  let activeItem = "Dashboard";
+  
+  // Sort paths by length descending to match the most specific path first
+  const sortedPaths = Object.keys(routeMap).sort((a, b) => b.length - a.length);
+  for (const path of sortedPaths) {
+    if (location.pathname.startsWith(path)) {
+      activeItem = routeMap[path];
+      break;
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] flex">
-      {/* Sidebar Wrapper */}
-      <div 
-        className={`hidden lg:block transition-all duration-300 ease-in-out ${
-          isOpen ? "w-72" : "w-20"
-        } flex-shrink-0`}
-      >
-         <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+    <DashboardLayout activeItem={activeItem}>
+      {/* We add w-full to ensure Outlet takes full width of the container */}
+      <div className="w-full">
+        <Outlet />
       </div>
-
-      {/* Mobile Sidebar Overlay (Sidebar will handle its own visibility on mobile) */}
-      <div className="lg:hidden">
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-      </div>
-
-      {/* Main Content */}
-      <main className="flex-1 w-full overflow-x-hidden min-h-screen relative p-0 transition-all duration-300">
-        <div className="max-w-[1600px] mx-auto">
-           <Outlet />
-        </div>
-      </main>
-    </div>
+    </DashboardLayout>
   )
 }

@@ -74,13 +74,7 @@ export default function PaymentHistory() {
     <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] p-6 lg:p-8 transition-colors duration-200">
       <Toaster position="top-right" />
       
-      {/* Header */}
-      <header className="mb-8">
-        <div>
-          <h1 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Payment History</h1>
-          <p className="text-gray-500 text-sm mt-1">Track and manage all ad-related financial transactions</p>
-        </div>
-      </header>
+      
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

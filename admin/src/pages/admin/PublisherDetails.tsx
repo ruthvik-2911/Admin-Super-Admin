@@ -70,52 +70,7 @@ export default function PublisherDetails() {
       <Toaster position="top-right" />
       
       {/* Sticky Top Header */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1C1F26]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <button
-                type="button"
-                onClick={() => navigate("/admin/publishers")}
-                className="p-2 -ml-2 text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500/50"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-3">
-                  Publisher Operations Hub
-                </h1>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3 self-end sm:self-auto">
-              {/* Deactivate/Activate Button */}
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-all ${
-                  isActive 
-                    ? "text-red-700 bg-red-50 border-red-200 hover:bg-red-100 dark:text-red-400 dark:bg-red-500/10 dark:border-red-500/20 dark:hover:bg-red-500/20"
-                    : "text-green-700 bg-green-50 border-green-200 hover:bg-green-100 dark:text-green-400 dark:bg-green-500/10 dark:border-green-500/20 dark:hover:bg-green-500/20"
-                }`}
-              >
-                {isActive ? <PowerOff className="w-4 h-4" /> : <Power className="w-4 h-4" />}
-                <span className="hidden sm:inline">{isActive ? "Deactivate" : "Activate"} Publisher</span>
-                <span className="sm:hidden">{isActive ? "Deactivate" : "Activate"}</span>
-              </button>
-              
-              {/* Edit Button */}
-              <button
-                onClick={() => navigate(`/admin/publishers/${id}/edit`)}
-                className="flex items-center gap-2 px-5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-sm font-semibold shadow-sm shadow-brand-500/20 transition-all active:scale-95"
-              >
-                <Edit3 className="w-4 h-4" />
-                <span className="hidden sm:inline">Edit Publisher</span>
-                <span className="sm:hidden">Edit</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      
 
       {/* Main Analytics Content */}
       <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">

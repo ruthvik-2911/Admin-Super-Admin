@@ -45,26 +45,7 @@ export default function TicketsList() {
     <div className="min-h-screen bg-[#F8F9FB] dark:bg-[#0E1117] p-8 transition-colors duration-200">
       <Toaster position="top-right" />
       
-      {/* Header */}
-      <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-           <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-2xl shadow-blue-600/20">
-              <LifeBuoy className="w-7 h-7" />
-           </div>
-           <div>
-              <h1 className="text-3xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Support Hub</h1>
-              <p className="text-gray-500 text-sm font-medium">Expert assistance for all your campaign needs</p>
-           </div>
-        </div>
-
-        <button
-          onClick={() => navigate("/admin/tickets/new")}
-          className="flex items-center gap-2 px-6 py-3.5 bg-gray-900 dark:bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-800 dark:hover:bg-blue-700 transition-all active:scale-95 shadow-xl shadow-gray-900/10 dark:shadow-blue-600/20"
-        >
-          <Plus className="w-5 h-5" />
-          Create New Ticket
-        </button>
-      </header>
+      
 
       {/* Main UI */}
       <main className="animate-in fade-in slide-in-from-bottom-4 duration-700">
