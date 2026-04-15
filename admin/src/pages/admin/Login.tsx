@@ -42,13 +42,7 @@ export default function AdminLogin() {
 
         <div className="relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center font-bold text-xl backdrop-blur-sm border border-white/30 shadow-lg">
-              K
-            </div>
-            <div>
-              <h1 className="font-bold text-lg leading-tight tracking-wide">KELIRI</h1>
-              <p className="text-[10px] uppercase font-semibold text-brand-100 tracking-wider">Admin Panel</p>
-            </div>
+            <img src="/logo.png" alt="" className="h-10 w-auto object-contain" />
           </div>
 
           <div className="mt-24 max-w-xl">
@@ -81,7 +75,7 @@ export default function AdminLogin() {
         </div>
 
         <div className="relative z-10 text-xs text-brand-200 font-medium tracking-wide">
-          © 2026 KELIRI
+          © 2026 Keliri
         </div>
       </div>
 
@@ -90,13 +84,7 @@ export default function AdminLogin() {
         <div className="w-full max-w-md">
           {/* Mobile Header (Hidden on desktop) */}
           <div className="flex lg:hidden items-center gap-3 mb-10">
-            <div className="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg shadow-brand-500/30">
-              K
-            </div>
-            <div>
-              <h1 className="font-bold text-lg text-gray-900 dark:text-white leading-tight tracking-wide">KELIRI</h1>
-              <p className="text-[10px] uppercase font-semibold text-brand-500 tracking-wider">Admin Panel</p>
-            </div>
+            <img src="/logo.png" alt="" className="h-10 w-auto object-contain" />
           </div>
 
           <div className="mb-10">
@@ -220,7 +208,7 @@ export default function AdminLogin() {
           </form>
 
           <div className="mt-10 flex items-center justify-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-            Protected by <span className="font-semibold text-gray-700 dark:text-gray-300">KELIRI Security</span>
+            Protected by <span className="font-semibold text-gray-700 dark:text-gray-300">Keliri Security</span>
             <span>·</span>
             Role-based access control
           </div>

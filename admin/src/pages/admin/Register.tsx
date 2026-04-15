@@ -106,11 +106,7 @@ export default function AdminRegister() {
 
         <div className="relative z-10">
           <div className="flex items-center gap-3">
-            <img src="/src/assets/keliri-logo.png" alt="KELIRI" className="w-10 h-10 rounded-xl bg-white/20 p-1 backdrop-blur-sm border border-white/30 shadow-lg object-contain" />
-            <div>
-              <h1 className="font-bold text-lg leading-tight tracking-wide">KELIRI</h1>
-              <p className="text-[10px] uppercase font-semibold text-brand-100 tracking-wider">Admin Panel</p>
-            </div>
+            <img src="/logo.png" alt="" className="h-10 w-auto object-contain" />
           </div>
 
           <div className="mt-16 max-w-xl">
@@ -140,7 +136,7 @@ export default function AdminRegister() {
           </div>
         </div>
 
-        <div className="relative z-10 text-xs text-brand-200 font-medium tracking-wide">© 2026 KELIRI</div>
+        <div className="relative z-10 text-xs text-brand-200 font-medium tracking-wide">© 2026 Keliri</div>
       </div>
 
       {/* ── Right Panel ── */}
@@ -149,16 +145,12 @@ export default function AdminRegister() {
 
           {/* Mobile Logo */}
           <div className="flex lg:hidden items-center gap-3 mb-8">
-            <img src="/src/assets/keliri-logo.png" alt="KELIRI" className="w-10 h-10 rounded-xl bg-brand-500 p-1 shadow-lg object-contain" />
-            <div>
-              <h1 className="font-bold text-lg text-gray-900 dark:text-white leading-tight tracking-wide">KELIRI</h1>
-              <p className="text-[10px] uppercase font-semibold text-brand-500 tracking-wider">Admin Panel</p>
-            </div>
+            <img src="/logo.png" alt="" className="h-10 w-auto object-contain" />
           </div>
 
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">Create your account</h2>
-            <p className="text-gray-500 dark:text-gray-400">Register your business to get started with KELIRI Admin</p>
+            <p className="text-gray-500 dark:text-gray-400">Register your business to get started with Keliri Admin</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -349,7 +341,7 @@ export default function AdminRegister() {
           </div>
 
           <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-            Protected by <span className="font-semibold text-gray-700 dark:text-gray-300">KELIRI Security</span>
+            Protected by <span className="font-semibold text-gray-700 dark:text-gray-300">Keliri Security</span>
             <span>·</span>
             Role-based access control
           </div>

@@ -108,7 +108,7 @@ export const getInvoiceById = async (transactionId: string): Promise<Invoice> =>
     status: "Paid",
     
     from: {
-      company: "KELIRI Platform Services",
+      company: "Keliri Platform Services",
       address: "123 Business Park, Sector 44, Gurgaon, Haryana - 122003",
       email: "billing@keliri.com",
       gst: "06AAAAA0000A1Z5"

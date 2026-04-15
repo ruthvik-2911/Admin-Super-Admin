@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
 import { 
-  Bell, 
-  ChevronDown, 
-  LogOut, 
   LayoutDashboard, 
   Megaphone, 
-  AlertCircle, 
+  AlertCircle,
   Users, 
   IndianRupee, 
-  MousePointerClick,
-  Moon,
-  Sun
+  MousePointerClick
 } from "lucide-react"
 import { KpiCard } from "../../components/dashboard/KpiCard"
 import { PerformanceChart, EngagementChart, SpendPerformanceChart } from "../../components/dashboard/Charts"
@@ -23,20 +17,7 @@ export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState("30")
-  const [isDarkMode, setIsDarkMode] = useState(false)
 
-  useEffect(() => {
-    // Check initial dark mode preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true)
-      document.documentElement.classList.add('dark')
-    }
-  }, [])
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode)
-    document.documentElement.classList.toggle('dark')
-  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -66,15 +47,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] transition-colors duration-200">
-      {/* Main Content */}
-      <main className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard Overview</h2>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">Welcome back, here's what's happening today.</p>
-          </div>
-          
+    <>
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
           <div className="flex items-center gap-3 bg-white dark:bg-[#1C1F26] p-1 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
              {['Today', '7', '30'].map((f) => (
                <button
@@ -181,7 +156,7 @@ export default function Dashboard() {
            )}
         </section>
 
-      </main>
-    </div>
+      </div>
+    </>
   )
 }

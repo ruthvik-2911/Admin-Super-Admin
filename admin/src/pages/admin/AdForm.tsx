@@ -25,20 +25,21 @@ export default function AdForm() {
   const [loading, setLoading] = React.useState(isEditMode)
 
   const methods = useForm<AdFormData>({
-    resolver: zodResolver(adSchema),
+    resolver: zodResolver(adSchema) as any,
     defaultValues: {
       title: "",
       description: "",
-      type: "Banner" as const,
+      type: "Banner",
       mediaFile: null,
-      locationMode: "manual" as const,
+      locationMode: "manual",
       latitude: 0,
       longitude: 0,
       radius: 10,
-    } as unknown as AdFormData
+      mediaUrl: ""
+    }
   })
 
-  const { handleSubmit, trigger, formState: { isSubmitting }, reset } = methods
+  const { handleSubmit, trigger, formState: { isSubmitting }, reset } = methods as any
 
   // Load draft ad if editing
   React.useEffect(() => {
@@ -124,40 +125,33 @@ export default function AdForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] pb-16 transition-colors duration-200">
+    <>
       <Toaster position="top-right" />
-      
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1C1F26]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="space-y-6">
+        
+        {/* Action Bar */}
+        <div className="max-w-3xl">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => navigate("/admin/ads")}
-                className="p-2 -ml-2 text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                {isEditMode ? "Manage Advertisement Draft" : "Launch New Advertisement"}
-              </h1>
-            </div>
-            
-            <div className="flex gap-3">
-              <button 
-                type="button"
-                onClick={handleSubmit((d) => onSubmit(d, false))}
-                disabled={isSubmitting}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 rounded-lg transition-colors font-semibold shadow-sm border border-gray-200 dark:border-gray-700 disabled:opacity-50"
-              >
-                <Save className="w-4 h-4" /> Save Draft
-              </button>
-            </div>
-          </div>
+            <button
+              onClick={() => navigate("/admin/ads")}
+              className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors group"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+              Back to Ads
+            </button>
+          
+          <button 
+            type="button"
+            onClick={handleSubmit((d) => onSubmit(d, false))}
+            disabled={isSubmitting}
+            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 rounded-lg transition-colors font-semibold border border-gray-200 dark:border-gray-800 disabled:opacity-50"
+          >
+            <Save className="w-4 h-4" /> Save Draft
+          </button>
         </div>
-      </header>
+      </div>
 
-      <main className="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      <div className="max-w-3xl mx-auto space-y-6">
         
         {/* Progress Stepper */}
         <AdStepper currentStep={currentStep} steps={STEPS} />
@@ -216,7 +210,8 @@ export default function AdForm() {
           </FormProvider>
         </div>
 
-      </main>
+      </div>
     </div>
-  )
+  </>
+)
 }

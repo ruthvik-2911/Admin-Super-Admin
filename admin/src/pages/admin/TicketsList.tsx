@@ -1,6 +1,5 @@
 import * as React from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Plus, HelpCircle, LifeBuoy, Loader2 } from "lucide-react"
+import { Plus, HelpCircle } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import toast, { Toaster } from "react-hot-toast"
 
@@ -42,54 +41,45 @@ export default function TicketsList() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] dark:bg-[#0E1117] p-8 transition-colors duration-200">
+    <>
       <Toaster position="top-right" />
-      
-      {/* Header */}
-      <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-           <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-2xl shadow-blue-600/20">
-              <LifeBuoy className="w-7 h-7" />
-           </div>
-           <div>
-              <h1 className="text-3xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Support Hub</h1>
-              <p className="text-gray-500 text-sm font-medium">Expert assistance for all your campaign needs</p>
-           </div>
+      <div className="space-y-6">
+        
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={() => navigate("/admin/tickets/new")}
+            className="flex items-center gap-2 px-6 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold text-sm transition-all active:scale-95 shadow-sm shadow-brand-500/20"
+          >
+            <Plus className="w-5 h-5" />
+            Create New Ticket
+          </button>
         </div>
 
-        <button
-          onClick={() => navigate("/admin/tickets/new")}
-          className="flex items-center gap-2 px-6 py-3.5 bg-gray-900 dark:bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-800 dark:hover:bg-blue-700 transition-all active:scale-95 shadow-xl shadow-gray-900/10 dark:shadow-blue-600/20"
-        >
-          <Plus className="w-5 h-5" />
-          Create New Ticket
-        </button>
-      </header>
-
-      {/* Main UI */}
-      <main className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <TicketFilters onFilterChange={setFilters} />
-        
-        <TicketTable 
-          data={tickets} 
-          isLoading={loading} 
-          onReopen={handleReopen} 
-        />
-        
-        {/* Help Banner */}
-        <div className="mt-12 p-8 bg-gray-900 rounded-[2.5rem] relative overflow-hidden group">
-           <HelpCircle className="absolute right-[-2.5rem] top-[-2.5rem] w-64 h-64 text-white/5 group-hover:rotate-12 transition-transform duration-1000" />
-           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-              <div>
-                 <h3 className="text-xl font-black text-white tracking-tight mb-2">Need immediate technical help?</h3>
-                 <p className="text-gray-400 text-sm font-medium max-w-lg">Our technical specialists are available 24/7 for urgent ad-delivery issues. High priority tickets are usually resolved within 2 hours.</p>
-              </div>
-              <button className="px-8 py-3.5 bg-white text-gray-900 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-100 transition-all active:scale-95">
-                 Contact Hotline
-              </button>
-           </div>
+        {/* Main UI */}
+        <div className="space-y-6">
+          <TicketFilters onFilterChange={setFilters} />
+          
+          <TicketTable 
+            data={tickets} 
+            isLoading={loading} 
+            onReopen={handleReopen} 
+          />
+          
+          {/* Help Banner */}
+          <div className="mt-12 p-8 bg-[#1C1F26] rounded-2xl relative overflow-hidden group border border-gray-800">
+             <HelpCircle className="absolute right-[-2.5rem] top-[-2.5rem] w-64 h-64 text-white/5 group-hover:rotate-12 transition-transform duration-1000" />
+             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div>
+                   <h3 className="text-xl font-black text-white tracking-tight mb-2">Need immediate technical help?</h3>
+                   <p className="text-gray-400 text-sm font-medium max-w-lg">Our technical specialists are available 24/7 for urgent ad-delivery issues. High priority tickets are usually resolved within 2 hours.</p>
+                </div>
+                <button className="px-8 py-3 bg-white text-gray-900 rounded-xl font-bold text-sm tracking-tight hover:bg-gray-100 transition-all active:scale-95">
+                   Contact Hotline
+                </button>
+             </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </>
   )
 }

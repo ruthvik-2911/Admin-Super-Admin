@@ -55,28 +55,15 @@ export default function AnalyticsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] p-8 transition-colors duration-200">
+    <>
       <Toaster position="top-right" />
-      
-      {/* Header */}
-      <header className="mb-10 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-           <div className="w-14 h-14 bg-brand-500 rounded-2xl flex items-center justify-center text-white shadow-2xl shadow-brand-500/20">
-              <BarChart3 className="w-7 h-7" />
-           </div>
-           <div>
-              <h1 className="text-3xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Analytics Hub</h1>
-              <p className="text-gray-500 text-sm font-medium">Deep-dive performance monitoring and optimization</p>
-           </div>
-        </div>
-      </header>
-
-      <AnalyticsFilters 
-        filters={filters}
-        setFilters={setFilters}
-        onReset={handleReset}
-        onExport={handleExport}
-      />
+      <div className="space-y-6">
+        <AnalyticsFilters 
+          filters={filters}
+          setFilters={setFilters}
+          onReset={handleReset}
+          onExport={handleExport}
+        />
 
       <AnimatePresence mode="wait">
         {loading ? (
@@ -116,6 +103,7 @@ export default function AnalyticsDashboard() {
           </div>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    </>
   )
 }

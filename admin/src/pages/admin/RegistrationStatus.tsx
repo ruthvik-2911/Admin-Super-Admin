@@ -27,7 +27,7 @@ const statusConfig = {
       </span>
     ),
     title: 'Application Approved!',
-    message: 'Your business account has been verified and approved. You can now log in to your KELIRI Admin dashboard.',
+    message: 'Your business account has been verified and approved. You can now log in to your Keliri Admin dashboard.',
     ctaLabel: 'Go to Login',
     ctaIcon: <ArrowRight className="w-[18px] h-[18px]" />,
     ctaStyle: 'bg-brand-500 hover:bg-brand-600 text-white shadow-lg shadow-brand-500/20',
@@ -106,14 +106,10 @@ export default function RegistrationStatus() {
         <div className="relative z-10">
           <div className="flex items-center gap-3">
             <img
-              src="/src/assets/keliri-logo.png"
-              alt="KELIRI"
-              className="w-10 h-10 rounded-xl bg-white/20 p-1 backdrop-blur-sm border border-white/30 shadow-lg object-contain"
+              src="/logo.png"
+              alt=""
+              className="h-10 w-auto object-contain"
             />
-            <div>
-              <h1 className="font-bold text-lg leading-tight tracking-wide">KELIRI</h1>
-              <p className="text-[10px] uppercase font-semibold text-brand-100 tracking-wider">Admin Panel</p>
-            </div>
           </div>
 
           <div className="mt-24 max-w-xl">
@@ -143,7 +139,7 @@ export default function RegistrationStatus() {
           </div>
         </div>
 
-        <div className="relative z-10 text-xs text-brand-200 font-medium tracking-wide">© 2026 KELIRI</div>
+        <div className="relative z-10 text-xs text-brand-200 font-medium tracking-wide">© 2026 Keliri</div>
       </div>
 
       {/* ── Right Panel ── */}
@@ -152,11 +148,7 @@ export default function RegistrationStatus() {
 
           {/* Mobile Logo */}
           <div className="flex lg:hidden items-center gap-3 mb-10">
-            <img src="/src/assets/keliri-logo.png" alt="KELIRI" className="w-10 h-10 rounded-xl bg-brand-500 p-1 shadow-lg object-contain" />
-            <div>
-              <h1 className="font-bold text-lg text-gray-900 dark:text-white leading-tight tracking-wide">KELIRI</h1>
-              <p className="text-[10px] uppercase font-semibold text-brand-500 tracking-wider">Admin Panel</p>
-            </div>
+            <img src="/logo.png" alt="" className="h-10 w-auto object-contain" />
           </div>
 
           {isLoading ? (
@@ -248,7 +240,7 @@ export default function RegistrationStatus() {
               </p>
 
               <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                Protected by <span className="font-semibold text-gray-700 dark:text-gray-300">KELIRI Security</span>
+                Protected by <span className="font-semibold text-gray-700 dark:text-gray-300">Keliri Security</span>
                 <span>·</span>
                 Role-based access control
               </div>

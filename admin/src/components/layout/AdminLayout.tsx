@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Outlet } from "react-router-dom"
 import { Sidebar } from "./Sidebar"
+import { Header } from "./Header"
 
 export default function AdminLayout() {
   const [isOpen, setIsOpen] = React.useState(true)
@@ -21,12 +22,15 @@ export default function AdminLayout() {
         <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
 
-      {/* Main Content */}
-      <main className="flex-1 w-full overflow-x-hidden min-h-screen relative p-0 transition-all duration-300">
-        <div className="max-w-[1600px] mx-auto">
-           <Outlet />
-        </div>
-      </main>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        <Header />
+        <main className="flex-1 w-full overflow-x-hidden relative transition-all duration-300">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-12">
+             <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   )
 }

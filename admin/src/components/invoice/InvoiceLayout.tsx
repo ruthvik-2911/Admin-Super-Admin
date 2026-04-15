@@ -18,13 +18,7 @@ export const InvoiceLayout = React.forwardRef<HTMLDivElement, InvoiceLayoutProps
         <div className="flex justify-between items-start mb-16">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center text-white font-black text-2xl">
-                K
-              </div>
-              <div>
-                 <h1 className="text-2xl font-black text-gray-900 tracking-tighter">KELIRI</h1>
-                 <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400">Platform Services</p>
-              </div>
+              <img src="/logo.png" alt="" className="h-12 w-auto object-contain" />
             </div>
           </div>
           
@@ -101,7 +95,7 @@ export const InvoiceLayout = React.forwardRef<HTMLDivElement, InvoiceLayoutProps
 
         {/* Footer */}
         <div className="mt-20 text-center">
-           <p className="text-[11px] text-gray-400 italic">"Thank you for your business. We appreciate your partnership with KELIRI Platform."</p>
+           <p className="text-[11px] text-gray-400 italic">"Thank you for your business. We appreciate your partnership with Keliri Platform."</p>
            <div className="mt-6 pt-6 border-t border-gray-50 flex justify-center gap-8 text-[9px] font-bold text-gray-400 uppercase tracking-widest">
              <span>keliri.com</span>
              <span>support@keliri.com</span>

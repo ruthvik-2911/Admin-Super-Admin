@@ -99,90 +99,90 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] transition-colors duration-200">
+    <>
       <Toaster position="top-right" />
-      
-      {/* Navbar */}
-      <nav className="bg-white dark:bg-[#1C1F26] border-b border-gray-200 dark:border-gray-800 px-6 py-4">
-        <div className="max-w-[1000px] mx-auto flex items-center justify-between">
+      <div className="space-y-6">
+        
+        {/* Sub-Header */}
+        <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-2">
           <button 
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors group"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             Go Back
           </button>
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-green-500" />
-            <span className="text-xs font-black uppercase tracking-widest text-gray-400">Secure Payment</span>
+          <div className="flex items-center gap-2 text-green-500">
+            <ShieldCheck className="w-5 h-5" />
+            <span className="text-[10px] font-black uppercase tracking-widest">Razorpay 256-bit SSL</span>
           </div>
         </div>
-      </nav>
 
-      <main className="max-w-[1000px] mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          
-          {/* Left: Summary */}
-          <div className="order-2 lg:order-1">
-             <PaymentSummary ad={ad} cost={cost} />
-          </div>
+        <div className="max-w-5xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            
+            {/* Left: Summary */}
+            <div className="order-2 lg:order-1">
+               <PaymentSummary ad={ad} cost={cost} />
+            </div>
 
-          {/* Right: Razorpay Card */}
-          <div className="order-1 lg:order-2 space-y-6">
-            <div className="bg-white dark:bg-[#1A1D24] rounded-3xl p-8 border border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden relative">
-              {/* Decorative Glow */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 blur-3xl -z-10" />
+            {/* Right: Razorpay Card */}
+            <div className="order-1 lg:order-2 space-y-6">
+              <div className="bg-white dark:bg-[#1A1D24] rounded-3xl p-8 border border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden relative">
+                {/* Decorative Glow */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 blur-3xl -z-10" />
 
-              <div className="flex justify-between items-start mb-8">
-                 <div className="w-12 h-12 bg-brand-500/10 rounded-2xl flex items-center justify-center text-brand-500">
-                   <CreditCard className="w-6 h-6" />
-                 </div>
-                 <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay" className="h-6 opacity-80" />
+                <div className="flex justify-between items-start mb-8">
+                   <div className="w-12 h-12 bg-brand-500/10 rounded-2xl flex items-center justify-center text-brand-500">
+                     <CreditCard className="w-6 h-6" />
+                   </div>
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay" className="h-6 opacity-80" />
+                </div>
+
+                <h1 className="text-2xl font-black text-gray-900 dark:text-white mb-2">Checkout</h1>
+                <p className="text-sm text-gray-500 mb-8 leading-relaxed">
+                  Clicking the button below will open a secure payment terminal provided by Razorpay. We never store your card details.
+                </p>
+
+                <button
+                  onClick={handlePay}
+                  disabled={processing}
+                  className="w-full bg-brand-500 hover:bg-brand-600 dark:bg-brand-500 dark:hover:bg-brand-400 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-brand-500/30 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-wait"
+                >
+                  {processing ? (
+                     <span className="flex items-center justify-center gap-3">
+                       <Loader2 className="w-5 h-5 animate-spin" />
+                       Initializing...
+                     </span>
+                  ) : (
+                    "Pay Now"
+                  )}
+                </button>
+
+                <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800 space-y-4">
+                   <div className="flex items-center gap-3 text-gray-500">
+                     <Lock className="w-4 h-4" />
+                     <span className="text-[11px] font-bold uppercase tracking-wider">AES-256 SSL Encrypted</span>
+                   </div>
+                   <div className="flex gap-4">
+                      {/* Mock payment method icons */}
+                      <div className="w-8 h-5 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center text-[8px] font-bold text-gray-400">VISA</div>
+                      <div className="w-8 h-5 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center text-[8px] font-bold text-gray-400">UPI</div>
+                      <div className="w-8 h-5 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center text-[8px] font-bold text-gray-400">NET</div>
+                   </div>
+                </div>
               </div>
 
-              <h1 className="text-2xl font-black text-gray-900 dark:text-white mb-2">Checkout</h1>
-              <p className="text-sm text-gray-500 mb-8 leading-relaxed">
-                Clicking the button below will open a secure payment terminal provided by Razorpay. We never store your card details.
-              </p>
-
-              <button
-                onClick={handlePay}
-                disabled={processing}
-                className="w-full bg-brand-500 hover:bg-brand-600 dark:bg-brand-500 dark:hover:bg-brand-400 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-brand-500/30 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-wait"
-              >
-                {processing ? (
-                   <span className="flex items-center justify-center gap-3">
-                     <Loader2 className="w-5 h-5 animate-spin" />
-                     Initializing...
-                   </span>
-                ) : (
-                  "Pay Now"
-                )}
-              </button>
-
-              <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800 space-y-4">
-                 <div className="flex items-center gap-3 text-gray-500">
-                   <Lock className="w-4 h-4" />
-                   <span className="text-[11px] font-bold uppercase tracking-wider">AES-256 SSL Encrypted</span>
-                 </div>
-                 <div className="flex gap-4">
-                    {/* Mock payment method icons */}
-                    <div className="w-8 h-5 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center text-[8px] font-bold text-gray-400">VISA</div>
-                    <div className="w-8 h-5 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center text-[8px] font-bold text-gray-400">UPI</div>
-                    <div className="w-8 h-5 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center text-[8px] font-bold text-gray-400">NET</div>
-                 </div>
+              <div className="text-center p-6 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-2xl">
+                 <p className="text-xs text-gray-400 leading-normal italic">
+                   "By proceeding with this payment, you agree to our Terms of Ad Placement and Advertiser Guidelines."
+                 </p>
               </div>
             </div>
 
-            <div className="text-center p-6 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-2xl">
-               <p className="text-xs text-gray-400 leading-normal italic">
-                 "By proceeding with this payment, you agree to our Terms of Ad Placement and Advertiser Guidelines."
-               </p>
-            </div>
           </div>
-
         </div>
-      </main>
-    </div>
+      </div>
+    </>
   )
 }

@@ -83,114 +83,114 @@ export default function PublishAd() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] pb-16 transition-colors duration-200">
+    <>
       <Toaster position="top-right" />
-      
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1C1F26]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-[1200px] mx-auto px-4 py-4 flex items-center gap-4">
-          <button
-            onClick={() => navigate(`/admin/ads/${id}/edit`)}
-            className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-             <h1 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">Publish Advertisement</h1>
-             <p className="text-xs text-gray-500 font-medium">Step 4 of 4: Finalize & Pay</p>
+      <div className="space-y-6">
+        
+        {/* Action Bar */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate(`/admin/ads/${id}/edit`)}
+              className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors group"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+              Back to Edit
+            </button>
           </div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Step 4 of 4: Finalize & Pay</p>
         </div>
-      </header>
 
-      <main className="max-w-[1200px] mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left: Configuration */}
-          <div className="lg:col-span-8 space-y-6">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* 1. Assignment */}
-            <section className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
-              <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                 <span className="flex items-center justify-center w-5 h-5 rounded-full bg-brand-500 text-white text-[10px]">1</span>
-                 Network Assignment
-              </h2>
-              <Controller 
-                name="publisherIds"
-                control={control}
-                render={({ field }) => (
-                  <MultiSelect 
-                    label="Assign Publishers" 
-                    options={publishers}
-                    selectedIds={field.value}
-                    onChange={field.onChange}
-                    error={errors.publisherIds?.message}
+            {/* Left: Configuration */}
+            <div className="lg:col-span-8 space-y-6">
+              
+              {/* 1. Assignment */}
+              <section className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
+                <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                   <span className="flex items-center justify-center w-5 h-5 rounded-full bg-brand-500 text-white text-[10px]">1</span>
+                   Network Assignment
+                </h2>
+                <Controller 
+                  name="publisherIds"
+                  control={control}
+                  render={({ field }) => (
+                    <MultiSelect 
+                      label="Assign Publishers" 
+                      options={publishers}
+                      selectedIds={field.value}
+                      onChange={field.onChange}
+                      error={errors.publisherIds?.message}
+                    />
+                  )}
+                />
+                <p className="mt-4 text-xs text-gray-500 leading-relaxed italic bg-gray-50 dark:bg-[#1C1F26] p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+                  <HelpCircle className="w-3.5 h-3.5 inline mr-1 mb-0.5 text-brand-500" />
+                  Selected publishers will receive this ad content for their allocated slots. You can add more publishers later from the dashboard.
+                </p>
+              </section>
+
+              {/* 2. Duration */}
+              <section className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
+                <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                   <span className="flex items-center justify-center w-5 h-5 rounded-full bg-brand-500 text-white text-[10px]">2</span>
+                   Campaign Duration
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <DatePicker 
+                    label="Activation Date"
+                    error={errors.startDate?.message}
+                    {...control.register("startDate")}
                   />
-                )}
-              />
-              <p className="mt-4 text-xs text-gray-500 leading-relaxed italic bg-gray-50 dark:bg-[#1C1F26] p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-                <HelpCircle className="w-3.5 h-3.5 inline mr-1 mb-0.5 text-brand-500" />
-                Selected publishers will receive this ad content for their allocated slots. You can add more publishers later from the dashboard.
-              </p>
-            </section>
+                  <DatePicker 
+                    label="Deactivation Date"
+                    error={errors.endDate?.message}
+                    {...control.register("endDate")}
+                  />
+                </div>
+              </section>
 
-            {/* 2. Duration */}
-            <section className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
-              <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                 <span className="flex items-center justify-center w-5 h-5 rounded-full bg-brand-500 text-white text-[10px]">2</span>
-                 Campaign Duration
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <DatePicker 
-                  label="Activation Date"
-                  error={errors.startDate?.message}
-                  {...control.register("startDate")}
-                />
-                <DatePicker 
-                  label="Deactivation Date"
-                  error={errors.endDate?.message}
-                  {...control.register("endDate")}
-                />
-              </div>
-            </section>
-
-            {/* 3. Targeting Review */}
-            <section className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-dotted border-gray-300 dark:border-gray-700 transition-colors opacity-90">
-               <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                 Targeting Constraints (Locked)
-              </h2>
-              <div className="grid grid-cols-2 gap-6 text-sm">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg"><MapPin className="w-4 h-4 text-gray-500" /></div>
-                  <div>
-                    <p className="text-xs text-gray-500 font-bold uppercase tracking-tighter">Coordinates</p>
-                    <p className="font-medium text-gray-700 dark:text-gray-300 tabular-nums">19.0760, 72.8777</p>
+              {/* 3. Targeting Review */}
+              <section className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl border border-dotted border-gray-300 dark:border-gray-700 transition-colors opacity-90">
+                 <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                   Targeting Constraints (Locked)
+                </h2>
+                <div className="grid grid-cols-2 gap-6 text-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg"><MapPin className="w-4 h-4 text-gray-500" /></div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-tighter">Coordinates</p>
+                      <p className="font-medium text-gray-700 dark:text-gray-300 tabular-nums">19.0760, 72.8777</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg"><Crosshair className="w-4 h-4 text-gray-500" /></div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-tighter">Coverage Radius</p>
+                      <p className="font-medium text-gray-700 dark:text-gray-300">25 KM Radius</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg"><Crosshair className="w-4 h-4 text-gray-500" /></div>
-                  <div>
-                    <p className="text-xs text-gray-500 font-bold uppercase tracking-tighter">Coverage Radius</p>
-                    <p className="font-medium text-gray-700 dark:text-gray-300">25 KM Radius</p>
-                  </div>
-                </div>
-              </div>
-            </section>
+              </section>
+            </div>
+
+            {/* Right: Summary */}
+            <aside className="lg:col-span-4">
+               <AdSummaryCard 
+                 ad={ad}
+                 days={days}
+                 numPublishers={formData.publisherIds.length}
+                 costPerDay={1} // ₹365 / 365
+                 onPublish={handleSubmit(onSubmit)}
+                 isSubmitting={isSubmitting}
+               />
+            </aside>
+
           </div>
-
-          {/* Right: Summary */}
-          <aside className="lg:col-span-4">
-             <AdSummaryCard 
-               ad={ad}
-               days={days}
-               numPublishers={formData.publisherIds.length}
-               costPerDay={1} // ₹365 / 365
-               onPublish={handleSubmit(onSubmit)}
-               isSubmitting={isSubmitting}
-             />
-          </aside>
-
         </div>
-      </main>
-    </div>
+      </div>
+    </>
   )
 }

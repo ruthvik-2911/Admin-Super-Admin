@@ -54,22 +54,18 @@ export default function CreateTicket() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] py-12 px-6">
+    <>
       <Toaster position="top-right" />
-      
-      <div className="max-w-3xl mx-auto">
-        <button 
-          onClick={() => navigate("/admin/tickets")}
-          className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white mb-8 transition-colors group"
-        >
-          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+      <div className="space-y-6">
+        
+        <div className="max-w-3xl">
+          <button 
+            onClick={() => navigate("/admin/tickets")}
+            className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors group"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           Back to Tickets
         </button>
-
-        <header className="mb-10 text-center">
-           <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tighter uppercase mb-2">Raise Support Ticket</h1>
-           <p className="text-gray-500 font-medium">Detailed information helps us resolve issues faster.</p>
-        </header>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -169,5 +165,6 @@ export default function CreateTicket() {
         </div>
       </div>
     </div>
-  )
+  </>
+)
 }

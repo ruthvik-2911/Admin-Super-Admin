@@ -54,24 +54,17 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         {/* Logo Section */}
         <div className="p-6 pb-12 flex items-center justify-between">
           <div className="flex items-center gap-4 min-w-0 overflow-hidden">
-            <div className="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-brand-500/20 flex-shrink-0">
-              K
-            </div>
-            {isOpen && (
-               <div className="animate-in fade-in slide-in-from-left-2 duration-300 truncate">
-                  <h1 className="text-xl font-black text-white tracking-tighter">KELIRI</h1>
-                  <p className="text-[10px] uppercase font-bold text-gray-500 tracking-[0.2em]">Admin Portal</p>
-               </div>
-            )}
+            <img src="/logo.png" alt="" className="h-10 w-auto object-contain" />
           </div>
           
-          {/* Dashboard Toggle (Three Lines) */}
-          <button 
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl transition-all active:scale-90"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+          {isOpen && (
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl transition-all active:scale-90"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         {/* Navigation */}
