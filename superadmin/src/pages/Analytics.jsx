@@ -652,7 +652,7 @@ const Analytics = () => {
 
       {/* Sticky Filter Bar Placeholder (since we need specific multi-select here, let's build it inline or use a specialized one) */}
       {/* Filter Bar */}
-      <div className="bg-white dark:bg-[#1A1D24] border-b border-gray-100 dark:border-gray-800 -mx-6 px-6 py-4 mb-8 sticky top-0 z-20 flex flex-col gap-4 shadow-sm">
+      <div className="bg-white/95 dark:bg-[#1A1D24]/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 -mx-6 px-6 py-4 mb-8 sticky top-[-24px] z-30 flex flex-col gap-4 shadow-sm transition-all duration-300">
         <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 p-1.5 rounded-xl border border-gray-100 dark:border-gray-700">
             <Calendar size={16} className="text-gray-400 ml-2" />

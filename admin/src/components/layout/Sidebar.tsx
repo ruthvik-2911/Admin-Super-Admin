@@ -13,6 +13,9 @@ import {
   HelpCircle
 } from "lucide-react"
 import { cn } from "../../lib/utils"
+import lightLogo from "../../assets/lightmodelogo.png"
+import darkLogo from "../../assets/darkmodelogo.png"
+import icon from "../../assets/keliriicon.png"
 
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
@@ -55,12 +58,13 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         <div className="p-6 pb-6 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0 overflow-hidden">
             <div className="w-10 h-10 bg-primary-50 dark:bg-primary-500/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-primary-100 dark:border-primary-500/20 shadow-sm">
-               <img src="/logo.png" alt="" className="h-6 w-auto object-contain" />
+               <img src={icon} alt="KELIRI Logo" className="h-6 w-auto object-contain" />
             </div>
             {isOpen && (
-              <div className="flex flex-col">
-                <span className="text-sm font-black text-gray-900 dark:text-white leading-tight">KELIRI</span>
-                <span className="text-[10px] font-black text-primary-500 uppercase tracking-widest leading-none">Admin Panel</span>
+              <div className="flex flex-col animate-fade-in">
+                <img src={lightLogo} alt="KELIRI Logo" className="w-20 h-auto object-contain dark:hidden" />
+                <img src={darkLogo} alt="KELIRI Logo" className="w-20 h-auto object-contain hidden dark:block" />
+                <span className="text-[10px] font-black text-primary-500 uppercase tracking-widest leading-none mt-1">Admin Platform</span>
               </div>
             )}
           </div>

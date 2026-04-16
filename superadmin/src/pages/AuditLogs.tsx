@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
-import { Search, Filter, CalendarDays, Download, Shield, FileText, Settings, Users, Monitor, ChevronLeft, ChevronRight, X, Clock } from 'lucide-react'
+import { Search, Filter, CalendarDays, Download, Shield, FileText, Settings, Users, Monitor, ChevronLeft, ChevronRight, X, Clock, ChevronDown } from 'lucide-react'
 
 // ─── Types & Mock Data ─────────────────────────────────────────────
 type LogCategory = 'Security' | 'Content' | 'System' | 'Users' | 'All'
@@ -38,11 +38,24 @@ Array.from({ length: 45 }).forEach((_, i) => {
 })
 
 const getCategoryBadge = (category: LogCategory) => {
+  const baseClasses = "px-2.5 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider flex items-center w-max border"
   switch (category) {
-    case 'Security': return <span className="badge-primary px-2.5 py-0.5"><Shield size={12} className="mr-1" /> Security</span>
-    case 'Content': return <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800 flex items-center w-max"><FileText size={12} className="mr-1" /> Content</span>
-    case 'System': return <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-800 flex items-center w-max"><Settings size={12} className="mr-1" /> System</span>
-    case 'Users': return <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border border-orange-100 dark:border-orange-800 flex items-center w-max"><Users size={12} className="mr-1" /> Users</span>
+    case 'Security': 
+      return <span className={`${baseClasses} bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border-red-100 dark:border-red-800/50`}>
+        <Shield size={12} className="mr-1.5" /> Security
+      </span>
+    case 'Content': 
+      return <span className={`${baseClasses} bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800/50`}>
+        <FileText size={12} className="mr-1.5" /> Content
+      </span>
+    case 'System': 
+      return <span className={`${baseClasses} bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-800/50`}>
+        <Settings size={12} className="mr-1.5" /> System
+      </span>
+    case 'Users': 
+      return <span className={`${baseClasses} bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-orange-100 dark:border-orange-800/50`}>
+        <Users size={12} className="mr-1.5" /> Users
+      </span>
     default: return null
   }
 }
@@ -171,13 +184,15 @@ export default function AuditLogs() {
           <table className="w-full text-left border-collapse">
             <thead className="bg-gray-50/50 dark:bg-gray-800/50">
               <tr>
-              <tr>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-800">Log Timestamp</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-800">Administrator</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-800">Category</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-800">Action Description</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-800">Source IP</th>
-              </tr>
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center gap-2 text-primary-600 dark:text-primary-400">
+                    Log Timestamp <ChevronDown size={14} />
+                  </div>
+                </th>
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">Administrator</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">Category</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">Action Description</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">Source IP</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-gray-800">

@@ -16,7 +16,11 @@ import {
   Radio,
   Megaphone,
   DollarSign,
-  Ticket
+  Ticket,
+  Key,
+  Eye,
+  EyeOff,
+  RefreshCw
 } from 'lucide-react';
 import PageHeader from '../components/shared/PageHeader';
 import DataTable from '../components/shared/DataTable';
@@ -33,6 +37,23 @@ const SubAdminManagement: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempPermissions, setTempPermissions] = useState<any>(null);
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, type: '', subAdmin: null });
+
+  // Creation State
+  const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
+  const [newSubAdmin, setNewSubAdmin] = useState({
+    name: '',
+    email: '',
+    password: '',
+    permissions: {
+      dashboard: true,
+      analytics: false,
+      admins: false,
+      publishers: false,
+      ads: true,
+      revenue: false,
+      tickets: true
+    }
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -92,6 +113,60 @@ const SubAdminManagement: React.FC = () => {
     setTempPermissions(prev => ({
       ...prev,
       [key]: !prev[key]
+    }));
+  };
+
+  const resetCreateForm = () => {
+    setNewSubAdmin({
+      name: '',
+      email: '',
+      password: '',
+      permissions: {
+        dashboard: true,
+        analytics: false,
+        admins: false,
+        publishers: false,
+        ads: true,
+        revenue: false,
+        tickets: true
+      }
+    });
+  };
+
+  const handleCreateSubAdmin = () => {
+    if (!newSubAdmin.name || !newSubAdmin.email) return;
+
+    const newEntry = {
+      id: `SADM-${Math.floor(100 + Math.random() * 900)}`,
+      ...newSubAdmin,
+      status: 'Active',
+      lastLogin: 'Never',
+      loginActivity: []
+    };
+
+    setSubAdmins(prev => [newEntry, ...prev]);
+    setIsCreateDrawerOpen(false);
+    resetCreateForm();
+  };
+
+  const generatePassword = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+    let password = "";
+    for (let i = 0; i < 10; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setNewSubAdmin(prev => ({ ...prev, password }));
+  };
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleNewPermission = (key: string) => {
+    setNewSubAdmin(prev => ({
+      ...prev,
+      permissions: {
+        ...prev.permissions,
+        [key]: !prev.permissions[key as keyof typeof prev.permissions]
+      }
     }));
   };
 
@@ -168,7 +243,10 @@ const SubAdminManagement: React.FC = () => {
           title="Sub-Admin Management" 
           subtitle="Define organizational structure and manage granular access controls for secondary administrators"
         />
-        <button className="flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-2xl text-sm font-black shadow-lg shadow-primary-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+        <button 
+          onClick={() => { resetCreateForm(); setIsCreateDrawerOpen(true); }}
+          className="flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-2xl text-sm font-black shadow-lg shadow-primary-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+        >
           <UserPlus size={18} />
           Create Sub-Admin
         </button>
@@ -338,6 +416,127 @@ const SubAdminManagement: React.FC = () => {
           type={confirmDialog.type === 'Delete' || confirmDialog.type === 'Suspend' ? 'danger' : 'primary'}
         />
       )}
+
+      {/* Create Sub-Admin Drawer */}
+      <DetailDrawer
+        isOpen={isCreateDrawerOpen}
+        onClose={() => setIsCreateDrawerOpen(false)}
+        title="Initialize New Governance"
+        footerActions={
+          <div className="flex gap-3 w-full">
+            <button 
+                onClick={handleCreateSubAdmin}
+                className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-2xl text-sm font-black uppercase tracking-widest shadow-lg shadow-primary-500/20 active:scale-95 transition-all"
+            >
+                Authorize Sub-Admin
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-2xl border border-primary-100 dark:border-primary-800">
+                <UserCheck size={20} className="text-primary-600" />
+                <p className="text-xs font-bold text-primary-800 dark:text-primary-300 italic">Configure the core profile and initial access permissions for the new secondary administrator.</p>
+            </div>
+
+            <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest ml-1">Full Identity</label>
+                        <input 
+                            type="text" 
+                            placeholder="e.g. Vikram Sharma"
+                            value={newSubAdmin.name}
+                            onChange={(e) => setNewSubAdmin(prev => ({ ...prev, name: e.target.value }))}
+                            className="w-full px-5 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold text-gray-900 dark:text-white"
+                        />
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest ml-1">Official Email</label>
+                        <input 
+                            type="email" 
+                            placeholder="vikram@keliri.com"
+                            value={newSubAdmin.email}
+                            onChange={(e) => setNewSubAdmin(prev => ({ ...prev, email: e.target.value }))}
+                            className="w-full px-5 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold text-gray-900 dark:text-white"
+                        />
+                    </div>
+                    <div className="space-y-1.5">
+                        <div className="flex items-center justify-between ml-1">
+                            <label className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Access Credentials</label>
+                            <button 
+                                onClick={generatePassword}
+                                className="text-[10px] font-black text-primary-500 hover:text-primary-600 transition-colors uppercase tracking-widest flex items-center gap-1.5"
+                            >
+                                <RefreshCw size={10} />
+                                Generate
+                            </button>
+                        </div>
+                        <div className="relative">
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400">
+                                <Key size={18} />
+                            </div>
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                placeholder="••••••••••••"
+                                value={newSubAdmin.password}
+                                onChange={(e) => setNewSubAdmin(prev => ({ ...prev, password: e.target.value }))}
+                                className="w-full pl-12 pr-12 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold text-gray-900 dark:text-white"
+                            />
+                            <button 
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">Initial Access Matrix</h4>
+            <div className="grid grid-cols-2 gap-3">
+                {[
+                    { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+                    { key: 'analytics', label: 'Analytics', icon: BarChart3 },
+                    { key: 'admins', label: 'Admins', icon: Users },
+                    { key: 'publishers', label: 'Publishers', icon: Radio },
+                    { key: 'ads', label: 'Ads', icon: Megaphone },
+                    { key: 'revenue', label: 'Revenue', icon: DollarSign },
+                    { key: 'tickets', label: 'Support', icon: Ticket },
+                ].map((mod) => {
+                    const isGranted = newSubAdmin.permissions[mod.key as keyof typeof newSubAdmin.permissions];
+                    
+                    return (
+                        <button 
+                            key={mod.key} 
+                            onClick={() => toggleNewPermission(mod.key)}
+                            className={`flex items-center justify-between p-4 rounded-2xl border transition-all text-left group
+                                ${isGranted 
+                                    ? 'bg-white dark:bg-gray-800 border-primary-500 shadow-lg shadow-primary-500/5' 
+                                    : 'bg-gray-50/50 dark:bg-gray-900/40 border-gray-100 dark:border-gray-800 opacity-60 grayscale hover:grayscale-0 hover:opacity-100'
+                                }
+                                hover:scale-[1.02] active:scale-[0.98] cursor-pointer
+                            `}
+                        >
+                            <div className="flex items-center gap-3">
+                                <mod.icon size={18} className={isGranted ? 'text-primary-500' : 'text-gray-400 dark:text-gray-600 group-hover:text-primary-400'} />
+                                <span className="text-xs font-black text-gray-900 dark:text-white tracking-tight">{mod.label}</span>
+                            </div>
+                            {isGranted ? 
+                                <span className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20 animate-in zoom-in-50 duration-200"><UserCheck size={12} /></span> : 
+                                <div className="w-5 h-5 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-700" />
+                            }
+                        </button>
+                    );
+                })}
+            </div>
+          </div>
+        </div>
+      </DetailDrawer>
     </div>
   );
 };

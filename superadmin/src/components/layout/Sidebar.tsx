@@ -14,7 +14,8 @@ import {
   Radio,
   ClipboardList
 } from 'lucide-react'
-import logo from '../../assets/lightmodelogo.png'
+import lightLogo from '../../assets/lightmodelogo.png'
+import darkLogo from '../../assets/darkmodelogo.png'
 import icon from '../../assets/keliriicon.png'
 
 interface NavItem {
@@ -66,7 +67,8 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </div>
         {!collapsed && (
           <div className="animate-fade-in">
-            <img src={logo} alt="KELIRI Logo" className="w-24 h-10 object-contain" />
+            <img src={lightLogo} alt="KELIRI Logo" className="w-24 h-10 object-contain dark:hidden" />
+            <img src={darkLogo} alt="KELIRI Logo" className="w-24 h-10 object-contain hidden dark:block" />
             <p className="text-[10px] text-primary-500 font-medium tracking-widest uppercase">Super Admin</p>
           </div>
         )}

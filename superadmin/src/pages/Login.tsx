@@ -4,7 +4,8 @@ import {
   Mail, Lock, Eye, EyeOff, Phone, ArrowRight,
   Shield, BarChart3, Megaphone, MapPin
 } from 'lucide-react'
-import logo from '../assets/lightmodelogo.png'
+import lightLogo from '../assets/lightmodelogo.png'
+import darkLogo from '../assets/darkmodelogo.png'
 import icon from '../assets/keliriicon.png'
 
 type Tab = 'email' | 'phone'
@@ -134,7 +135,8 @@ export default function Login() {
             <img src={icon} alt="KELIRI Logo" className="w-full h-full object-contain" />
           </div>
           <div>
-            <img src={logo} alt="KELIRI Logo" className="w-24 h-10 object-contain" />
+            <img src={lightLogo} alt="KELIRI Logo" className="w-24 h-10 object-contain dark:hidden" />
+            <img src={darkLogo} alt="KELIRI Logo" className="w-24 h-10 object-contain hidden dark:block" />
             <p className="text-orange-200 text-[11px] font-medium tracking-widest uppercase mt-0.5">Super Admin Panel</p>
           </div>
         </div>

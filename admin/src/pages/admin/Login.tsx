@@ -27,7 +27,8 @@ import {
   type OtpLoginStep2FormData,
 } from "../../schemas/loginSchema";
 import { Modal } from "../../components/ui/Modal";
-import logo from "../../assets/lightmodelogo.png";
+import lightLogo from "../../assets/lightmodelogo.png";
+import darkLogo from "../../assets/darkmodelogo.png";
 import icon from "../../assets/keliriicon.png";
 
 type Tab = "email" | "phone";
@@ -157,7 +158,8 @@ export default function AdminLogin() {
             <img src={icon} alt="KELIRI Logo" className="w-full h-full object-contain" />
           </div>
           <div>
-            <img src={logo} alt="KELIRI Logo" className="w-24 h-10 object-contain drop-shadow-md" />
+            <img src={lightLogo} alt="KELIRI Logo" className="w-24 h-10 object-contain drop-shadow-md dark:hidden" />
+            <img src={darkLogo} alt="KELIRI Logo" className="w-24 h-10 object-contain drop-shadow-md hidden dark:block" />
             <p className="text-orange-200 text-[11px] font-medium tracking-widest uppercase mt-0.5 drop-shadow-sm">Admin Platform</p>
           </div>
         </div>
