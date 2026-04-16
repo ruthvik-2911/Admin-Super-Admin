@@ -19,7 +19,6 @@ import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
 import AdminLayout from "./components/layout/AdminLayout";
 import TicketsList from "./pages/admin/TicketsList";
 import CreateTicket from "./pages/admin/CreateTicket";
-import TicketDetails from "./pages/admin/TicketDetails";
 
 function App() {
   return (
@@ -33,7 +32,6 @@ function App() {
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/tickets" element={<TicketsList />} />
           <Route path="/admin/tickets/new" element={<CreateTicket />} />
-          <Route path="/admin/tickets/:id" element={<TicketDetails />} />
           <Route path="/admin/ads" element={<AdsList />} />
           <Route path="/admin/ads/new" element={<AdForm />} />
           <Route path="/admin/ads/:id" element={<AdDetails />} />

@@ -7,12 +7,15 @@ import { fetchTickets, reopenTicket } from "../../services/tickets"
 import type { Ticket } from "../../types/ticket"
 import { TicketFilters } from "../../components/tickets/TicketFilters"
 import { TicketTable } from "../../components/tickets/TicketTable"
+import { TicketDetailsDrawer } from "../../components/tickets/TicketDetailsDrawer"
 
 export default function TicketsList() {
   const navigate = useNavigate()
   const [tickets, setTickets] = React.useState<Ticket[]>([])
   const [loading, setLoading] = React.useState(true)
   const [filters, setFilters] = React.useState({ query: "", status: "All", category: "All" })
+  const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(null)
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
 
   const loadTickets = React.useCallback(async () => {
     setLoading(true)
@@ -40,6 +43,11 @@ export default function TicketsList() {
     }
   }
 
+  const handleRowClick = (id: string) => {
+    setSelectedTicketId(id)
+    setIsDrawerOpen(true)
+  }
+
   return (
     <>
       <Toaster position="top-right" />
@@ -63,6 +71,7 @@ export default function TicketsList() {
             data={tickets} 
             isLoading={loading} 
             onReopen={handleReopen} 
+            onRowClick={handleRowClick}
           />
           
           {/* Help Banner */}
@@ -80,6 +89,13 @@ export default function TicketsList() {
           </div>
         </div>
       </div>
+      
+      <TicketDetailsDrawer 
+        ticketId={selectedTicketId}
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onTicketUpdated={loadTickets}
+      />
     </>
   )
 }

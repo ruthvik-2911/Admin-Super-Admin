@@ -7,11 +7,10 @@ import {
   getSortedRowModel,
   type SortingState
 } from "@tanstack/react-table"
-import { Eye, RotateCcw, ArrowUpDown, Clock, MoreHorizontal } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { RotateCcw, ArrowUpDown, Clock, ChevronRight } from "lucide-react"
 import type { Ticket } from "../../types/ticket"
 import { 
-  Table, 
+  Table,
   TableBody, 
   TableCell, 
   TableHead, 
@@ -24,12 +23,12 @@ interface TicketTableProps {
   data: Ticket[]
   isLoading: boolean
   onReopen: (id: string) => void
+  onRowClick: (id: string) => void
 }
 
 const columnHelper = createColumnHelper<Ticket>()
 
-export function TicketTable({ data, isLoading, onReopen }: TicketTableProps) {
-  const navigate = useNavigate()
+export function TicketTable({ data, isLoading, onReopen, onRowClick }: TicketTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
 
   const columns = React.useMemo(() => [
@@ -92,26 +91,25 @@ export function TicketTable({ data, isLoading, onReopen }: TicketTableProps) {
       header: "Actions",
       cell: info => (
         <div className="flex items-center gap-2">
-           <button
-             onClick={() => navigate(`/admin/tickets/${info.row.original.id}`)}
-             className="p-2 hover:bg-primary-50 dark:hover:bg-primary-500/10 text-primary-600 transition-all rounded-xl group"
-             title="View Conversation"
-           >
-             <Eye className="w-4 h-4 transition-transform group-hover:scale-110" />
-           </button>
            {info.row.original.status === "Resolved" && (
              <button
-                onClick={() => onReopen(info.row.original.id)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onReopen(info.row.original.id)
+                }}
                 className="p-2 hover:bg-amber-50 dark:hover:bg-amber-500/10 text-amber-600 transition-all rounded-xl group"
                 title="Re-open Ticket"
              >
                <RotateCcw className="w-4 h-4 transition-transform group-hover:rotate-180 duration-500" />
              </button>
            )}
+           <div className="p-2 text-gray-400 group-hover:text-primary-500 transition-colors">
+              <ChevronRight className="w-4 h-4" />
+           </div>
         </div>
       ),
     }),
-  ], [navigate, onReopen])
+  ], [onReopen, onRowClick])
 
   const table = useReactTable({
     data,
@@ -149,7 +147,11 @@ export function TicketTable({ data, isLoading, onReopen }: TicketTableProps) {
             ))
           ) : table.getRowModel().rows.length > 0 ? (
             table.getRowModel().rows.map(row => (
-              <TableRow key={row.id} className="group hover:bg-gray-50/50 dark:hover:bg-gray-800/20 border-gray-50 dark:border-gray-800/50 transition-colors">
+              <TableRow 
+                key={row.id} 
+                onClick={() => onRowClick(row.original.id)}
+                className="group hover:bg-gray-50/50 dark:hover:bg-gray-800/20 border-gray-50 dark:border-gray-800/50 transition-all cursor-pointer"
+              >
                 {row.getVisibleCells().map(cell => (
                   <TableCell key={cell.id} className="py-6 px-6">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
