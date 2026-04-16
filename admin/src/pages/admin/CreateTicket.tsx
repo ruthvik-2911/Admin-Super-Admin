@@ -58,7 +58,7 @@ export default function CreateTicket() {
       <Toaster position="top-right" />
       <div className="space-y-6">
         
-        <div className="max-w-3xl">
+        <div className="w-full">
           <button 
             onClick={() => navigate("/admin/tickets")}
             className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors group"
@@ -80,7 +80,7 @@ export default function CreateTicket() {
                 {...register("subject")}
                 placeholder="Brief summary of the issue"
                 className={`w-full px-6 py-4 bg-gray-50 dark:bg-[#0E1117] border rounded-2xl text-sm font-bold transition-all focus:ring-4 ${
-                  errors.subject ? "border-red-500 focus:ring-red-500/10" : "border-gray-100 dark:border-gray-800 focus:border-blue-500 focus:ring-blue-500/10"
+                  errors.subject ? "border-red-500 focus:ring-red-500/10" : "border-gray-100 dark:border-gray-800 focus:border-primary-500 focus:ring-primary-500/10"
                 } dark:text-white`}
               />
               {errors.subject && <p className="text-xs font-bold text-red-500">{errors.subject.message}</p>}
@@ -91,7 +91,7 @@ export default function CreateTicket() {
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Category</label>
               <select 
                 {...register("category")}
-                className="w-full px-6 py-4 bg-gray-50 dark:bg-[#0E1117] border border-gray-100 dark:border-gray-800 rounded-2xl text-sm font-bold transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:text-white appearance-none cursor-pointer"
+                className="w-full px-6 py-4 bg-gray-50 dark:bg-[#0E1117] border border-gray-100 dark:border-gray-800 rounded-2xl text-sm font-bold transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 dark:text-white appearance-none cursor-pointer"
               >
                 <option value="Technical Issue">Technical Issue</option>
                 <option value="Payment Issue">Payment Issue</option>
@@ -108,7 +108,7 @@ export default function CreateTicket() {
                 rows={6}
                 placeholder="Please describe your issue in detail. Include any transaction IDs or ad titles if relevant."
                 className={`w-full px-6 py-4 bg-gray-50 dark:bg-[#0E1117] border rounded-2xl text-sm font-bold resize-none transition-all focus:ring-4 ${
-                  errors.description ? "border-red-500 focus:ring-red-500/10" : "border-gray-100 dark:border-gray-800 focus:border-blue-500 focus:ring-blue-500/10"
+                  errors.description ? "border-red-500 focus:ring-red-500/10" : "border-gray-100 dark:border-gray-800 focus:border-primary-500 focus:ring-primary-500/10"
                 } dark:text-white`}
               />
               {errors.description && <p className="text-xs font-bold text-red-500">{errors.description.message}</p>}
@@ -120,16 +120,16 @@ export default function CreateTicket() {
               
               <div className="flex flex-wrap gap-4">
                 {attachments.map((file, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-blue-50 dark:bg-blue-500/10 p-3 rounded-xl border border-blue-100 dark:border-blue-500/20 group">
-                    <FileText className="w-4 h-4 text-blue-600" />
-                    <span className="text-xs font-bold text-blue-900 dark:text-blue-300 truncate max-w-[150px]">{file.name}</span>
-                    <button type="button" onClick={() => removeFile(i)} className="text-blue-400 hover:text-red-500 transition-colors">
+                  <div key={i} className="flex items-center gap-3 bg-primary-50 dark:bg-primary-500/10 p-3 rounded-xl border border-primary-100 dark:border-primary-500/20 group">
+                    <FileText className="w-4 h-4 text-primary-600" />
+                    <span className="text-xs font-bold text-primary-900 dark:text-primary-300 truncate max-w-[150px]">{file.name}</span>
+                    <button type="button" onClick={() => removeFile(i)} className="text-primary-400 hover:text-red-500 transition-colors">
                       <X className="w-3 h-3" />
                     </button>
                   </div>
                 ))}
                 
-                <label className="flex items-center gap-2 px-6 py-3 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-2xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all text-gray-400 hover:text-blue-600 hover:border-blue-500/50 group">
+                <label className="flex items-center gap-2 px-6 py-3 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-2xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all text-gray-400 hover:text-primary-600 hover:border-primary-500/50 group">
                   <Upload className="w-4 h-4" />
                   <span className="text-xs font-bold uppercase tracking-wider">Add File</span>
                   <input type="file" className="hidden" multiple onChange={handleFileChange} accept="image/*,.pdf" />
@@ -141,7 +141,7 @@ export default function CreateTicket() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full flex items-center justify-center gap-3 py-5 bg-blue-600 text-white rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-blue-700 transition-all active:scale-[0.98] shadow-2xl shadow-blue-600/20 disabled:opacity-50 disabled:active:scale-100"
+              className="w-full flex items-center justify-center gap-3 py-5 bg-primary-500 text-white rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-primary-600 transition-all active:scale-[0.98] shadow-2xl shadow-primary-500/20 disabled:opacity-50 disabled:active:scale-100"
             >
               {isSubmitting ? (
                  <>

@@ -7,7 +7,7 @@ export default function AdminLayout() {
   const [isOpen, setIsOpen] = React.useState(true)
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA] flex dashboard-bg transition-colors overflow-x-hidden">
+    <div className="min-h-screen flex dashboard-bg transition-colors overflow-x-hidden">
       {/* Sidebar Wrapper */}
       <div 
         className={`hidden lg:block transition-all duration-300 ease-in-out relative z-30 ${

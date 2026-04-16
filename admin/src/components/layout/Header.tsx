@@ -38,9 +38,14 @@ export function Header() {
   const currentTitle = getPageTitle(location.pathname)
 
   React.useEffect(() => {
-    // Default to light mode for the premium slate look
-    setIsDarkMode(false)
-    document.documentElement.classList.remove('dark')
+    const storedTheme = localStorage.getItem('theme')
+    if (storedTheme === 'dark') {
+      setIsDarkMode(true)
+      document.documentElement.classList.add('dark')
+    } else {
+      setIsDarkMode(false)
+      document.documentElement.classList.remove('dark')
+    }
   }, [])
 
   const toggleDarkMode = () => {
@@ -48,13 +53,15 @@ export function Header() {
     setIsDarkMode(newMode)
     if (newMode) {
       document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
     } else {
       document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
     }
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-colors">
+    <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1A1D24]/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14">
           <div className="flex items-center gap-2.5">
