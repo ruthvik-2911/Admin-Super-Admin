@@ -61,20 +61,23 @@ export function PublisherInfoCard({ publisher }: PublisherInfoCardProps) {
           </div>
         </div>
 
-        <div className="flex gap-4">
-          <div className="mt-1 text-gray-400"><Mail className="w-5 h-5" /></div>
-          <div className="truncate">
+        <div className="flex gap-4 min-w-0">
+          <div className="mt-1 text-gray-400 shrink-0"><Mail className="w-5 h-5" /></div>
+          <div className="min-w-0 flex-1">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Email Address</p>
-            <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5 truncate" title={publisher.email}>{publisher.email}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5 break-all" title={publisher.email}>{publisher.email}</p>
           </div>
         </div>
 
-        <div className="flex gap-4">
-          <div className="mt-1 text-gray-400"><MapPin className="w-5 h-5" /></div>
-          <div>
+        <div className="flex gap-4 min-w-0">
+          <div className="mt-1 text-gray-400 shrink-0"><MapPin className="w-5 h-5" /></div>
+          <div className="min-w-0 flex-1">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Location Data</p>
-            <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5 truncate max-w-[200px]" title={publisher.address}>{publisher.address || "N/A"}</p>
-            <p className="text-xs text-primary-500 font-medium mt-1">Lat: {publisher.latitude?.toFixed(4) || "0.0"}, Lng: {publisher.longitude?.toFixed(4) || "0.0"}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5 leading-relaxed break-words" title={publisher.address}>{publisher.address || "N/A"}</p>
+            <div className="mt-2 flex items-center gap-2">
+                <span className="px-1.5 py-0.5 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded text-[10px] font-bold border border-orange-100 dark:border-orange-800/50">Lat: {publisher.latitude?.toFixed(4) || "0.0"}</span>
+                <span className="px-1.5 py-0.5 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded text-[10px] font-bold border border-orange-100 dark:border-orange-800/50">Lng: {publisher.longitude?.toFixed(4) || "0.0"}</span>
+            </div>
           </div>
         </div>
       </div>
