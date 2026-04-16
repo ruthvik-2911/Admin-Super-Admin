@@ -176,31 +176,31 @@ export default function Login() {
       </div>
 
       {/* ─── Right Panel: Form ─── */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-gray-50">
+      <div className="flex-1 flex items-center justify-center p-8 bg-gray-50 dark:bg-[#0F1115]">
         <div className="w-full max-w-md animate-fade-in">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 mb-8">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0">
               <img src={icon} alt="KELIRI Logo" className="w-8 h-8 object-contain" />
             </div>
-            <p className="font-bold text-gray-900">KELIRI</p>
+            <p className="font-bold text-gray-900 dark:text-white">KELIRI</p>
           </div>
 
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
-            <p className="text-gray-500 text-sm mt-1">Sign in to your Super Admin account</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Sign in to your Super Admin account</p>
           </div>
 
           {/* Tab Switcher */}
-          <div className="flex bg-gray-100 rounded-xl p-1 mb-6 gap-1">
+          <div className="flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-6 gap-1">
             {(['email', 'phone'] as Tab[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => { setActiveTab(tab); setErrors({}); setOtpStep('phone') }}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
                   ${activeTab === tab
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                   }`}
               >
                 {tab === 'email' ? <Mail size={15} /> : <Phone size={15} />}
@@ -213,7 +213,7 @@ export default function Login() {
           {activeTab === 'email' && (
             <form onSubmit={handleEmailLogin} className="space-y-4 animate-fade-in">
               <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Email Address</label>
+                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5 block">Email Address</label>
                 <div className="relative">
                   <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
@@ -228,9 +228,9 @@ export default function Login() {
                 {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
               </div>
 
-              <div>
+               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-semibold text-gray-600">Password</label>
+                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Password</label>
                   <button type="button" className="text-xs text-primary-600 hover:text-primary-700 font-medium transition-colors">
                     Forgot password?
                   </button>
@@ -245,10 +245,10 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     className={`input-field pl-10 pr-10 ${errors.password ? 'border-red-400 ring-2 ring-red-100' : ''}`}
                   />
-                  <button
+                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -283,10 +283,10 @@ export default function Login() {
               {otpStep === 'phone' ? (
                 <form onSubmit={handleSendOtp} className="space-y-4">
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Phone Number</label>
+                    <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5 block">Phone Number</label>
                     <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">+91</span>
-                      <span className="absolute left-[46px] top-1/2 -translate-y-1/2 text-gray-300">|</span>
+                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 text-sm font-medium">+91</span>
+                      <span className="absolute left-[46px] top-1/2 -translate-y-1/2 text-gray-300 dark:text-gray-700">|</span>
                       <input
                         id="phone-input"
                         type="tel"
@@ -320,9 +320,9 @@ export default function Login() {
                 </form>
               ) : (
                 <form onSubmit={handleVerifyOtp} className="space-y-5 animate-fade-in">
-                  <div className="bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 flex items-center gap-2">
+                  <div className="bg-primary-50 dark:bg-primary-900/40 border border-primary-100 dark:border-primary-500/30 rounded-xl px-4 py-3 flex items-center gap-2">
                     <Phone size={14} className="text-primary-500 flex-shrink-0" />
-                    <p className="text-sm text-primary-700">OTP sent to <strong>+91 {phone}</strong></p>
+                    <p className="text-sm text-primary-700 dark:text-primary-300">OTP sent to <strong>+91 {phone}</strong></p>
                     <button
                       type="button"
                       onClick={() => { setOtpStep('phone'); setOtp(['', '', '', '', '', '']) }}
@@ -333,25 +333,27 @@ export default function Login() {
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 mb-3 block">Enter 6-digit OTP</label>
+                    <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3 block">Enter 6-digit OTP</label>
                     <div className="flex gap-2 justify-between">
                       {otp.map((digit, i) => (
-                        <input
-                          key={i}
-                          ref={(el) => { otpRefs.current[i] = el }}
-                          id={`otp-${i}`}
-                          type="text"
-                          inputMode="numeric"
-                          maxLength={1}
-                          value={digit}
-                          onChange={(e) => handleOtpChange(i, e.target.value)}
-                          onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                          className={`w-11 h-12 text-center text-lg font-bold border rounded-xl bg-white
-                                     focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100
-                                     transition-all duration-200
-                                     ${digit ? 'border-primary-400 bg-primary-50 text-primary-700' : 'border-gray-200 text-gray-800'}
-                                     ${errors.otp ? 'border-red-400' : ''}`}
-                        />
+                         <input
+                           key={i}
+                           ref={(el) => { otpRefs.current[i] = el }}
+                           id={`otp-${i}`}
+                           type="text"
+                           inputMode="numeric"
+                           maxLength={1}
+                           value={digit}
+                           onChange={(e) => handleOtpChange(i, e.target.value)}
+                           onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                           className={`w-11 h-12 text-center text-lg font-bold border rounded-xl bg-white dark:bg-gray-800
+                                      focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100
+                                      transition-all duration-200
+                                      ${digit 
+                                        ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300' 
+                                        : 'border-gray-200 dark:border-gray-700 text-gray-800 dark:text-white'}
+                                      ${errors.otp ? 'border-red-400' : ''}`}
+                         />
                       ))}
                     </div>
                     {errors.otp && <p className="text-xs text-red-500 mt-2">{errors.otp}</p>}
@@ -401,8 +403,8 @@ export default function Login() {
           )}
 
           {/* Footer */}
-          <p className="text-center text-xs text-gray-400 mt-8">
-            Protected by KELIRI Security · <span className="text-gray-500">Role-based access control</span>
+          <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-8">
+            Protected by KELIRI Security · <span className="text-gray-500 dark:text-gray-600">Role-based access control</span>
           </p>
         </div>
       </div>

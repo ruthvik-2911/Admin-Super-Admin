@@ -68,17 +68,17 @@ const AdminManagement = () => {
 
   const getColumns = (status) => {
     const baseColumns = [
-      { key: 'id', label: 'Admin ID', className: 'font-mono text-xs font-bold' },
+      { key: 'id', label: 'Admin ID', className: 'font-mono text-xs font-bold text-gray-400 dark:text-gray-500' },
       { key: 'name', label: 'Name', render: (val, row) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold text-xs uppercase">
+          <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-700 dark:text-primary-400 font-bold text-xs uppercase">
             {val.charAt(0)}
           </div>
-          <span className="font-semibold text-gray-900">{val}</span>
+          <span className="font-semibold text-gray-900 dark:text-white">{val}</span>
         </div>
       )},
       { key: 'email', label: 'Email' },
-      { key: 'company', label: 'Company', render: (val) => <span className="font-medium text-gray-700">{val}</span> },
+      { key: 'company', label: 'Company', render: (val) => <span className="font-medium text-gray-700 dark:text-gray-300">{val}</span> },
       { key: 'registeredDate', label: 'Registered Date' },
       { key: 'actions', label: 'Actions', render: (_, row) => (
         <div className="flex items-center gap-1">
@@ -147,7 +147,7 @@ const AdminManagement = () => {
         />
       </div>
 
-      <div className="flex bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-white/20 shadow-xl shadow-gray-200/50 relative z-10 animate-fade-in-scale delay-75">
+      <div className="flex bg-white/50 dark:bg-gray-800/40 backdrop-blur-md p-1.5 rounded-2xl border border-white/20 dark:border-gray-800 shadow-xl shadow-gray-200/50 dark:shadow-none relative z-10 animate-fade-in-scale delay-75 transition-colors">
         {tabs.map((tab) => {
           const count = admins.filter(a => a.status === tab.id).length;
           const isActive = activeTab === tab.id;
@@ -157,14 +157,14 @@ const AdminManagement = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 py-3 px-4 rounded-xl flex items-center justify-center gap-2.5 transition-all duration-300 relative group ${
                 isActive 
-                  ? 'bg-white shadow-lg shadow-gray-200/50 text-gray-900 translate-y-[-1px]' 
-                  : 'text-gray-500 hover:text-gray-900 hover:bg-white/40'
+                  ? 'bg-white dark:bg-gray-800 shadow-lg dark:shadow-none shadow-gray-200/50 text-gray-900 dark:text-white translate-y-[-1px]' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/40 dark:hover:bg-gray-800/40'
               }`}
             >
               <span className={`text-sm font-bold tracking-tight ${isActive ? 'scale-105' : ''} transition-transform`}>
                 {tab.label}
               </span>
-              <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black tracking-tighter ${tab.color.bg} ${tab.color.text} shadow-sm border border-black/5`}>
+              <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black tracking-tighter ${tab.color.bg} dark:bg-opacity-10 ${tab.color.text} shadow-sm border border-black/5 dark:border-white/5`}>
                 {count}
               </span>
               {isActive && (
@@ -226,62 +226,62 @@ const AdminManagement = () => {
           <div className="space-y-8 animate-fade-in">
             {/* Header Profile */}
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-2xl font-bold">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-primary-500/20">
                 {selectedAdmin.name.charAt(0)}
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900">{selectedAdmin.name}</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{selectedAdmin.name}</h3>
                 <div className="flex items-center gap-2 mt-1">
                   <StatusBadge status={selectedAdmin.status} />
-                  <span className="text-xs text-gray-400 font-medium font-mono">{selectedAdmin.id}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 font-medium font-mono">{selectedAdmin.id}</span>
                 </div>
               </div>
             </div>
 
             {/* Basic Info */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
                 <div className="flex items-center gap-2 text-primary-500 mb-2">
                     <Mail size={16} />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Email Address</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Email Address</span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">{selectedAdmin.email}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{selectedAdmin.email}</p>
               </div>
-              <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
                 <div className="flex items-center gap-2 text-primary-500 mb-2">
                     <Phone size={16} />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Phone Number</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Phone Number</span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">{selectedAdmin.phone}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{selectedAdmin.phone}</p>
               </div>
-              <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
                 <div className="flex items-center gap-2 text-primary-500 mb-2">
                     <Building2 size={16} />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Company</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Company</span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">{selectedAdmin.company}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{selectedAdmin.company}</p>
               </div>
-              <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
                 <div className="flex items-center gap-2 text-primary-500 mb-2">
                     <Calendar size={16} />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Registered</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Registered</span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">{selectedAdmin.registeredDate}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{selectedAdmin.registeredDate}</p>
               </div>
             </div>
 
             {/* KPI Summary */}
             <div className="space-y-3">
-              <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Performance Summary</h4>
+              <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Performance Summary</h4>
               <div className="grid grid-cols-3 gap-3">
                 {[
                     { label: 'Total Ads', value: '124', color: 'text-indigo-600' },
                     { label: 'Revenue', value: '₹4.5L', color: 'text-green-600' },
                     { label: 'Avg CTR', value: '3.2%', color: 'text-primary-600' },
                 ].map((kpi, idx) => (
-                    <div key={idx} className="bg-white p-3 rounded-xl border border-gray-100 text-center">
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">{kpi.label}</p>
-                        <p className={`text-lg font-black ${kpi.color}`}>{kpi.value}</p>
+                    <div key={idx} className="bg-white dark:bg-gray-800 p-3 rounded-xl border border-gray-100 dark:border-gray-700 text-center">
+                        <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter mb-1">{kpi.label}</p>
+                        <p className={`text-lg font-black ${kpi.color} dark:brightness-125`}>{kpi.value}</p>
                     </div>
                 ))}
               </div>
@@ -289,20 +289,20 @@ const AdminManagement = () => {
 
             {/* Submitted Documents */}
             <div className="space-y-3">
-              <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Verification Documents</h4>
+              <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Verification Documents</h4>
               <div className="space-y-2">
                 {[
                   { name: 'GST Certificate.pdf', type: 'GST Registration' },
                   { name: 'Company_Registration.pdf', type: 'COI' }
                 ].map((doc, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-xl hover:border-primary-200 transition-all cursor-pointer group">
+                  <div key={idx} className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl hover:border-primary-200 transition-all cursor-pointer group">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-red-50 text-red-500 rounded-lg">
+                      <div className="p-2 bg-red-50 dark:bg-red-500/10 text-red-500 dark:text-red-400 rounded-lg">
                         <FileText size={18} />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">{doc.name}</p>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase">{doc.type}</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 transition-colors">{doc.name}</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase">{doc.type}</p>
                       </div>
                     </div>
                     <button className="text-xs font-bold text-primary-500 hover:underline">View</button>
@@ -313,22 +313,22 @@ const AdminManagement = () => {
 
             {/* Publisher List */}
             <div className="space-y-3">
-              <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Publishers Under Management</h4>
-              <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
+              <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Publishers Under Management</h4>
+              <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden">
                 <table className="w-full text-left">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-gray-50 dark:bg-gray-900/50">
                     <tr>
-                      <th className="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase">Name</th>
-                      <th className="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase">Status</th>
-                      <th className="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase text-right">Ads</th>
+                      <th className="px-4 py-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase">Name</th>
+                      <th className="px-4 py-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase">Status</th>
+                      <th className="px-4 py-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase text-right">Ads</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                     {adminPublishers.length > 0 ? adminPublishers.map((pub, idx) => (
                         <tr key={idx} className="text-sm">
-                            <td className="px-4 py-3 font-medium text-gray-900">{pub.name}</td>
+                            <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{pub.name}</td>
                             <td className="px-4 py-3"><StatusBadge status={pub.status} /></td>
-                            <td className="px-4 py-3 text-right font-bold text-gray-700">{pub.adsPosted}</td>
+                            <td className="px-4 py-3 text-right font-bold text-gray-700 dark:text-gray-400">{pub.adsPosted}</td>
                         </tr>
                     )) : (
                         <tr>

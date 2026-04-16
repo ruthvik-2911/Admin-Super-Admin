@@ -15,9 +15,9 @@ interface CustomTooltipProps {
 const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border border-gray-100 rounded-xl shadow-card-hover px-3.5 py-2.5">
-        <p className="text-[11px] text-gray-400 mb-1">{payload[0].name}</p>
-        <p className="text-sm font-bold text-gray-900">
+      <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 rounded-xl shadow-card-hover px-3.5 py-2.5">
+        <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-1">{payload[0].name}</p>
+        <p className="text-sm font-bold text-gray-900 dark:text-white">
           ₹{payload[0].value.toLocaleString()}
         </p>
       </div>
@@ -37,9 +37,9 @@ const renderLegend = (props: any) => {
               className="w-2.5 h-2.5 rounded-full"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-gray-600 font-medium">{entry.value}</span>
+            <span className="text-gray-600 dark:text-gray-400 font-medium">{entry.value}</span>
           </div>
-          <span className="text-gray-900 font-bold">
+          <span className="text-gray-900 dark:text-gray-200 font-bold">
             ₹{entry.payload.value.toLocaleString()}
           </span>
         </li>
@@ -52,8 +52,8 @@ export default function RevenueDistributionChart() {
   return (
     <div className="glass-card p-6 animate-fade-in h-full flex flex-col">
       <div className="mb-5">
-        <h3 className="text-sm font-semibold text-gray-900">Revenue by Ad Type</h3>
-        <p className="text-xs text-gray-400 mt-0.5">Distribution across formats</p>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Revenue by Ad Type</h3>
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Distribution across formats</p>
       </div>
       
       <div className="flex-1 min-h-[280px]">

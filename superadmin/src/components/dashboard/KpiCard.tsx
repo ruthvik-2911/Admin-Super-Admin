@@ -28,24 +28,26 @@ export default function KpiCard({
     <div className="glass-card-hover p-5 group animate-fade-in flex flex-col justify-between h-full min-h-[140px]">
       {/* Top row: icon + badge */}
       <div className="flex items-center justify-between mb-4">
-        <div className={`w-10 h-10 ${iconBg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
-          <Icon size={18} className={iconColor} />
+        <div className={`w-10 h-10 ${iconBg} dark:bg-opacity-20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
+          <Icon size={18} className={`${iconColor} dark:text-opacity-80`} />
         </div>
         <div className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] font-semibold
-                         ${isPositive ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'}`}>
+                         ${isPositive 
+                           ? 'bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400' 
+                           : 'bg-red-50 dark:bg-red-500/10 text-red-500 dark:text-red-400'}`}>
           {isPositive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
           {Math.abs(change)}%
         </div>
       </div>
 
       {/* Value */}
-      <p className="text-[22px] font-bold text-gray-900 tracking-tight leading-none">
+      <p className="text-[22px] font-bold text-gray-900 dark:text-white tracking-tight leading-none">
         {prefix}{value}
       </p>
 
       {/* Labels */}
-      <p className="text-[13px] font-medium text-gray-600 mt-1.5">{title}</p>
-      <p className="text-[11px] text-gray-400 mt-0.5 truncate">{changeLabel}</p>
+      <p className="text-[13px] font-medium text-gray-600 dark:text-gray-300 mt-1.5">{title}</p>
+      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5 truncate">{changeLabel}</p>
     </div>
   )
 }

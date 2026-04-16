@@ -50,17 +50,17 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Mobile Backdrop */}
       {!collapsed && (
         <div 
-          className="lg:hidden fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-30 animate-fade-in"
+          className="lg:hidden fixed inset-0 bg-gray-900/40 dark:bg-black/60 backdrop-blur-sm z-30 animate-fade-in"
           onClick={onToggle}
         />
       )}
       
       <aside
-        className={`fixed lg:relative flex flex-col bg-white shadow-sidebar transition-all duration-300 ease-in-out h-full flex-shrink-0 z-40
+        className={`fixed lg:relative flex flex-col bg-white dark:bg-[#11141A] shadow-sidebar dark:border-r dark:border-white/5 transition-all duration-300 ease-in-out h-full flex-shrink-0 z-40
           ${collapsed ? '-translate-x-full lg:translate-x-0 lg:w-[72px]' : 'translate-x-0 w-[240px]'}`}
       >
       {/* Logo */}
-      <div className={`flex items-center h-16 px-4 border-b border-gray-100 ${collapsed ? 'justify-center' : 'gap-3'}`}>
+      <div className={`flex items-center h-16 px-4 border-b border-gray-100 dark:border-white/5 ${collapsed ? 'justify-center' : 'gap-3'}`}>
         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
           <img src={icon} alt="KELIRI Logo" className="w-8 h-8 object-contain" />
         </div>
@@ -75,11 +75,11 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Toggle button */}
       <button
         onClick={onToggle}
-        className="hidden lg:flex absolute -right-3 top-[72px] z-10 w-6 h-6 bg-white border border-gray-200 rounded-full
-                   items-center justify-center shadow-sm hover:bg-primary-50 hover:border-primary-200
-                   transition-all duration-200 text-gray-500 hover:text-primary-600"
+        className="hidden lg:flex absolute -right-3 top-[72px] z-10 w-6 h-6 bg-white dark:bg-[#1A1D24] border border-gray-200 dark:border-gray-800 rounded-full
+                   items-center justify-center shadow-sm hover:bg-primary-50 dark:hover:bg-primary-900/40 hover:border-primary-200 dark:hover:border-primary-500
+                   transition-all duration-200 text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"
       >
-        {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
+        {collapsed ? <ChevronRight size={10} /> : <ChevronLeft size={10} />}
       </button>
 
       {/* Navigation */}
@@ -96,8 +96,8 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer group relative
                 ${isActive
-                  ? 'bg-primary-50 text-primary-600'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
                 }
                 ${collapsed ? 'justify-center' : ''}`
               }
@@ -118,7 +118,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                   )}
                   {/* Tooltip when collapsed */}
                   {collapsed && (
-                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-lg
+                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-lg
                                    opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50
                                    transition-opacity duration-200">
                       {item.label}
@@ -132,11 +132,11 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-gray-100 p-2 space-y-1">
+      <div className="border-t border-gray-100 dark:border-white/5 p-2 space-y-1">
         <button
           onClick={() => navigate('/settings')}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-                     text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200
+                     text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all duration-200
                      ${collapsed ? 'justify-center' : ''}`}
         >
           <Settings size={18} className="flex-shrink-0" />
@@ -145,7 +145,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
         <button
           onClick={() => navigate('/')}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-                     text-red-500 hover:bg-red-50 transition-all duration-200
+                     text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-200
                      ${collapsed ? 'justify-center' : ''}`}
         >
           <LogOut size={18} className="flex-shrink-0" />

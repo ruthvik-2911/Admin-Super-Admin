@@ -52,9 +52,9 @@ interface CustomTooltipProps {
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border border-gray-100 rounded-xl shadow-card-hover px-3.5 py-2.5">
-        <p className="text-[11px] text-gray-400 mb-1">{label}</p>
-        <p className="text-sm font-bold text-gray-900">₹{payload[0].value.toLocaleString()}</p>
+      <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 rounded-xl shadow-card-hover px-3.5 py-2.5">
+        <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-1">{label}</p>
+        <p className="text-sm font-bold text-gray-900 dark:text-white">₹{payload[0].value.toLocaleString()}</p>
       </div>
     )
   }
@@ -75,18 +75,18 @@ export default function RevenueChart() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">Revenue Trend</h3>
-          <p className="text-xs text-gray-400 mt-0.5">Total earnings over time</p>
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Revenue Trend</h3>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Total earnings over time</p>
         </div>
-        <div className="flex bg-gray-100 rounded-xl p-1 gap-0.5">
+        <div className="flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-0.5">
           {periods.map((p) => (
             <button
               key={p.key}
               onClick={() => setPeriod(p.key)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
                 ${period === p.key
-                  ? 'bg-white text-primary-600 shadow-sm font-semibold'
-                  : 'text-gray-500 hover:text-gray-700'
+                   ? 'bg-white dark:bg-gray-800 text-primary-600 dark:text-primary-400 shadow-sm font-semibold'
+                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
             >
               {p.label}
@@ -104,7 +104,7 @@ export default function RevenueChart() {
               <stop offset="95%" stopColor="#FF6B00" stopOpacity={0.01} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} className="dark:opacity-10" />
           <XAxis
             dataKey="name"
             tick={{ fontSize: 11, fill: '#9CA3AF' }}
@@ -124,8 +124,8 @@ export default function RevenueChart() {
             stroke="#FF6B00"
             strokeWidth={2.5}
             fill="url(#revenueGradient)"
-            dot={{ fill: '#FF6B00', strokeWidth: 2, r: 3.5, stroke: 'white' }}
-            activeDot={{ r: 6, fill: '#FF6B00', stroke: 'white', strokeWidth: 2 }}
+            dot={{ fill: '#FF6B00', strokeWidth: 2, r: 3.5, stroke: 'white', className: 'dark:stroke-[#1A1D24]' }}
+            activeDot={{ r: 6, fill: '#FF6B00', stroke: 'white', strokeWidth: 2, className: 'dark:stroke-[#1A1D24]' }}
           />
           </AreaChart>
         </ResponsiveContainer>

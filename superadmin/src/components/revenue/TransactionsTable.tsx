@@ -17,16 +17,16 @@ export default function TransactionsTable() {
     <div className="glass-card p-6 animate-fade-in h-full overflow-hidden flex flex-col">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">Recent Transactions</h3>
-          <p className="text-xs text-gray-400 mt-0.5">Detailed record of incoming revenue</p>
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Recent Transactions</h3>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Detailed record of incoming revenue</p>
         </div>
         <div className="flex gap-2">
-          <button className="bg-gray-50 border border-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-gray-100 transition-colors">
+          <button className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
             Filter
           </button>
           <button 
             onClick={() => navigate('/transactions')}
-            className="bg-primary-50 text-primary-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-primary-100 transition-colors"
+            className="bg-primary-50 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-colors"
           >
             View All
           </button>
@@ -37,48 +37,50 @@ export default function TransactionsTable() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 border-b border-gray-100">Transaction</th>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 border-b border-gray-100">Admin</th>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 border-b border-gray-100">Ad Type</th>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 border-b border-gray-100 text-right">Amount</th>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 border-b border-gray-100 text-center">Status</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 border-b border-gray-100 dark:border-gray-800">Transaction</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 border-b border-gray-100 dark:border-gray-800">Admin</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 border-b border-gray-100 dark:border-gray-800">Ad Type</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 border-b border-gray-100 dark:border-gray-800 text-right">Amount</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 border-b border-gray-100 dark:border-gray-800 text-center">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50 text-sm">
+          <tbody className="divide-y divide-gray-50 dark:divide-gray-800 text-sm">
             {transactions.map((tx) => (
-              <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors cursor-pointer group">
+              <tr key={tx.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer group">
                 <td className="py-3">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
-                      ${tx.incoming ? 'bg-green-50 text-green-500' : 'bg-red-50 text-red-500'}`}>
+                      ${tx.incoming 
+                        ? 'bg-green-50 dark:bg-green-900/20 text-green-500 dark:text-green-400' 
+                        : 'bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400'}`}>
                       {tx.incoming ? <ArrowDownRight size={14} /> : <ArrowUpRight size={14} />}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900 leading-none">{tx.id}</p>
-                      <p className="text-[11px] text-gray-400 mt-1">{tx.date}</p>
+                      <p className="font-semibold text-gray-900 dark:text-white leading-none">{tx.id}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">{tx.date}</p>
                     </div>
                   </div>
                 </td>
-                <td className="py-3 text-gray-700 font-medium">{tx.admin}</td>
-                <td className="py-3 text-gray-500 text-xs">{tx.type}</td>
+                <td className="py-3 text-gray-700 dark:text-gray-300 font-medium">{tx.admin}</td>
+                <td className="py-3 text-gray-500 dark:text-gray-400 text-xs">{tx.type}</td>
                 <td className="py-3 text-right">
-                  <span className={`font-bold ${tx.incoming ? 'text-gray-900' : 'text-gray-900'}`}>
+                  <span className={`font-bold text-gray-900 dark:text-white`}>
                     {tx.incoming ? '+' : '-'}{tx.amount}
                   </span>
                 </td>
                 <td className="py-3 text-center">
                   {tx.status === 'Completed' && (
-                    <span className="inline-flex items-center gap-1 bg-green-50 text-green-600 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">
+                    <span className="inline-flex items-center gap-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">
                       <CheckCircle2 size={10} /> Completed
                     </span>
                   )}
                   {tx.status === 'Pending' && (
-                    <span className="inline-flex items-center gap-1 bg-yellow-50 text-yellow-600 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">
+                    <span className="inline-flex items-center gap-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">
                       <Clock size={10} /> Pending
                     </span>
                   )}
                   {tx.status === 'Failed' && (
-                    <span className="inline-flex items-center gap-1 bg-red-50 text-red-600 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">
+                    <span className="inline-flex items-center gap-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">
                       <XCircle size={10} /> Failed
                     </span>
                   )}

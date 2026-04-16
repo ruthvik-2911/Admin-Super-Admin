@@ -28,9 +28,9 @@ const ConfirmDialog = ({
 
   const getColors = () => {
     switch (type) {
-      case 'danger': return { btn: 'bg-red-600 hover:bg-red-700 shadow-red-200', icon: 'text-red-600 bg-red-100' };
-      case 'warning': return { btn: 'bg-amber-600 hover:bg-amber-700 shadow-amber-200', icon: 'text-amber-600 bg-amber-100' };
-      default: return { btn: 'bg-primary-600 hover:bg-primary-700 shadow-primary-200', icon: 'text-primary-600 bg-primary-100' };
+      case 'danger': return { btn: 'bg-red-600 hover:bg-red-700 shadow-red-200 dark:shadow-none', icon: 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-500/20' };
+      case 'warning': return { btn: 'bg-amber-600 hover:bg-amber-700 shadow-amber-200 dark:shadow-none', icon: 'text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/20' };
+      default: return { btn: 'bg-primary-600 hover:bg-primary-700 shadow-primary-200 dark:shadow-none', icon: 'text-primary-600 dark:text-primary-400 bg-primary-100 dark:bg-primary-500/20' };
     }
   };
 
@@ -38,22 +38,22 @@ const ConfirmDialog = ({
 
   return createPortal(
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-md animate-fade-in" onClick={onClose} />
-      <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-scale">
+      <div className="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md animate-fade-in" onClick={onClose} />
+      <div className="relative bg-white dark:bg-[#1A1D24] rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-scale border border-transparent dark:border-gray-800">
         <div className="p-8">
           <div className="flex items-start gap-4">
             <div className={`p-4 rounded-2xl flex-shrink-0 ${colors.icon}`}>
               <AlertTriangle size={28} />
             </div>
             <div className="flex-1">
-              <h3 className="text-xl font-black text-gray-900 tracking-tight">{title}</h3>
-              <p className="text-sm text-gray-500 mt-2 leading-relaxed">{message}</p>
+              <h3 className="text-xl font-black text-gray-900 dark:text-white tracking-tight">{title}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">{message}</p>
               
               {requireReason && (
                 <div className="mt-6">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Reason for {title.toLowerCase()}</label>
+                  <label className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">Reason for {title.toLowerCase()}</label>
                   <textarea
-                    className="w-full mt-2 p-4 text-sm bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary-500/10 focus:border-primary-400 transition-all font-medium"
+                    className="w-full mt-2 p-4 text-sm bg-gray-50 dark:bg-[#11141A] border border-gray-100 dark:border-gray-800 rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary-500/10 focus:border-primary-400 transition-all font-medium text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600"
                     rows="3"
                     placeholder={reasonPlaceholder}
                     value={reason}
@@ -69,10 +69,10 @@ const ConfirmDialog = ({
           </div>
         </div>
         
-        <div className="bg-gray-50/50 px-8 py-6 flex items-center justify-end gap-3">
+        <div className="bg-gray-50/50 dark:bg-gray-800/40 px-8 py-6 flex items-center justify-end gap-3 border-t border-gray-50 dark:border-gray-800">
           <button
             onClick={onClose}
-            className="px-6 py-3 text-xs font-black text-gray-500 hover:bg-gray-100 rounded-xl transition-all uppercase tracking-widest"
+            className="px-6 py-3 text-xs font-black text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all uppercase tracking-widest"
           >
             {cancelText}
           </button>
@@ -87,7 +87,7 @@ const ConfirmDialog = ({
         
         <button 
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-xl text-gray-400 hover:bg-gray-100 transition-all active:scale-90"
+          className="absolute top-6 right-6 p-2 rounded-xl text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all active:scale-90"
         >
           <X size={18} />
         </button>

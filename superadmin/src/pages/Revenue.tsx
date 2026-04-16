@@ -17,21 +17,21 @@ export default function Revenue() {
       {/* ── Page Header ── */}
       <div className="flex items-center justify-between pt-1">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Revenue Management</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Revenue Management</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
             Complete financial analytics and revenue tracking · {today}
           </p>
         </div>
 
         {/* Action Bar */}
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700
-                           px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm hover:bg-gray-50 transition-colors">
+          <button className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300
+                           px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <Calendar size={14} className="text-gray-400" />
             Last 30 Days
           </button>
-          <button className="flex items-center gap-2 bg-primary-50 border border-primary-100 text-primary-600
-                           px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm hover:bg-primary-100 transition-colors">
+          <button className="flex items-center gap-2 bg-primary-50 dark:bg-primary-900/40 border border-primary-100 dark:border-primary-500/30 text-primary-600 dark:text-primary-400
+                           px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-colors">
             <Download size={14} />
             Export CSV
           </button>

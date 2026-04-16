@@ -102,12 +102,12 @@ const SubAdminManagement: React.FC = () => {
       label: 'Sub-Admin', 
       render: (val: string, row: any) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold text-xs uppercase">
+          <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-700 dark:text-primary-400 font-bold text-xs uppercase">
             {val.charAt(0)}
           </div>
           <div className="flex flex-col">
-            <span className="font-black text-gray-900 leading-none">{val}</span>
-            <span className="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-tighter">{row.email}</span>
+            <span className="font-black text-gray-900 dark:text-white leading-none">{val}</span>
+            <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold mt-1 uppercase tracking-tighter">{row.email}</span>
           </div>
         </div>
       ) 
@@ -121,12 +121,12 @@ const SubAdminManagement: React.FC = () => {
         return (
           <div className="flex items-center gap-2">
             <div className="flex -space-x-1.5 overflow-hidden">
-               {permissions.dashboard && <div className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 border-2 border-white flex items-center justify-center"><LayoutDashboard size={10} /></div>}
-               {permissions.analytics && <div className="w-5 h-5 rounded-full bg-indigo-50 text-indigo-500 border-2 border-white flex items-center justify-center"><BarChart3 size={10} /></div>}
-               {permissions.ads && <div className="w-5 h-5 rounded-full bg-orange-50 text-orange-500 border-2 border-white flex items-center justify-center"><Megaphone size={10} /></div>}
-               {permissions.tickets && <div className="w-5 h-5 rounded-full bg-primary-50 text-primary-500 border-2 border-white flex items-center justify-center"><Ticket size={10} /></div>}
+               {permissions.dashboard && <div className="w-5 h-5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-500 dark:text-blue-400 border-2 border-white dark:border-gray-900 flex items-center justify-center"><LayoutDashboard size={10} /></div>}
+               {permissions.analytics && <div className="w-5 h-5 rounded-full bg-indigo-50 dark:bg-indigo-900/40 text-indigo-500 dark:text-indigo-400 border-2 border-white dark:border-gray-900 flex items-center justify-center"><BarChart3 size={10} /></div>}
+               {permissions.ads && <div className="w-5 h-5 rounded-full bg-orange-50 dark:bg-orange-900/40 text-orange-500 dark:text-orange-400 border-2 border-white dark:border-gray-900 flex items-center justify-center"><Megaphone size={10} /></div>}
+               {permissions.tickets && <div className="w-5 h-5 rounded-full bg-primary-50 dark:bg-primary-900/40 text-primary-500 dark:text-primary-400 border-2 border-white dark:border-gray-900 flex items-center justify-center"><Ticket size={10} /></div>}
             </div>
-            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{activeModules}/{totalModules} Modules</span>
+            <span className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">{activeModules}/{totalModules} Modules</span>
           </div>
         )
       }
@@ -140,13 +140,13 @@ const SubAdminManagement: React.FC = () => {
         <div className="flex items-center justify-end gap-1">
           <button 
             onClick={(e) => { e.stopPropagation(); handleAction(row.status === 'Active' ? 'Suspend' : 'Activate', row); }}
-            className={`p-2 rounded-lg transition-all ${row.status === 'Active' ? 'text-orange-400 hover:bg-orange-50 hover:text-orange-600' : 'text-emerald-400 hover:bg-emerald-50 hover:text-emerald-600'}`}
+            className={`p-2 rounded-lg transition-all ${row.status === 'Active' ? 'text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400' : 'text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 dark:hover:text-emerald-400'}`}
           >
             {row.status === 'Active' ? <ShieldAlert size={18} /> : <UserCheck size={18} />}
           </button>
           <button 
             onClick={(e) => { e.stopPropagation(); handleAction('Delete', row); }}
-            className="p-2 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all"
+            className="p-2 text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-all"
           >
             <Trash2 size={18} />
           </button>
@@ -176,19 +176,19 @@ const SubAdminManagement: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in-scale">
         {kpis.map((kpi, idx) => (
-          <div key={idx} className="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm flex items-center gap-5 group hover:shadow-lg transition-all">
-            <div className={`p-4 rounded-3xl ${kpi.bg} ${kpi.color} group-hover:scale-110 transition-transform`}>
+          <div key={idx} className="bg-white dark:bg-[#1A1D24] p-6 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-sm flex items-center gap-5 group hover:shadow-lg transition-all">
+            <div className={`p-4 rounded-3xl ${kpi.bg} dark:bg-opacity-10 ${kpi.color} group-hover:scale-110 transition-transform`}>
               <kpi.icon size={28} />
             </div>
             <div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">{kpi.label}</p>
-              <p className="text-3xl font-black text-gray-900 tracking-tight">{kpi.value}</p>
+              <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-1">{kpi.label}</p>
+              <p className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">{kpi.value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-[3rem] border border-gray-100 shadow-sm overflow-hidden animate-fade-in-scale delay-75">
+      <div className="bg-white dark:bg-[#1A1D24] rounded-[3rem] border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden animate-fade-in-scale delay-75">
         <DataTable 
           columns={columns} 
           data={subAdmins} 
@@ -215,7 +215,7 @@ const SubAdminManagement: React.FC = () => {
                             </button>
                             <button 
                                 onClick={cancelEditing}
-                                className="px-6 py-2.5 bg-gray-100 text-gray-400 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-gray-200 transition-all"
+                                className="px-6 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-gray-200 dark:hover:bg-gray-700 transition-all font-mono"
                             >
                                 Cancel
                             </button>
@@ -223,7 +223,7 @@ const SubAdminManagement: React.FC = () => {
                     ) : (
                         <>
                             <button onClick={() => handleAction('Suspend', selectedSubAdmin)} className="flex-1 px-6 py-2.5 bg-orange-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg shadow-orange-600/20 active:scale-95 transition-all">Suspend Access</button>
-                            <button onClick={() => handleAction('Delete', selectedSubAdmin)} className="p-2.5 bg-red-50 text-red-600 rounded-2xl hover:bg-red-100 transition-colors"><Trash2 size={20} /></button>
+                            <button onClick={() => handleAction('Delete', selectedSubAdmin)} className="p-2.5 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-2xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"><Trash2 size={20} /></button>
                         </>
                     )}
                 </div>
@@ -234,11 +234,11 @@ const SubAdminManagement: React.FC = () => {
             <div className="space-y-10 animate-fade-in">
               {/* Profile Overview */}
               <div className="flex items-center gap-6">
-                <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-3xl font-bold border-4 border-white shadow-xl">
+                <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-3xl font-bold border-4 border-white dark:border-gray-800 shadow-xl">
                     {selectedSubAdmin.name.charAt(0)}
                 </div>
                 <div className="space-y-1">
-                    <h3 className="text-2xl font-black text-gray-900 tracking-tight">{selectedSubAdmin.name}</h3>
+                    <h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{selectedSubAdmin.name}</h3>
                     <div className="flex items-center gap-3">
                         <StatusBadge status={selectedSubAdmin.status} />
                         <span className="text-xs font-bold font-mono text-gray-400">{selectedSubAdmin.id}</span>
@@ -249,7 +249,7 @@ const SubAdminManagement: React.FC = () => {
               {/* Permissions Matrix */}
               <div className="space-y-4">
                  <div className="flex items-center justify-between px-1">
-                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Module Access Scope</h4>
+                    <h4 className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">Module Access Scope</h4>
                     {!isEditing && (
                         <button 
                             onClick={startEditing}
@@ -286,8 +286,8 @@ const SubAdminManagement: React.FC = () => {
                                 `}
                             >
                                 <div className="flex items-center gap-3">
-                                    <mod.icon size={18} className={isGranted ? 'text-primary-500' : 'text-gray-400'} />
-                                    <span className="text-xs font-black text-gray-900 tracking-tight">{mod.label}</span>
+                                    <mod.icon size={18} className={isGranted ? 'text-primary-500' : 'text-gray-400 dark:text-gray-600'} />
+                                    <span className="text-xs font-black text-gray-900 dark:text-white tracking-tight">{mod.label}</span>
                                 </div>
                                 {isGranted ? 
                                     <span className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20"><UserCheck size={12} /></span> : 
@@ -301,22 +301,22 @@ const SubAdminManagement: React.FC = () => {
 
               {/* Login Audit Trail */}
               <div className="space-y-4">
-                  <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-1">Login Audit Trail</h4>
+                  <h4 className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] px-1">Login Audit Trail</h4>
                   <div className="space-y-3">
                     {selectedSubAdmin.loginActivity.map((log: any, idx: number) => (
-                        <div key={idx} className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl hover:border-primary-200 transition-all group">
+                        <div key={idx} className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl hover:border-primary-200 transition-all group">
                             <div className="flex items-center gap-4">
-                                <div className="p-3 bg-gray-50 text-gray-400 rounded-xl group-hover:bg-primary-50 group-hover:text-primary-500 transition-colors">
+                                <div className="p-3 bg-gray-50 dark:bg-gray-900 text-gray-400 dark:text-gray-600 rounded-xl group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 group-hover:text-primary-500 transition-colors">
                                     <Monitor size={18} />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-sm font-black text-gray-900 leading-none">{log.location}</p>
+                                    <p className="text-sm font-black text-gray-900 dark:text-white leading-none">{log.location}</p>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{log.ip}</p>
                                 </div>
                             </div>
                             <div className="text-right space-y-1">
-                                <p className="text-xs font-black text-gray-900">{log.time}</p>
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{log.date}</p>
+                                <p className="text-xs font-black text-gray-900 dark:text-white">{log.time}</p>
+                                <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{log.date}</p>
                             </div>
                         </div>
                     ))}

@@ -49,8 +49,8 @@ export default function ActivityFeed() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">Recent Activity</h3>
-          <p className="text-xs text-gray-400 mt-0.5">Latest platform events</p>
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Recent Activity</h3>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Latest platform events</p>
         </div>
         <button className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors">
           View all
@@ -66,15 +66,15 @@ export default function ActivityFeed() {
             <div key={item.id} className="flex gap-3">
               {/* Left: icon + connector line */}
               <div className="flex flex-col items-center">
-                <div className={`w-8 h-8 ${item.iconBg} rounded-lg flex items-center justify-center flex-shrink-0 z-10`}>
+                <div className={`w-8 h-8 ${item.iconBg} dark:bg-opacity-10 rounded-lg flex items-center justify-center flex-shrink-0 z-10`}>
                   <Icon size={14} className={item.iconColor} />
                 </div>
-                {!isLast && <div className="w-px flex-1 bg-gray-100 my-1" />}
+                {!isLast && <div className="w-px flex-1 bg-gray-100 dark:bg-gray-800 my-1" />}
               </div>
               {/* Right: text */}
               <div className={`flex-1 min-w-0 ${!isLast ? 'pb-4' : ''}`}>
-                <p className="text-xs text-gray-700 leading-relaxed">{item.action}</p>
-                <p className="text-[11px] text-gray-400 mt-0.5">{item.time}</p>
+                <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">{item.action}</p>
+                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{item.time}</p>
               </div>
             </div>
           )

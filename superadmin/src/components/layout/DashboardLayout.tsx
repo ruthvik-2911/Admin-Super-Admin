@@ -36,7 +36,7 @@ export default function DashboardLayout() {
   }, [])
 
   return (
-    <div className="flex h-full overflow-hidden bg-gray-50">
+    <div className="flex h-full overflow-hidden bg-gray-50 dark:bg-[#0E1117]">
       {/* Sidebar */}
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
 

@@ -10,10 +10,10 @@ const topAdmins = [
 
 const rankBadge = [
   'bg-yellow-400 text-white',
-  'bg-gray-300 text-gray-700',
+  'bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300',
   'bg-orange-300 text-white',
-  'bg-gray-100 text-gray-500',
-  'bg-gray-100 text-gray-500',
+  'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400',
+  'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400',
 ]
 
 const avatarGradients = [
@@ -34,8 +34,8 @@ export default function TopAdminsTable() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">Top Admins by Revenue</h3>
-          <p className="text-xs text-gray-400 mt-0.5">This month's performance ranking</p>
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Top Admins by Revenue</h3>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">This month's performance ranking</p>
         </div>
         <button className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors">
           Full report
@@ -46,18 +46,18 @@ export default function TopAdminsTable() {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-left w-8">#</th>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-left">Admin</th>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-right">Revenue</th>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-center">Ads</th>
-              <th className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider pb-3 text-right">Trend</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 text-left w-8">#</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 text-left">Admin</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 text-right">Revenue</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 text-center">Ads</th>
+              <th className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pb-3 text-right">Trend</th>
             </tr>
           </thead>
           <tbody>
             {topAdmins.map((admin, i) => (
               <tr
                 key={admin.rank}
-                className="hover:bg-gray-50/70 transition-colors cursor-pointer group border-t border-gray-50"
+                className="hover:bg-gray-50/70 dark:hover:bg-gray-800/40 transition-colors cursor-pointer group border-t border-gray-50 dark:border-gray-800"
               >
                 {/* Rank */}
                 <td className="py-3 pr-2">
@@ -74,20 +74,20 @@ export default function TopAdminsTable() {
                       {getInitials(admin.name)}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-800 leading-none">{admin.name}</p>
-                      <p className="text-[11px] text-gray-400 mt-0.5">{admin.email}</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-none">{admin.name}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{admin.email}</p>
                     </div>
                   </div>
                 </td>
 
                 {/* Revenue */}
                 <td className="py-3 text-right">
-                  <span className="text-sm font-semibold text-gray-800">{admin.revenue}</span>
+                  <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{admin.revenue}</span>
                 </td>
 
                 {/* Ads */}
                 <td className="py-3 text-center">
-                  <span className="text-xs bg-gray-100 text-gray-600 font-medium px-2 py-0.5 rounded-full">
+                  <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 font-medium px-2 py-0.5 rounded-full">
                     {admin.ads}
                   </span>
                 </td>
@@ -95,7 +95,9 @@ export default function TopAdminsTable() {
                 {/* Trend */}
                 <td className="py-3 text-right">
                   <span className={`inline-flex items-center gap-0.5 text-xs font-semibold
-                    ${admin.change >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                    ${admin.change >= 0 
+                      ? 'text-green-600 dark:text-green-400' 
+                      : 'text-red-500 dark:text-red-400'}`}>
                     {admin.change >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                     {Math.abs(admin.change)}%
                   </span>

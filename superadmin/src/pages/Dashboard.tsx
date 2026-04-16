@@ -157,15 +157,15 @@ export default function Dashboard() {
       {/* ── Page Header ── */}
       <div className="flex items-center justify-between pt-1 scroll-animate delay-75 relative z-30">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Dashboard</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
             Welcome back, Super Admin · {today}
           </p>
         </div>
 
         {/* Right side: status badge + customize */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-white border border-green-200 text-green-700
+          <div className="flex items-center gap-2 bg-white dark:bg-green-500/5 border border-green-200 dark:border-green-500/20 text-green-700 dark:text-green-400
                           px-3 py-1.5 rounded-xl text-xs font-medium shadow-sm">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             All systems operational
@@ -225,22 +225,22 @@ export default function Dashboard() {
 
           {/* Ad Type Breakdown */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">Ad Type Breakdown</h3>
-            <p className="text-xs text-gray-400 mt-0.5 mb-4">Distribution of active ad types</p>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Ad Type Breakdown</h3>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 mb-4">Distribution of active ad types</p>
             <div className="space-y-3">
               {adTypes.map((item) => (
                 <div key={item.label}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <span className={`w-2 h-2 rounded-full ${item.color}`} />
-                      <span className="text-xs text-gray-700 font-medium">{item.label}</span>
+                      <span className="text-xs text-gray-700 dark:text-gray-300 font-medium">{item.label}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs text-gray-400">{item.count}</span>
-                      <span className="text-xs font-bold text-gray-700">{item.pct}%</span>
+                      <span className="text-xs text-gray-400 dark:text-gray-500">{item.count}</span>
+                      <span className="text-xs font-bold text-gray-700 dark:text-white">{item.pct}%</span>
                     </div>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-1.5">
+                  <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
                     <div
                       className={`${item.color} h-1.5 rounded-full transition-all duration-700 ease-out`}
                       style={{ width: `${item.pct}%` }}
@@ -251,7 +251,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="border-t border-gray-100" />
+          <div className="border-t border-gray-100 dark:border-gray-800" />
 
           {/* Platform Health */}
           <div>
@@ -261,8 +261,8 @@ export default function Dashboard() {
             <div className="space-y-2.5">
               {platformStats.map((stat) => (
                 <div key={stat.label} className="flex items-center justify-between">
-                  <span className="text-xs text-gray-500">{stat.label}</span>
-                  <span className={`text-xs font-bold ${stat.ok ? 'text-green-600' : 'text-red-500'}`}>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</span>
+                  <span className={`text-xs font-bold ${stat.ok ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
                     {stat.value}
                   </span>
                 </div>

@@ -42,10 +42,10 @@ const AdvertisementMonitoring = () => {
 
     const columns = [
         { key: 'id', label: 'ID', className: 'font-mono text-[10px] font-bold text-gray-400' },
-        { key: 'title', label: 'Campaign Title', render: (val) => <span className="font-bold text-gray-900">{val}</span> },
+        { key: 'title', label: 'Campaign Title', render: (val) => <span className="font-bold text-gray-900 dark:text-white">{val}</span> },
         { key: 'type', label: 'Ad Type' },
-        { key: 'adminName', label: 'Admin', render: (val) => <span className="text-xs font-semibold text-gray-600">{val}</span> },
-        { key: 'publisherName', label: 'Publisher', render: (val) => <span className="text-xs font-semibold text-gray-600">{val}</span> },
+        { key: 'adminName', label: 'Admin', render: (val) => <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">{val}</span> },
+        { key: 'publisherName', label: 'Publisher', render: (val) => <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">{val}</span> },
         { key: 'status', label: 'Status', render: (val) => <StatusBadge status={val} /> },
         { key: 'impressions', label: 'Impr.', className: 'text-right font-medium' },
         { key: 'ctr', label: 'CTR', render: (val) => <span className="font-bold text-primary-500">{val}%</span>, className: 'text-right' },
@@ -129,7 +129,7 @@ const AdvertisementMonitoring = () => {
                 {isLoading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                            <div key={i} className="aspect-[4/5] bg-white rounded-[2.5rem] border border-gray-100 animate-pulse" />
+                            <div key={i} className="aspect-[4/5] bg-white dark:bg-gray-800 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 animate-pulse" />
                         ))}
                     </div>
                 ) : filteredData.length > 0 ? (
@@ -138,7 +138,7 @@ const AdvertisementMonitoring = () => {
                             <div 
                                 key={ad.id}
                                 onClick={() => { setSelectedAd(ad); setIsDrawerOpen(true); }}
-                                className="group relative bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-500 cursor-pointer overflow-hidden flex flex-col animate-fade-in"
+                                className="group relative bg-white dark:bg-[#1A1D24] rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-500 cursor-pointer overflow-hidden flex flex-col animate-fade-in"
                             >
                                 {/* Image Preview Wrapper */}
                                 <div className="aspect-[4/3] w-full overflow-hidden relative">
@@ -166,19 +166,19 @@ const AdvertisementMonitoring = () => {
                                 {/* Content Details */}
                                 <div className="p-6 flex-1 flex flex-col relative">
                                     <div className="mb-1">
-                                        <span className="text-[10px] font-black text-gray-400 font-mono tracking-tighter bg-gray-50 px-2 py-0.5 rounded-md">ID: {ad.id}</span>
+                                        <span className="text-[10px] font-black text-gray-400 dark:text-gray-500 font-mono tracking-tighter bg-gray-50 dark:bg-gray-800/50 px-2 py-0.5 rounded-md">ID: {ad.id}</span>
                                     </div>
-                                    <h4 className="text-lg font-black text-gray-900 leading-tight mb-6 group-hover:text-primary-600 transition-colors line-clamp-2">
+                                    <h4 className="text-lg font-black text-gray-900 dark:text-white leading-tight mb-6 group-hover:text-primary-600 transition-colors line-clamp-2">
                                         {ad.title}
                                     </h4>
 
-                                    <div className="mt-auto pt-5 border-t border-gray-50 flex items-center justify-between">
+                                    <div className="mt-auto pt-5 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Impressions</p>
-                                            <p className="text-base font-black text-gray-900 tracking-tight">{ad.impressions.toLocaleString()}</p>
+                                            <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Impressions</p>
+                                            <p className="text-base font-black text-gray-900 dark:text-white tracking-tight">{ad.impressions.toLocaleString()}</p>
                                         </div>
                                         <div className="space-y-1 text-right">
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Avg CTR</p>
+                                            <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Avg CTR</p>
                                             <p className="text-base font-black text-primary-500 tracking-tight">{ad.ctr}%</p>
                                         </div>
                                     </div>
@@ -187,14 +187,14 @@ const AdvertisementMonitoring = () => {
                                     <div className="absolute -top-6 right-6 flex gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-20">
                                         <button 
                                             onClick={(e) => { e.stopPropagation(); setSelectedAd(ad); setIsDrawerOpen(true); }}
-                                            className="w-12 h-12 bg-white shadow-xl rounded-2xl flex items-center justify-center text-primary-500 hover:bg-primary-500 hover:text-white transition-all active:scale-90 border border-gray-50"
+                                            className="w-12 h-12 bg-white dark:bg-gray-800 shadow-xl rounded-2xl flex items-center justify-center text-primary-500 hover:bg-primary-500 hover:text-white transition-all active:scale-90 border border-gray-50 dark:border-gray-700"
                                         >
                                             <Eye size={20} />
                                         </button>
                                         {ad.status === 'Active' && (
                                             <button 
                                                 onClick={(e) => { e.stopPropagation(); handleSuspend(ad); }}
-                                                className="w-12 h-12 bg-white shadow-xl rounded-2xl flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-90 border border-gray-50"
+                                                className="w-12 h-12 bg-white dark:bg-gray-800 shadow-xl rounded-2xl flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-90 border border-gray-50 dark:border-gray-700"
                                             >
                                                 <AlertCircle size={20} />
                                             </button>
@@ -206,11 +206,11 @@ const AdvertisementMonitoring = () => {
                     </div>
                 ) : (
                     <div className="card-floating py-20 flex flex-col items-center justify-center text-center">
-                         <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mb-4">
+                         <div className="w-20 h-20 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-300 dark:text-gray-600 mb-4">
                             <Megaphone size={40} />
                          </div>
-                         <h3 className="text-xl font-black text-gray-900">No campaigns found</h3>
-                         <p className="text-sm text-gray-400 mt-2">Try adjusting your filters or search criteria</p>
+                         <h3 className="text-xl font-black text-gray-900 dark:text-white">No campaigns found</h3>
+                         <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">Try adjusting your filters or search criteria</p>
                     </div>
                 )}
             </div>
@@ -235,74 +235,74 @@ const AdvertisementMonitoring = () => {
                 {selectedAd && (
                     <div className="space-y-8 animate-fade-in">
                         {/* Ad Overview Card */}
-                        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                        <div className="bg-white dark:bg-gray-800/40 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
                             <div className="flex items-start justify-between">
-                                <div className="p-3 bg-primary-100 text-primary-600 rounded-2xl">
+                                <div className="p-3 bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 rounded-2xl">
                                     <Megaphone size={28} />
                                 </div>
                                 <StatusBadge status={selectedAd.status} />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-black text-gray-900 leading-tight">{selectedAd.title}</h3>
-                                <p className="text-sm font-medium text-gray-400 mt-1 font-mono tracking-tighter">ID: {selectedAd.id}</p>
+                                <h3 className="text-2xl font-black text-gray-900 dark:text-white leading-tight">{selectedAd.title}</h3>
+                                <p className="text-sm font-medium text-gray-400 dark:text-gray-500 mt-1 font-mono tracking-tighter">ID: {selectedAd.id}</p>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
+                            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-50 dark:border-gray-700">
                                <div className="space-y-1">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Type</p>
-                                    <p className="text-sm font-bold text-gray-900">{selectedAd.type} Advertisement</p>
+                                    <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Type</p>
+                                    <p className="text-sm font-bold text-gray-900 dark:text-white">{selectedAd.type} Advertisement</p>
                                </div>
                                <div className="space-y-1">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Created On</p>
-                                    <p className="text-sm font-bold text-gray-900">{selectedAd.createdDate}</p>
+                                    <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Created On</p>
+                                    <p className="text-sm font-bold text-gray-900 dark:text-white">{selectedAd.createdDate}</p>
                                </div>
                             </div>
                         </div>
 
                         {/* Stakeholders */}
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-inner">
-                                <div className="flex items-center gap-2 text-indigo-600 mb-2 font-bold text-[10px] uppercase">
+                            <div className="bg-gray-50 dark:bg-gray-800/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-inner text-gray-900 dark:text-white">
+                                <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 mb-2 font-bold text-[10px] uppercase">
                                     <User size={14} />
                                     Account Admin
                                 </div>
-                                <p className="text-sm font-black text-gray-900">{selectedAd.adminName}</p>
+                                <p className="text-sm font-black text-gray-900 dark:text-white">{selectedAd.adminName}</p>
                             </div>
-                            <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-inner">
-                                <div className="flex items-center gap-2 text-purple-600 mb-2 font-bold text-[10px] uppercase">
+                            <div className="bg-gray-50 dark:bg-gray-800/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-inner text-gray-900 dark:text-white">
+                                <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400 mb-2 font-bold text-[10px] uppercase">
                                     <Radio size={14} />
                                     Publisher
                                 </div>
-                                <p className="text-sm font-black text-gray-900">{selectedAd.publisherName}</p>
+                                <p className="text-sm font-black text-gray-900 dark:text-white">{selectedAd.publisherName}</p>
                             </div>
                         </div>
 
                         {/* Geo-Targeting */}
                         <div className="space-y-3">
-                            <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
+                            <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                                 <MapPin size={16} className="text-primary-500" />
                                 Targeting Configuration
                             </h4>
-                            <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm grid grid-cols-2 gap-4">
+                            <div className="bg-white dark:bg-gray-800/20 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Target City</p>
-                                    <p className="text-sm font-bold text-gray-900">{selectedAd.location}</p>
+                                    <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Target City</p>
+                                    <p className="text-sm font-bold text-gray-900 dark:text-white">{selectedAd.location}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Geo-Radius</p>
+                                    <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Geo-Radius</p>
                                     <div className="flex items-center gap-2">
-                                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full">
+                                        <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full">
                                             <div className="bg-primary-500 h-1.5 rounded-full" style={{ width: (parseInt(selectedAd.radius) * 10) + '%' }} />
                                         </div>
-                                        <p className="text-sm font-bold text-gray-900">{selectedAd.radius}</p>
+                                        <p className="text-sm font-bold text-gray-900 dark:text-white">{selectedAd.radius}</p>
                                     </div>
                                 </div>
                                 <div className="col-span-2 space-y-1 pt-2">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Campaign Duration</p>
+                                    <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Campaign Duration</p>
                                     <div className="flex items-center gap-3">
-                                        <span className="text-sm font-bold text-gray-900">{selectedAd.startDate}</span>
-                                        <span className="text-gray-300">→</span>
-                                        <span className="text-sm font-bold text-gray-900">{selectedAd.endDate}</span>
+                                        <span className="text-sm font-bold text-gray-900 dark:text-white">{selectedAd.startDate}</span>
+                                        <span className="text-gray-300 dark:text-gray-700">→</span>
+                                        <span className="text-sm font-bold text-gray-900 dark:text-white">{selectedAd.endDate}</span>
                                     </div>
                                 </div>
                             </div>
@@ -320,9 +320,9 @@ const AdvertisementMonitoring = () => {
                                     { label: 'Clicks', value: selectedAd.clicks.toLocaleString() },
                                     { label: 'Avg CTR', value: `${selectedAd.ctr}%`, highlight: true }
                                 ].map((m, i) => (
-                                    <div key={i} className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm text-center">
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight mb-1">{m.label}</p>
-                                        <p className={`text-xl font-black ${m.highlight ? 'text-primary-500' : 'text-gray-900'}`}>{m.value}</p>
+                                    <div key={i} className="bg-white dark:bg-gray-800/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm text-center">
+                                        <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tight mb-1">{m.label}</p>
+                                        <p className={`text-xl font-black ${m.highlight ? 'text-primary-500' : 'text-gray-900 dark:text-white'}`}>{m.value}</p>
                                     </div>
                                 ))}
                             </div>
@@ -330,15 +330,15 @@ const AdvertisementMonitoring = () => {
 
                         {/* Ad Preview Placeholder */}
                         <div className="space-y-3">
-                            <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
+                            <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                                 <Target size={16} className="text-primary-500" />
                                 Ad Creative Preview
                             </h4>
-                            <div className="aspect-video bg-gray-100 rounded-3xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-2 group cursor-pointer hover:bg-gray-50 transition-all hover:border-primary-200">
-                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-400 group-hover:text-primary-500 group-hover:scale-110 shadow-sm transition-all">
+                            <div className="aspect-video bg-gray-100 dark:bg-gray-800/40 rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center gap-2 group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:border-primary-200">
+                                <div className="w-12 h-12 bg-white dark:bg-gray-900 shadow-sm rounded-2xl flex items-center justify-center text-gray-400 group-hover:text-primary-500 group-hover:scale-110 shadow-sm transition-all">
                                     <ExternalLink size={24} />
                                 </div>
-                                <span className="text-sm font-bold text-gray-400 group-hover:text-primary-600">Click to preview active creative</span>
+                                <span className="text-sm font-bold text-gray-400 dark:text-gray-500 group-hover:text-primary-600">Click to preview active creative</span>
                             </div>
                         </div>
                     </div>

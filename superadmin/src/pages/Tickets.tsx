@@ -131,13 +131,13 @@ const Tickets = () => {
             {/* Support KPIs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in-scale delay-75">
                 {kpis.map((kpi, idx) => (
-                    <div key={idx} className="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-4 group hover:shadow-lg transition-all">
-                        <div className={`p-4 rounded-2xl ${kpi.bg} ${kpi.color} group-hover:scale-110 transition-transform`}>
+                    <div key={idx} className="bg-white dark:bg-[#1A1D24] p-5 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-sm flex items-center gap-4 group hover:shadow-lg transition-all">
+                        <div className={`p-4 rounded-2xl ${kpi.bg} dark:bg-opacity-10 ${kpi.color} group-hover:scale-110 transition-transform`}>
                             <kpi.icon size={24} />
                         </div>
                         <div>
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.15em] mb-0.5">{kpi.label}</p>
-                            <p className="text-2xl font-black text-gray-900 tracking-tight">{kpi.value}</p>
+                            <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] mb-0.5">{kpi.label}</p>
+                            <p className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{kpi.value}</p>
                         </div>
                     </div>
                 ))}
@@ -185,45 +185,45 @@ const Tickets = () => {
                 {selectedTicket && (
                     <div className="flex flex-col h-full space-y-8 animate-fade-in">
                         {/* Summary Header */}
-                        <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm space-y-4">
+                        <div className="bg-white dark:bg-gray-800/40 p-6 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
                             <div className="flex items-start justify-between">
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-black text-gray-900 tracking-tight">{selectedTicket.subject}</h3>
-                                    <p className="text-xs font-semibold text-primary-500 uppercase tracking-wider">{selectedTicket.category} Query</p>
+                                    <h3 className="text-xl font-black text-gray-900 dark:text-white tracking-tight">{selectedTicket.subject}</h3>
+                                    <p className="text-xs font-semibold text-primary-500 dark:text-primary-400 uppercase tracking-wider">{selectedTicket.category} Query</p>
                                 </div>
                                 <StatusBadge status={selectedTicket.priority} />
                             </div>
                             
-                            <div className="pt-4 border-t border-gray-50 flex items-center justify-between gap-4">
+                            <div className="pt-4 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between gap-4">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-700 uppercase">
+                                    <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase">
                                         {selectedTicket.userName.charAt(0)}
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-black text-gray-900">{selectedTicket.userName}</span>
-                                        <span className="text-[10px] font-bold text-gray-400 capitalize">{selectedTicket.userType} Account</span>
+                                        <span className="text-sm font-black text-gray-900 dark:text-white">{selectedTicket.userName}</span>
+                                        <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 capitalize">{selectedTicket.userType} Account</span>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Created On</p>
-                                    <p className="text-xs font-black text-gray-900">{selectedTicket.createdDate}</p>
+                                    <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Created On</p>
+                                    <p className="text-xs font-black text-gray-900 dark:text-white">{selectedTicket.createdDate}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Thread View */}
                         <div className="flex-1 space-y-4">
-                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-1">Conversation History</h4>
-                            <div className="bg-gray-50/50 rounded-[2rem] p-6 border border-gray-50">
+                            <h4 className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] px-1">Conversation History</h4>
+                            <div className="bg-gray-50/50 dark:bg-gray-900/20 rounded-[2rem] p-6 border border-gray-50 dark:border-gray-800">
                                 <TicketThread messages={selectedTicket.messages} />
                             </div>
                         </div>
 
                         {/* Quick Reply Box */}
-                        <div className="bg-white p-4 rounded-[1.5rem] border border-gray-100 shadow-xl shadow-primary-500/5 sticky bottom-0">
+                        <div className="bg-white dark:bg-[#1A1D24] p-4 rounded-[1.5rem] border border-gray-100 dark:border-gray-800 shadow-xl shadow-primary-500/5 sticky bottom-0">
                             <div className="relative">
                                 <textarea 
-                                    className="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-primary-500/10 placeholder:text-gray-400 resize-none no-scrollbar"
+                                    className="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl p-4 text-sm font-medium text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500/10 placeholder:text-gray-400 dark:placeholder:text-gray-600 resize-none no-scrollbar"
                                     placeholder="Type your reply here..."
                                     rows={3}
                                     value={replyText}

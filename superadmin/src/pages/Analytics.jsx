@@ -276,15 +276,15 @@ const Analytics = () => {
   const renderKPIs = (data = []) => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       {data?.map((kpi, idx) => (
-        <div key={idx} className="card-floating tilt-card animate-fade-in-scale group hover:-translate-y-2 transition-all duration-500 overflow-hidden relative">
-          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+        <div key={idx} className="card-floating tilt-card animate-fade-in-scale group hover:-translate-y-2 transition-all duration-500 overflow-hidden relative dark:bg-[#1A1D24] dark:border-gray-800">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity dark:text-gray-500">
              <BarChart3 size={80} />
           </div>
           <div className="relative z-10">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{kpi?.title}</p>
+            <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-4">{kpi?.title}</p>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-4xl font-black text-slate-900 tracking-tighter">{kpi?.value}</h3>
-              <div className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm ${kpi?.change >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
+              <h3 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{kpi?.value}</h3>
+              <div className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm ${kpi?.change >= 0 ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400'}`}>
                 {kpi?.change >= 0 ? '↑' : '↓'} {Math.abs(kpi?.change)}%
               </div>
             </div>
@@ -309,8 +309,8 @@ const Analytics = () => {
         {renderKPIs(kpiSummaryData)}
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-2xl shadow-card">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">Top 10 Performing Ads</h3>
+          <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-card">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Top 10 Performing Ads</h3>
             <div className="h-[350px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={adPerformanceChartData}>
@@ -328,8 +328,8 @@ const Analytics = () => {
             </div>
           </div>
   
-          <div className="bg-white p-6 rounded-2xl shadow-card">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">Performance by Ad Type</h3>
+          <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-card">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Performance by Ad Type</h3>
             <div className="h-[350px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -354,8 +354,8 @@ const Analytics = () => {
           </div>
         </div>
   
-        <div className="bg-white p-6 rounded-2xl shadow-card">
-          <h3 className="text-lg font-bold text-gray-900 mb-6">Top Performing Locations (Impressions)</h3>
+        <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-card">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Top Performing Locations (Impressions)</h3>
           <div className="h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={topLocationsData} layout="vertical">
@@ -377,10 +377,10 @@ const Analytics = () => {
     const topLoc = geoTableData[0];
     return (
       <div className="space-y-6">
-        <div className="bg-white p-6 rounded-2xl shadow-card animate-fade-in flex items-center justify-between border-l-4 border-primary-500">
+        <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-card animate-fade-in flex items-center justify-between border-l-4 border-primary-500">
           <div>
-             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Top Performing Location</p>
-             <h3 className="text-2xl font-bold text-gray-900">{topLoc?.city || 'N/A'}</h3>
+             <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">Top Performing Location</p>
+             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{topLoc?.city || 'N/A'}</h3>
           </div>
           <div className="text-right">
              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Impact</p>
@@ -389,28 +389,28 @@ const Analytics = () => {
         </div>
   
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-               <div className="px-6 py-4 border-b border-gray-100">
-                  <h3 className="text-lg font-bold text-gray-900">City-wise Engagement</h3>
+          <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-card overflow-hidden">
+               <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">City-wise Engagement</h3>
                </div>
                <div className="overflow-x-auto">
                   <table className="w-full text-left">
-                      <thead className="bg-gray-50">
+                      <thead className="bg-gray-50 dark:bg-gray-900/50">
                           <tr>
-                              <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">City</th>
+                              <th className="px-6 py-3 text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">City</th>
                               <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Impressions</th>
                               <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Clicks</th>
                               <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">CTR</th>
                               <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Status</th>
                           </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-100">
+                      <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                           {geoTableData.map((row, idx) => (
-                              <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{row.city}</td>
-                                  <td className="px-6 py-4 text-sm text-gray-600">{row.impressions.toLocaleString()}</td>
-                                  <td className="px-6 py-4 text-sm text-gray-600">{row.clicks.toLocaleString()}</td>
-                                  <td className="px-6 py-4 text-sm font-bold text-primary-600">{row.ctr}</td>
+                              <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{row.city}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{row.impressions.toLocaleString()}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{row.clicks.toLocaleString()}</td>
+                                  <td className="px-6 py-4 text-sm font-bold text-primary-600 dark:text-primary-400">{row.ctr}</td>
                                   <td className="px-6 py-4"><StatusBadge status={row.status} /></td>
                               </tr>
                           ))}
@@ -419,8 +419,8 @@ const Analytics = () => {
                </div>
           </div>
   
-          <div className="bg-white p-6 rounded-2xl shadow-card">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">Engagement by Radius</h3>
+          <div className="bg-white dark:bg-[#1A1D24] p-6 rounded-2xl shadow-card">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Engagement by Radius</h3>
             <div className="h-[350px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={radiusEngagementData}>
@@ -443,13 +443,13 @@ const Analytics = () => {
     return (
       <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-white rounded-2xl shadow-card overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-100">
-                      <h3 className="text-lg font-bold text-gray-900">Admin Leaderboard</h3>
+              <div className="lg:col-span-2 bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-card overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white">Admin Leaderboard</h3>
                   </div>
                   <div className="overflow-x-auto">
                       <table className="w-full text-left">
-                          <thead className="bg-gray-50">
+                          <thead className="bg-gray-50 dark:bg-gray-900/50">
                               <tr>
                                   <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Rank</th>
                                   <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Admin Name</th>
@@ -458,22 +458,22 @@ const Analytics = () => {
                                   <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Revenue</th>
                               </tr>
                           </thead>
-                          <tbody className="divide-y divide-gray-100">
+                          <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                               {adminLeaderboardData.map((row, idx) => (
-                                  <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                                  <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                                       <td className="px-6 py-4">
                                           <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold 
-                                              ${idx === 0 ? 'bg-yellow-100 text-yellow-700' : 
-                                                idx === 1 ? 'bg-gray-100 text-gray-600' : 
-                                                idx === 2 ? 'bg-orange-100 text-orange-700' : 'bg-transparent text-gray-400'}
+                                              ${idx === 0 ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400' : 
+                                                idx === 1 ? 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400' : 
+                                                idx === 2 ? 'bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400' : 'bg-transparent text-gray-400 dark:text-gray-600'}
                                           `}>
                                               {row.rank}
                                           </span>
                                       </td>
-                                      <td className="px-6 py-4 text-sm font-semibold text-gray-900">{row.name}</td>
-                                      <td className="px-6 py-4 text-sm text-gray-600">{row.ads}</td>
-                                      <td className="px-6 py-4 text-sm font-bold text-indigo-600">{row.ctr}%</td>
-                                      <td className="px-6 py-4 text-sm font-bold text-gray-900">₹{row.revenue.toLocaleString()}</td>
+                                      <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{row.name}</td>
+                                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{row.ads}</td>
+                                      <td className="px-6 py-4 text-sm font-bold text-indigo-600 dark:text-indigo-400">{row.ctr}%</td>
+                                      <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">₹{row.revenue.toLocaleString()}</td>
                                   </tr>
                               ))}
                           </tbody>
@@ -481,8 +481,8 @@ const Analytics = () => {
                   </div>
               </div>
   
-              <div className="bg-white p-6 rounded-2xl shadow-card">
-                  <h3 className="text-lg font-bold text-gray-900 mb-6">Revenue per Admin</h3>
+              <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-card">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Revenue per Admin</h3>
                   <div className="h-[400px]">
                       <ResponsiveContainer width="100%" height="100%">
                           <BarChart data={adminLeaderboardData}>
@@ -504,13 +504,13 @@ const Analytics = () => {
     if (filteredAds.length === 0) return renderEmptyState();
     return (
       <div className="space-y-6">
-          <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100">
-                  <h3 className="text-lg font-bold text-gray-900">Publisher Performance Monitoring</h3>
+          <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Publisher Performance Monitoring</h3>
               </div>
               <div className="overflow-x-auto">
                   <table className="w-full text-left">
-                      <thead className="bg-gray-50">
+                      <thead className="bg-gray-50 dark:bg-gray-900/50">
                           <tr>
                               <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Publisher</th>
                               <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Ads Posted</th>
@@ -519,18 +519,18 @@ const Analytics = () => {
                               <th className="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Status</th>
                           </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-100">
+                      <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                           {publisherPerformanceData.map((row, idx) => (
-                              <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{row.name}</td>
-                                  <td className="px-6 py-4 text-sm text-gray-600">{row.ads}</td>
-                                  <td className="px-6 py-4 text-sm text-gray-600">{row.impressions.toLocaleString()}</td>
+                              <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{row.name}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{row.ads}</td>
+                                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{row.impressions.toLocaleString()}</td>
                                   <td className="px-6 py-4">
                                        <div className="flex items-center gap-2">
-                                          <div className="flex-1 w-24 bg-gray-100 rounded-full h-1.5">
+                                          <div className="flex-1 w-24 bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
                                               <div className="bg-primary-500 h-1.5 rounded-full" style={{ width: `${parseFloat(row.engagement) * 10}%` }} />
                                           </div>
-                                          <span className="text-sm font-bold text-gray-900">{row.engagement}%</span>
+                                          <span className="text-sm font-bold text-gray-900 dark:text-white">{row.engagement}%</span>
                                        </div>
                                   </td>
                                   <td className="px-6 py-4"><StatusBadge status={row.status} /></td>
@@ -548,8 +548,8 @@ const Analytics = () => {
     if (filteredAds.length === 0) return renderEmptyState();
     return (
       <div className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-card">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">Hour-wise Engagement (0–23 hrs)</h3>
+          <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-card">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Hour-wise Engagement (0–23 hrs)</h3>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={hourlyEngagementData}>
@@ -564,12 +564,12 @@ const Analytics = () => {
           </div>
   
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-2xl shadow-card">
+              <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-card">
                   <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-lg font-bold text-gray-900">Campaign Trends</h3>
-                      <div className="flex bg-gray-100 p-1 rounded-xl">
-                          <button className="px-3 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm transition-all">Daily</button>
-                          <button className="px-3 py-1.5 text-xs font-bold text-gray-400 hover:text-gray-600 transition-all">Weekly</button>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white">Campaign Trends</h3>
+                      <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
+                          <button className="px-3 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-gray-700 dark:text-white shadow-sm transition-all">Daily</button>
+                          <button className="px-3 py-1.5 text-xs font-bold text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-all">Weekly</button>
                       </div>
                   </div>
                   <div className="h-[300px]">
@@ -587,8 +587,8 @@ const Analytics = () => {
                   </div>
               </div>
   
-              <div className="bg-white p-6 rounded-2xl shadow-card">
-                  <h3 className="text-lg font-bold text-gray-900 mb-6">Duration vs Average CTR</h3>
+              <div className="bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-card">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Duration vs Average CTR</h3>
                   <div className="h-[300px]">
                       <ResponsiveContainer width="100%" height="100%">
                           <BarChart data={[
@@ -613,12 +613,12 @@ const Analytics = () => {
   };
 
   const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-20 px-6 bg-white rounded-3xl shadow-card animate-fade-in border border-dashed border-gray-200">
-        <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-            <SearchX size={40} className="text-gray-300" />
+    <div className="flex flex-col items-center justify-center py-20 px-6 bg-white dark:bg-[#1A1D24] rounded-3xl shadow-card animate-fade-in border border-dashed border-gray-200 dark:border-gray-800">
+        <div className="w-20 h-20 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6">
+            <SearchX size={40} className="text-gray-300 dark:text-gray-600" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">No data matches the selected filters</h3>
-        <p className="text-gray-500 mb-8 max-w-sm text-center">Try adjusting your time range, location, or other filter settings to see analytics.</p>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No data matches the selected filters</h3>
+        <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-sm text-center">Try adjusting your time range, location, or other filter settings to see analytics.</p>
         <button 
             onClick={resetFilters}
             className="px-6 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary-600/20 active:scale-95 transition-all"
@@ -636,14 +636,14 @@ const Analytics = () => {
         actions={
           <>
             <div className="relative group">
-               <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all">
+               <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
                   <Download size={16} className="text-primary-500" />
                   Export
                   <ChevronDown size={14} className="text-gray-400" />
                </button>
-               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 overflow-hidden">
-                  <button onClick={handleExport} className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 transition-colors font-medium border-b border-gray-50">Export as CSV</button>
-                  <button onClick={handleExport} className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 transition-colors font-medium">Export as Excel</button>
+               <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 overflow-hidden">
+                  <button onClick={handleExport} className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium border-b border-gray-50 dark:border-gray-800 text-gray-700 dark:text-white">Export as CSV</button>
+                  <button onClick={handleExport} className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium text-gray-700 dark:text-white">Export as Excel</button>
                </div>
             </div>
           </>
@@ -652,14 +652,14 @@ const Analytics = () => {
 
       {/* Sticky Filter Bar Placeholder (since we need specific multi-select here, let's build it inline or use a specialized one) */}
       {/* Filter Bar */}
-      <div className="bg-white border-b border-gray-100 -mx-6 px-6 py-4 mb-8 sticky top-0 z-20 flex flex-col gap-4 shadow-sm">
+      <div className="bg-white dark:bg-[#1A1D24] border-b border-gray-100 dark:border-gray-800 -mx-6 px-6 py-4 mb-8 sticky top-0 z-20 flex flex-col gap-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
+            <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 p-1.5 rounded-xl border border-gray-100 dark:border-gray-700">
             <Calendar size={16} className="text-gray-400 ml-2" />
             <select 
                 value={filters.dateRange} 
                 onChange={(e) => setFilters(p => ({ ...p, dateRange: e.target.value }))}
-                className="bg-transparent text-sm font-semibold text-gray-700 outline-none pr-4 cursor-pointer"
+                className="bg-transparent text-sm font-semibold text-gray-700 dark:text-gray-300 outline-none pr-4 cursor-pointer"
             >
                 <option value="today">Today</option>
                 <option value="last7">Last 7 Days</option>
@@ -669,7 +669,7 @@ const Analytics = () => {
             </select>
             </div>
 
-            <div className="h-6 w-px bg-gray-200" />
+            <div className="h-6 w-px bg-gray-200 dark:bg-gray-800" />
 
             <div className="flex items-center gap-2 relative">
                 {[
@@ -684,8 +684,8 @@ const Analytics = () => {
                             onClick={() => setActiveDropdown(activeDropdown === dropdown.id ? null : dropdown.id)}
                             className={`flex items-center gap-2 px-3 py-1.5 border rounded-xl text-xs font-bold transition-all
                                 ${filters[dropdown.id].length > 0 
-                                    ? 'bg-primary-50 border-primary-100 text-primary-600' 
-                                    : 'bg-gray-50 border-gray-100 text-gray-600 hover:bg-gray-100'}
+                                    ? 'bg-primary-50 dark:bg-primary-900/40 border-primary-100 dark:border-primary-500/30 text-primary-600 dark:text-primary-400' 
+                                    : 'bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}
                             `}
                         >
                             {dropdown.label}
@@ -694,13 +694,13 @@ const Analytics = () => {
                         </button>
                         
                         {activeDropdown === dropdown.id && (
-                            <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-2xl z-50 p-2 animate-fade-in">
+                            <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl z-50 p-2 animate-fade-in">
                                 <div className="max-h-60 overflow-y-auto custom-scrollbar">
                                     {dropdown.options.map(opt => (
-                                        <label key={opt.value} className="flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-xl cursor-pointer group">
+                                        <label key={opt.value} className="flex items-center gap-3 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl cursor-pointer group">
                                             <input 
                                                 type="checkbox"
-                                                className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 transition-all cursor-pointer"
+                                                className="w-4 h-4 rounded border-gray-300 dark:border-gray-700 text-primary-600 focus:ring-primary-500 transition-all cursor-pointer bg-transparent"
                                                 checked={filters[dropdown.id].includes(opt.value)}
                                                 onChange={(e) => {
                                                     const val = opt.value;
@@ -712,7 +712,7 @@ const Analytics = () => {
                                                     }));
                                                 }}
                                             />
-                                            <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{opt.label}</span>
+                                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">{opt.label}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -726,25 +726,25 @@ const Analytics = () => {
                         onClick={() => setActiveDropdown(activeDropdown === 'radius' ? null : 'radius')}
                         className={`flex items-center gap-2 px-3 py-1.5 border rounded-xl text-xs font-bold transition-all
                             ${filters.radius 
-                                ? 'bg-primary-50 border-primary-100 text-primary-600' 
-                                : 'bg-gray-50 border-gray-100 text-gray-600 hover:bg-gray-100'}
+                                ? 'bg-primary-50 dark:bg-primary-900/40 border-primary-100 dark:border-primary-500/30 text-primary-600 dark:text-primary-400' 
+                                : 'bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}
                         `}
                     >
                         Radius {filters.radius && `: ${filters.radius}km`}
                         <ChevronDown size={14} />
                     </button>
                     {activeDropdown === 'radius' && (
-                        <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-2xl z-50 p-4 animate-fade-in">
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Max Radius: {filters.radius || 0}km</p>
+                        <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-[#1A1D24] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl z-50 p-4 animate-fade-in">
+                            <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Max Radius: {filters.radius || 0}km</p>
                             <input 
                                 type="range" 
                                 min="0" 
                                 max="50" 
                                 value={filters.radius || 0}
                                 onChange={(e) => setFilters(p => ({ ...p, radius: parseInt(e.target.value) || null }))}
-                                className="w-full h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                                className="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary-500"
                             />
-                            <div className="flex justify-between mt-2 text-[10px] font-bold text-gray-400">
+                            <div className="flex justify-between mt-2 text-[10px] font-bold text-gray-400 dark:text-gray-500">
                                 <span>0km</span>
                                 <span>50km</span>
                             </div>
@@ -755,7 +755,7 @@ const Analytics = () => {
 
             <button 
                 onClick={resetFilters}
-                className="text-xs font-bold text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider ml-auto"
+                className="text-xs font-bold text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider ml-auto"
             >
                 Reset All
             </button>
@@ -768,9 +768,9 @@ const Analytics = () => {
                 {Object.entries(filters).map(([key, value]) => {
                     if (Array.isArray(value)) {
                         return value.map(val => (
-                            <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary-100 text-primary-700 rounded-lg text-[10px] font-black shadow-sm border border-primary-200 group">
+                            <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-400 rounded-lg text-[10px] font-black shadow-sm border border-primary-200 dark:border-primary-800 group">
                                 {val}
-                                <button onClick={() => removeFilterPill(key, val)} className="hover:text-primary-900 transition-colors">
+                                <button onClick={() => removeFilterPill(key, val)} className="hover:text-primary-900 dark:hover:text-primary-300 transition-colors">
                                     <X size={12} strokeWidth={3} />
                                 </button>
                             </div>
@@ -778,9 +778,9 @@ const Analytics = () => {
                     }
                     if (key === 'radius' && value) {
                         return (
-                            <div key="radius-pill" className="flex items-center gap-1.5 px-2 py-1 bg-primary-100 text-primary-700 rounded-lg text-[10px] font-black shadow-sm border border-primary-200 group">
+                            <div key="radius-pill" className="flex items-center gap-1.5 px-2 py-1 bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-400 rounded-lg text-[10px] font-black shadow-sm border border-primary-200 dark:border-primary-800 group">
                                 Radius: {value}km
-                                <button onClick={() => setFilters(p => ({ ...p, radius: null }))} className="hover:text-primary-900 transition-colors">
+                                <button onClick={() => setFilters(p => ({ ...p, radius: null }))} className="hover:text-primary-900 dark:hover:text-primary-300 transition-colors">
                                     <X size={12} strokeWidth={3} />
                                 </button>
                             </div>
@@ -793,7 +793,7 @@ const Analytics = () => {
       </div>
 
       {/* Sub-nav tabs */}
-      <div className="flex items-center gap-1 mb-8 bg-gray-100/50 p-1 rounded-2xl w-fit">
+      <div className="flex items-center gap-1 mb-8 bg-gray-100/50 dark:bg-gray-800/40 p-1 rounded-2xl w-fit">
         {TABS.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -801,8 +801,10 @@ const Analytics = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all
-                ${isActive ? 'bg-white text-primary-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all
+                ${isActive 
+                    ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm' 
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-gray-800/50'}
               `}
             >
               <Icon size={16} />
