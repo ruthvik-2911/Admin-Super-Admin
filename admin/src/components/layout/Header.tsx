@@ -54,7 +54,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-colors">
+    <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1A1D24]/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14">
           <div className="flex items-center gap-2.5">
