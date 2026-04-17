@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface hitRecordRepository extends MongoRepository<hitRecord, ObjectId>{
+    long countByCampaignIdAndEventType(String campaignId, String eventType);
 
 }

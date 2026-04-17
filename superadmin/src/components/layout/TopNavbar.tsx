@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Bell, Search, ChevronDown, User, Settings, LogOut, Menu } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { getAuthSession, logoutSuperAdmin } from '../../lib/auth'
+import { getAuthSession, getRoleLabel, logoutSuperAdmin } from '../../lib/auth'
 
 interface TopNavbarProps {
   onMenuToggle: () => void
@@ -105,6 +105,7 @@ export default function TopNavbar({ onMenuToggle }: TopNavbarProps) {
             </div>
             <div className="text-left hidden sm:block">
               <p className="text-xs font-semibold text-gray-800">Super Admin</p>
+              <p className="text-[10px] text-primary-600">{getRoleLabel(session?.role)}</p>
               <p className="text-[10px] text-gray-500">{session?.email ?? 'admin@keliri.com'}</p>
             </div>
             <ChevronDown size={14} className={`text-gray-500 transition-transform duration-200 ${profileOpen ? 'rotate-180' : ''}`} />
@@ -113,7 +114,7 @@ export default function TopNavbar({ onMenuToggle }: TopNavbarProps) {
           {profileOpen && (
             <div className="absolute right-0 top-12 w-48 bg-white rounded-2xl shadow-card-hover border border-gray-100 z-50 animate-fade-in overflow-hidden">
               <div className="px-4 py-3 border-b border-gray-100">
-                <p className="text-xs font-semibold text-gray-800">Super Admin</p>
+                <p className="text-xs font-semibold text-gray-800">{getRoleLabel(session?.role)}</p>
                 <p className="text-[10px] text-gray-400">{session?.email ?? 'admin@keliri.com'}</p>
               </div>
               <div className="py-1">

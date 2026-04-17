@@ -1,17 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
-import { Eye, AlertCircle, MapPin, Target, Calendar, BarChart3, Megaphone, User, Radio, ExternalLink } from 'lucide-react';
+import { Eye, AlertCircle, MapPin, Target, BarChart3, Megaphone, User, Radio, ExternalLink } from 'lucide-react';
 import PageHeader from '../components/shared/PageHeader';
-import DataTable from '../components/shared/DataTable';
 import StatusBadge from '../components/shared/StatusBadge';
 import DetailDrawer from '../components/shared/DetailDrawer';
 import FilterBar from '../components/shared/FilterBar';
 import ConfirmDialog from '../components/shared/ConfirmDialog';
-import { mockAds, mockAdmins, mockPublishers } from '../data/mockData';
+import { fetchAdvertisements, suspendAdvertisement } from '../lib/ads';
 
 const AdvertisementMonitoring = () => {
     const [ads, setAds] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
     const [selectedAd, setSelectedAd] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [activeFilters, setActiveFilters] = useState({ status: null, type: null, adType: null });
@@ -19,56 +18,67 @@ const AdvertisementMonitoring = () => {
     // Dialog state
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, ad: null });
 
+    const formatMetric = (value, suffix = '') => {
+        if (value === null || value === undefined) {
+            return 'N/A';
+        }
+
+        if (typeof value === 'number') {
+            return `${value.toLocaleString()}${suffix}`;
+        }
+
+        return `${value}${suffix}`;
+    };
+
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setAds(mockAds);
-            setIsLoading(false);
-        }, 800);
-        return () => clearTimeout(timer);
+        let active = true;
+
+        const loadAdvertisements = async () => {
+            setIsLoading(true);
+            setError('');
+
+            try {
+                const data = await fetchAdvertisements();
+                if (active) {
+                    setAds(data);
+                }
+            } catch (err) {
+                if (active) {
+                    setAds([]);
+                    setError(err instanceof Error ? err.message : 'Unable to load advertisements');
+                }
+            } finally {
+                if (active) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        loadAdvertisements();
+        return () => { active = false; };
     }, []);
 
     const handleSuspend = (ad) => {
         setConfirmDialog({ isOpen: true, ad });
     };
 
-    const executeSuspend = () => {
+    const executeSuspend = async () => {
         const { ad } = confirmDialog;
-        setAds(prev => prev.map(a => a.id === ad.id ? { ...a, status: 'Suspended' } : a));
-        if (selectedAd && selectedAd.id === ad.id) {
-            setSelectedAd(prev => ({ ...prev, status: 'Suspended' }));
+        if (!ad) {
+            return;
         }
-        setConfirmDialog({ isOpen: false, ad: null });
-    };
 
-    const columns = [
-        { key: 'id', label: 'ID', className: 'font-mono text-[10px] font-bold text-gray-400' },
-        { key: 'title', label: 'Campaign Title', render: (val) => <span className="font-bold text-gray-900">{val}</span> },
-        { key: 'type', label: 'Ad Type' },
-        { key: 'adminName', label: 'Admin', render: (val) => <span className="text-xs font-semibold text-gray-600">{val}</span> },
-        { key: 'publisherName', label: 'Publisher', render: (val) => <span className="text-xs font-semibold text-gray-600">{val}</span> },
-        { key: 'status', label: 'Status', render: (val) => <StatusBadge status={val} /> },
-        { key: 'impressions', label: 'Impr.', className: 'text-right font-medium' },
-        { key: 'ctr', label: 'CTR', render: (val) => <span className="font-bold text-primary-500">{val}%</span>, className: 'text-right' },
-        { key: 'actions', label: 'Actions', render: (_, row) => (
-            <div className="flex items-center gap-1">
-                <button 
-                    onClick={(e) => { e.stopPropagation(); setSelectedAd(row); setIsDrawerOpen(true); }}
-                    className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all"
-                >
-                    <Eye size={18} />
-                </button>
-                {row.status === 'Active' && (
-                    <button 
-                        onClick={(e) => { e.stopPropagation(); handleSuspend(row); }}
-                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                        title="Suspend Advertisement"
-                    >
-                        <AlertCircle size={18} />
-                    </button>
-                )}
-            </div>
-        )}
-    ];
+        try {
+            const updatedAd = await suspendAdvertisement(ad.id);
+            setAds(prev => prev.map(a => a.id === ad.id ? updatedAd : a));
+            if (selectedAd && selectedAd.id === ad.id) {
+                setSelectedAd(updatedAd);
+            }
+            setConfirmDialog({ isOpen: false, ad: null });
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Unable to suspend advertisement');
+        }
+    };
 
     const filterOptions = [
         { 
@@ -124,6 +134,12 @@ const AdvertisementMonitoring = () => {
                 />
             </div>
 
+            {error && (
+                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                    {error}
+                </div>
+            )}
+
             {/* Ads Grid View */}
             <div className="animate-fade-in-scale delay-200">
                 {isLoading ? (
@@ -175,11 +191,11 @@ const AdvertisementMonitoring = () => {
                                     <div className="mt-auto pt-5 border-t border-gray-50 flex items-center justify-between">
                                         <div className="space-y-1">
                                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Impressions</p>
-                                            <p className="text-base font-black text-gray-900 tracking-tight">{ad.impressions.toLocaleString()}</p>
+                                            <p className="text-base font-black text-gray-900 tracking-tight">{formatMetric(ad.impressions)}</p>
                                         </div>
                                         <div className="space-y-1 text-right">
                                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Avg CTR</p>
-                                            <p className="text-base font-black text-primary-500 tracking-tight">{ad.ctr}%</p>
+                                            <p className="text-base font-black text-primary-500 tracking-tight">{formatMetric(ad.ctr, ad.ctr === null || ad.ctr === undefined ? '' : '%')}</p>
                                         </div>
                                     </div>
 
@@ -292,7 +308,7 @@ const AdvertisementMonitoring = () => {
                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Geo-Radius</p>
                                     <div className="flex items-center gap-2">
                                         <div className="flex-1 h-1.5 bg-gray-100 rounded-full">
-                                            <div className="bg-primary-500 h-1.5 rounded-full" style={{ width: (parseInt(selectedAd.radius) * 10) + '%' }} />
+                                            <div className="bg-primary-500 h-1.5 rounded-full" style={{ width: `${Math.min((parseFloat(selectedAd.radius) || 0) * 10, 100)}%` }} />
                                         </div>
                                         <p className="text-sm font-bold text-gray-900">{selectedAd.radius}</p>
                                     </div>
@@ -316,9 +332,9 @@ const AdvertisementMonitoring = () => {
                             </h4>
                             <div className="grid grid-cols-3 gap-3">
                                 {[
-                                    { label: 'Impressions', value: selectedAd.impressions.toLocaleString() },
-                                    { label: 'Clicks', value: selectedAd.clicks.toLocaleString() },
-                                    { label: 'Avg CTR', value: `${selectedAd.ctr}%`, highlight: true }
+                                    { label: 'Impressions', value: formatMetric(selectedAd.impressions) },
+                                    { label: 'Clicks', value: formatMetric(selectedAd.clicks) },
+                                    { label: 'Avg CTR', value: formatMetric(selectedAd.ctr, selectedAd.ctr === null || selectedAd.ctr === undefined ? '' : '%'), highlight: true }
                                 ].map((m, i) => (
                                     <div key={i} className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm text-center">
                                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight mb-1">{m.label}</p>

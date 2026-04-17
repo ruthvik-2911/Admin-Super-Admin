@@ -14,6 +14,9 @@ public class hitRecord {
 	    private String latitude;
 	    private String longitude;
 	    private String userAgent;
+        private String campaignId;
+        private String advertisementId;
+        private String eventType;
 
 	    // Default constructor: Sets the timestamp when the object is created
 	    public hitRecord() {
@@ -35,5 +38,10 @@ public class hitRecord {
 
 	    public String getUserAgent() { return userAgent; }
 	    public void setUserAgent(String userAgent) { this.userAgent = userAgent; }
+        public String getCampaignId() { return campaignId; }
+        public void setCampaignId(String campaignId) { this.campaignId = campaignId; }
+        public String getAdvertisementId() { return advertisementId; }
+        public void setAdvertisementId(String advertisementId) { this.advertisementId = advertisementId; }
+        public String getEventType() { return eventType; }
+        public void setEventType(String eventType) { this.eventType = eventType; }
 	}
-

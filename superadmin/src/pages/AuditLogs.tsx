@@ -1,189 +1,249 @@
-import { useState, useMemo, useEffect, useRef } from 'react'
-import { Search, Filter, CalendarDays, Download, Shield, FileText, Settings, Users, Monitor, ChevronLeft, ChevronRight, X, Clock } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react';
+import {
+  Search,
+  Download,
+  X,
+  Clock,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  Shield,
+  FileText,
+  Wallet,
+  LogIn,
+  BadgeCheck,
+} from 'lucide-react';
+import { fetchAuditLogs } from '../lib/management';
+import type { AuditLogRecord } from '../lib/management';
 
-// ─── Types & Mock Data ─────────────────────────────────────────────
-type LogCategory = 'Security' | 'Content' | 'System' | 'Users' | 'All'
+type ActionType = 'Ad Creation' | 'Ad Update' | 'Payment' | 'Login' | 'Approval';
+type ActorRole = 'Super Admin' | 'Admin' | 'Publisher';
+type EntityType = 'Ad' | 'Payment' | 'Account' | 'Session';
 
-interface AuditLog {
-  id: string
-  adminName: string
-  adminEmail: string
-  action: string
-  category: LogCategory
-  ip: string
-  timestamp: string
-}
-
-const MOCK_LOGS: AuditLog[] = [
-  { id: 'LOG-8991', adminName: 'System Operator', adminEmail: 'admin@keliri.com', action: 'Approved Ad Campaign #1092', category: 'Content', ip: '192.168.1.45', timestamp: '2026-04-14T14:15:21' },
-  { id: 'LOG-8990', adminName: 'Arjun M.', adminEmail: 'arjun@keliri.com', action: 'Suspended Publisher "Vidya Media"', category: 'Users', ip: '10.0.0.2', timestamp: '2026-04-14T11:05:00' },
-  { id: 'LOG-8989', adminName: 'System Operator', adminEmail: 'admin@keliri.com', action: 'Updated Global Revenue Share configuration to 15%', category: 'System', ip: '192.168.1.45', timestamp: '2026-04-13T09:44:11' },
-  { id: 'LOG-8988', adminName: 'Priya K.', adminEmail: 'priya@keliri.com', action: 'Failed login attempt (Invalid Password)', category: 'Security', ip: '45.22.11.90', timestamp: '2026-04-13T08:30:00' },
-  { id: 'LOG-8987', adminName: 'System Operator', adminEmail: 'admin@keliri.com', action: 'Created Sub-Admin account for "Arjun M."', category: 'Users', ip: '192.168.1.45', timestamp: '2026-04-12T16:22:15' },
-  { id: 'LOG-8986', adminName: 'Arjun M.', adminEmail: 'arjun@keliri.com', action: 'Logged in securely via 2FA', category: 'Security', ip: '10.0.0.2', timestamp: '2026-04-12T16:25:01' },
-  { id: 'LOG-8985', adminName: 'System Operator', adminEmail: 'admin@keliri.com', action: 'Rejected Ad Campaign #1088 (Violation: Graphic Content)', category: 'Content', ip: '192.168.1.45', timestamp: '2026-04-12T14:10:00' },
-  // ... extra dummy logs for pagination testing
-]
-
-Array.from({ length: 45 }).forEach((_, i) => {
-  MOCK_LOGS.push({
-    id: `LOG-80${i}`,
-    adminName: i % 3 === 0 ? 'Priya K.' : 'Arjun M.',
-    adminEmail: i % 3 === 0 ? 'priya@keliri.com' : 'arjun@keliri.com',
-    action: `System automated backup sequence #${1000 + i}`,
-    category: 'System',
-    ip: '127.0.0.1',
-    timestamp: new Date(Date.now() - i * 10000000).toISOString(),
-  })
-})
-
-const getCategoryBadge = (category: LogCategory) => {
-  switch (category) {
-    case 'Security': return <span className="badge-primary px-2.5 py-0.5"><Shield size={12} className="mr-1" /> Security</span>
-    case 'Content': return <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-blue-600 border border-blue-100 flex items-center w-max"><FileText size={12} className="mr-1" /> Content</span>
-    case 'System': return <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-purple-50 text-purple-600 border border-purple-100 flex items-center w-max"><Settings size={12} className="mr-1" /> System</span>
-    case 'Users': return <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-orange-50 text-orange-600 border border-orange-100 flex items-center w-max"><Users size={12} className="mr-1" /> Users</span>
-    default: return null
+const getActionBadge = (actionType: string) => {
+  if (actionType === 'Ad Creation') {
+    return (
+      <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-100 flex items-center w-max">
+        <FileText size={12} className="mr-1" /> Ad Creation
+      </span>
+    );
   }
-}
+
+  if (actionType === 'Ad Update') {
+    return (
+      <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 flex items-center w-max">
+        <FileText size={12} className="mr-1" /> Ad Update
+      </span>
+    );
+  }
+
+  if (actionType === 'Payment') {
+    return (
+      <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center w-max">
+        <Wallet size={12} className="mr-1" /> Payment
+      </span>
+    );
+  }
+
+  if (actionType === 'Login') {
+    return (
+      <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-100 flex items-center w-max">
+        <LogIn size={12} className="mr-1" /> Login
+      </span>
+    );
+  }
+
+  return (
+    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-100 flex items-center w-max">
+      <BadgeCheck size={12} className="mr-1" /> Approval
+    </span>
+  );
+};
+
+const escapeCsv = (value: string) => `"${String(value).replaceAll('"', '""')}"`;
 
 export default function AuditLogs() {
-  const [search, setSearch] = useState('')
-  const [filterCategory, setFilterCategory] = useState<LogCategory>('All')
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 12
+  const [logs, setLogs] = useState<AuditLogRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [actionType, setActionType] = useState<ActionType | ''>('');
+  const [actorRole, setActorRole] = useState<ActorRole | ''>('');
+  const [entityType, setEntityType] = useState<EntityType | ''>('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Close custom dropdowns on outside click
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const itemsPerPage = 10;
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setShowCategoryDropdown(false)
+    const loadLogs = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchAuditLogs({
+          search: search || undefined,
+          actionType: actionType || undefined,
+          actorRole: actorRole || undefined,
+          entityType: entityType || undefined,
+          fromDate: fromDate || undefined,
+          toDate: toDate || undefined,
+        });
+        setLogs(data);
+      } finally {
+        setIsLoading(false);
       }
+    };
+
+    loadLogs();
+  }, [search, actionType, actorRole, entityType, fromDate, toDate]);
+
+  const totalPages = Math.ceil(logs.length / itemsPerPage);
+  const paginatedLogs = useMemo(
+    () => logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+    [logs, currentPage],
+  );
+
+  useEffect(() => {
+    if (currentPage > 1 && currentPage > Math.max(totalPages, 1)) {
+      setCurrentPage(1);
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [currentPage, totalPages]);
 
-  // Derived state
-  const filteredLogs = useMemo(() => {
-    return MOCK_LOGS.filter(log => {
-      const matchSearch = 
-        log.adminName.toLowerCase().includes(search.toLowerCase()) ||
-        log.action.toLowerCase().includes(search.toLowerCase()) ||
-        log.ip.includes(search) ||
-        log.id.toLowerCase().includes(search.toLowerCase())
-      
-      const matchCategory = filterCategory === 'All' || log.category === filterCategory
+  const activeFiltersCount = [search, actionType, actorRole, entityType, fromDate, toDate].filter(Boolean).length;
 
-      return matchSearch && matchCategory
-    }).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-  }, [search, filterCategory])
+  const clearFilters = () => {
+    setSearch('');
+    setActionType('');
+    setActorRole('');
+    setEntityType('');
+    setFromDate('');
+    setToDate('');
+    setCurrentPage(1);
+  };
 
-  const totalPages = Math.ceil(filteredLogs.length / itemsPerPage)
-  const paginatedLogs = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+  const exportCsv = () => {
+    const header = ['Log ID', 'Timestamp', 'Actor Name', 'Actor Role', 'Action Type', 'Entity Type', 'Entity ID', 'Action', 'IP'];
+    const rows = logs.map((log) => ([
+      log.id,
+      log.timestamp,
+      log.actorName,
+      log.actorRole,
+      log.actionType,
+      log.entityType,
+      log.entityId,
+      log.action,
+      log.ip,
+    ].map((value) => escapeCsv(String(value))).join(',')));
+
+    const csv = [header.map((column) => escapeCsv(column)).join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = `audit-logs-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="space-y-6 pb-6 max-w-[1400px] mx-auto">
-      {/* ── Page Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 scroll-animate delay-75 relative z-30">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 relative z-30">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Audit Logs</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
-            Immutable system-wide activity monitoring.
-          </p>
+          <p className="text-sm text-gray-500 mt-0.5">Read-only audit trail of ads, payments, logins, and approvals.</p>
         </div>
-        <button className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm">
+        <button onClick={exportCsv} className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm">
           <Download size={16} /> Export Logs (CSV)
         </button>
       </div>
 
-      {/* ── Filter Bar ── */}
-      <div className="glass-card p-4 flex flex-col md:flex-row gap-4 items-center justify-between relative z-20 scroll-animate delay-150">
-        <div className="flex items-center w-full gap-4 flex-col sm:flex-row">
-          {/* Search Box */}
-          <div className="relative w-full md:max-w-xs">
+      <div className="glass-card p-4 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3">
+          <div className="relative xl:col-span-2">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search ID, IP, or Admin..."
+              placeholder="Search actor, action, id, ip..."
               value={search}
-              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1) }}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all font-medium text-gray-700 placeholder:font-normal"
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+              className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
             />
           </div>
 
-          <div className="h-4 w-px bg-gray-200 hidden sm:block" />
+          <select value={actionType} onChange={(e) => { setActionType(e.target.value as ActionType | ''); setCurrentPage(1); }} className="px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none">
+            <option value="">All Action Types</option>
+            <option value="Ad Creation">Ad Creation</option>
+            <option value="Ad Update">Ad Update</option>
+            <option value="Payment">Payment</option>
+            <option value="Login">Login</option>
+            <option value="Approval">Approval</option>
+          </select>
 
-          {/* Custom Category Dropdown */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors w-full sm:w-auto"
-            >
-              <Filter size={16} className="text-gray-400" />
-              {filterCategory === 'All' ? 'All Categories' : filterCategory}
-            </button>
-            
-            {showCategoryDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-xl z-50 overflow-hidden animate-fade-in" style={{ animationDuration: '0.15s' }}>
-                <div className="p-1">
-                  {(['All', 'Security', 'Content', 'System', 'Users'] as LogCategory[]).map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => { setFilterCategory(cat); setShowCategoryDropdown(false); setCurrentPage(1) }}
-                      className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${filterCategory === cat ? 'bg-primary-50 text-primary-700 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium'}`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+          <select value={actorRole} onChange={(e) => { setActorRole(e.target.value as ActorRole | ''); setCurrentPage(1); }} className="px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none">
+            <option value="">All Actors</option>
+            <option value="Super Admin">Super Admin</option>
+            <option value="Admin">Admin</option>
+            <option value="Publisher">Publisher</option>
+          </select>
+
+          <select value={entityType} onChange={(e) => { setEntityType(e.target.value as EntityType | ''); setCurrentPage(1); }} className="px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none">
+            <option value="">All Entities</option>
+            <option value="Ad">Ad</option>
+            <option value="Payment">Payment</option>
+            <option value="Account">Account</option>
+            <option value="Session">Session</option>
+          </select>
+
+          <div className="flex items-center gap-2 xl:col-span-1">
+            <input type="date" value={fromDate} onChange={(e) => { setFromDate(e.target.value); setCurrentPage(1); }} className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none" />
+            <input type="date" value={toDate} onChange={(e) => { setToDate(e.target.value); setCurrentPage(1); }} className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none" />
           </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="inline-flex items-center gap-2 text-xs text-gray-500">
+            <Shield size={14} className="text-primary-500" />
+            Immutable logs: entries cannot be edited or deleted.
+          </div>
+          {activeFiltersCount > 0 && (
+            <button onClick={clearFilters} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-100 text-xs font-medium text-gray-700 border border-gray-200 hover:bg-gray-200">
+              <Filter size={12} /> Clear Filters <X size={12} />
+            </button>
+          )}
         </div>
       </div>
 
-      {/* ── Active Filters Summary ── */}
-      {(search || filterCategory !== 'All') && (
-        <div className="flex items-center gap-2 scroll-animate delay-200">
-          <span className="text-xs font-semibold text-gray-500">Active Filters:</span>
-          {search && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-100 text-xs font-medium text-gray-700 border border-gray-200">
-              Query: "{search}"
-              <button onClick={() => setSearch('')} className="hover:text-red-500"><X size={12} /></button>
-            </span>
-          )}
-          {filterCategory !== 'All' && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-100 text-xs font-medium text-gray-700 border border-gray-200">
-              Category: {filterCategory}
-              <button onClick={() => setFilterCategory('All')} className="hover:text-red-500"><X size={12} /></button>
-            </span>
-          )}
-        </div>
-      )}
-
-      {/* ── Data Table ── */}
-      <div className="glass-card flex-1 overflow-hidden flex flex-col p-0 scroll-animate delay-300">
+      <div className="glass-card flex-1 overflow-hidden flex flex-col p-0">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead className="bg-gray-50/50">
               <tr>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Log Timestamp</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Administrator</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Category</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Action Description</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Source IP</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Timestamp</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Actor</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Action Type</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Entity</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">Action</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">IP</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {paginatedLogs.length > 0 ? (
+              {isLoading ? (
+                Array.from({ length: 8 }).map((_, idx) => (
+                  <tr key={idx} className="animate-pulse">
+                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-28" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-24" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-20" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-16" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-56" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-20" /></td>
+                  </tr>
+                ))
+              ) : paginatedLogs.length > 0 ? (
                 paginatedLogs.map((log) => {
-                  const dateObj = new Date(log.timestamp)
+                  const dateObj = new Date(log.timestamp);
                   return (
-                    <tr key={log.id} className="hover:bg-gray-50/50 transition-colors group">
+                    <tr key={log.id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-semibold text-gray-900">
                           {dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -194,43 +254,33 @@ export default function AuditLogs() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center font-bold text-xs uppercase shadow-sm">
-                            {log.adminName.substring(0, 2)}
-                          </div>
-                          <div>
-                            <div className="text-sm font-bold text-gray-900">{log.adminName}</div>
-                            <div className="text-xs text-gray-500">{log.adminEmail}</div>
-                          </div>
-                        </div>
+                        <div className="text-sm font-bold text-gray-900">{log.actorName}</div>
+                        <div className="text-xs text-gray-500">{log.actorRole}</div>
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap">{getActionBadge(log.actionType)}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {getCategoryBadge(log.category)}
+                        <div className="text-sm font-medium text-gray-700">{log.entityType}</div>
+                        <div className="text-xs text-gray-500">{log.entityId}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-gray-700 max-w-md">
-                          {log.action}
-                        </div>
-                        <div className="text-xs text-gray-400 mt-1 uppercase tracking-wider font-semibold">
-                          {log.id}
-                        </div>
+                        <div className="text-sm font-medium text-gray-700">{log.action}</div>
+                        <div className="text-xs text-gray-400 mt-1 uppercase tracking-wider font-semibold">{log.id}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 text-xs font-medium font-mono">
-                          <Monitor size={12} className="text-gray-400" />
                           {log.ip}
                         </div>
                       </td>
                     </tr>
-                  )
+                  );
                 })
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center">
+                  <td colSpan={6} className="px-6 py-12 text-center">
                     <div className="flex flex-col items-center justify-center text-gray-500">
                       <Search size={40} className="text-gray-300 mb-3" />
                       <p className="text-sm font-medium text-gray-900">No logs found</p>
-                      <p className="text-xs mt-1">Try adjusting your active filters.</p>
+                      <p className="text-xs mt-1">Try adjusting your filters.</p>
                     </div>
                   </td>
                 </tr>
@@ -239,29 +289,26 @@ export default function AuditLogs() {
           </table>
         </div>
 
-        {/* ── Pagination Footer ── */}
         {totalPages > 1 && (
           <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/30 flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-500">
-              Showing <span className="text-gray-900">{((currentPage - 1) * itemsPerPage) + 1}</span> to <span className="text-gray-900">{Math.min(currentPage * itemsPerPage, filteredLogs.length)}</span> of <span className="text-gray-900">{filteredLogs.length}</span> logs
+              Showing <span className="text-gray-900">{((currentPage - 1) * itemsPerPage) + 1}</span> to <span className="text-gray-900">{Math.min(currentPage * itemsPerPage, logs.length)}</span> of <span className="text-gray-900">{logs.length}</span> logs
             </span>
             <div className="flex items-center gap-1">
-              <button 
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ChevronLeft size={16} />
               </button>
-              
-              <div className="px-3 text-xs font-bold text-gray-700">
-                Page {currentPage} of {totalPages}
-              </div>
 
-              <button 
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              <div className="px-3 text-xs font-bold text-gray-700">Page {currentPage} of {totalPages}</div>
+
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ChevronRight size={16} />
               </button>
@@ -269,7 +316,6 @@ export default function AuditLogs() {
           </div>
         )}
       </div>
-
     </div>
-  )
+  );
 }

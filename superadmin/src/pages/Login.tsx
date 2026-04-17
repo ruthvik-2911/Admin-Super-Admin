@@ -51,6 +51,10 @@ export default function Login() {
       setAuthMessage('Session expired. Please login again.')
       return
     }
+    if (reason === 'forbidden') {
+      setAuthMessage('You do not have permission to access that module.')
+      return
+    }
 
     setAuthMessage('')
   }, [location.search])
@@ -88,7 +92,7 @@ export default function Login() {
 
     try {
       const response = await loginSuperAdmin(email, password)
-      persistAuthSession(email, response.token, response.expiresInHours ?? 24)
+      persistAuthSession(response)
       setLoading(false)
       navigate('/dashboard', { replace: true })
     } catch (error) {

@@ -226,6 +226,31 @@ private SessionData getSessionAnalytics(HttpServletRequest request) {
 
     return s;
 }
+
+private void logSiteHit(location location, String userAgent) {
+    hitRecord hit = new hitRecord();
+    hit.setLatitude(location.getLat());
+    hit.setLongitude(location.getLng());
+    hit.setUserAgent(userAgent);
+    hit.setEventType("PAGE_HIT");
+    hitRecordRepository.save(hit);
+}
+
+private void logAdEvent(String latitude, String longitude, String userAgent, String campaignId, String advertisementId, String eventType) {
+    hitRecord hit = new hitRecord();
+    hit.setLatitude(latitude);
+    hit.setLongitude(longitude);
+    hit.setUserAgent(userAgent);
+    hit.setCampaignId(campaignId);
+    hit.setAdvertisementId(advertisementId);
+    hit.setEventType(eventType);
+    hitRecordRepository.save(hit);
+}
+
+private String sessionValue(HttpSession session, String key) {
+    Object value = session.getAttribute(key);
+    return value == null ? null : String.valueOf(value);
+}
 @PostMapping("/location")
 public String getHomePage(@RequestBody location location,HttpSession session, HttpServletRequest request) {
 	 System.out.println("Location in ajax : " +location);
@@ -248,11 +273,7 @@ public String getHomePage(@RequestBody location location,HttpSession session, Ht
 		//session.invalidate();
 		
 		// 1. LOG THE HIT RECORD (NEW LOGIC)
-        hitRecord hit = new hitRecord();
-        hit.setLatitude(location.getLat());
-        hit.setLongitude(location.getLng());
-        hit.setUserAgent(userAgent);
-        hitRecordRepository.save(hit);
+        logSiteHit(location, userAgent);
         
         
    /*     String latFile = location.getLat();
@@ -2484,19 +2505,38 @@ public String idd(@RequestParam String buttonId,HttpSession session ,HttpServlet
 {
 	session.setAttribute("adId",buttonId );
 //	System.out.println("id receibed: " +buttonId);
+	ad_campaigns adDetail = ad_campaignsRepo.findByIdadDetails(buttonId);
+	if (adDetail != null) {
+		logAdEvent(
+				sessionValue(session, "latitude"),
+				sessionValue(session, "longitude"),
+				request.getHeader("User-Agent"),
+				adDetail.getId(),
+				adDetail.getAdvertisementId(),
+				"AD_CLICK");
+	}
 	
 		   return new Gson().toJson(buttonId);
 	
 }
 
 @GetMapping("adDetailsview")
-public ModelAndView adDetailsview(HttpSession session)
+public ModelAndView adDetailsview(HttpSession session, HttpServletRequest request)
 {
 	String buttonId = (String)session.getAttribute("adId");
 	
 	 double lat = Double.parseDouble((String)session.getAttribute("latitude"));
 	  double lng = Double.parseDouble((String)session.getAttribute("longitude"));
 	ad_campaigns adDetail = ad_campaignsRepo.findByIdadDetails(buttonId);
+	if (adDetail != null) {
+		logAdEvent(
+				sessionValue(session, "latitude"),
+				sessionValue(session, "longitude"),
+				request.getHeader("User-Agent"),
+				adDetail.getId(),
+				adDetail.getAdvertisementId(),
+				"AD_VIEW");
+	}
 //	System.out.println("List : " +adDetail);
 	ArrayList<ad_campaigns> ul=new ArrayList<ad_campaigns>();
 	List<ad_campaigns> list = ad_campaignsRepo.findByLat();
@@ -3853,6 +3893,15 @@ public Map<String, Object> toshowotheradsbypubli(@RequestParam("adId") String ad
 	 double lat = Double.parseDouble((String)session.getAttribute("latitude"));
 	  double lng = Double.parseDouble((String)session.getAttribute("longitude"));
 	ad_campaigns adDetail = ad_campaignsRepo.findByIdadDetails(adcampaignId);
+	if (adDetail != null) {
+		logAdEvent(
+				sessionValue(session, "latitude"),
+				sessionValue(session, "longitude"),
+				request.getHeader("User-Agent"),
+				adDetail.getId(),
+				adDetail.getAdvertisementId(),
+				"AD_VIEW");
+	}
 	ArrayList<ad_campaigns> ul=new ArrayList<ad_campaigns>();
 	  double lat1 = 0.0;
 	  double lng1 = 0.0;double lat2 = 0.0;
@@ -5284,11 +5333,7 @@ System.out.println("list size of active: " +list.size());
 System.out.println("------"+list.size());		
 int j=0;
 
-hitRecord hit = new hitRecord();
-hit.setLatitude(location.getLat());
-hit.setLongitude(location.getLng());
-hit.setUserAgent(userAgent);
-hitRecordRepository.save(hit);
+logSiteHit(location, userAgent);
 
 for(ad_campaigns item1:list)
 {
@@ -10277,6 +10322,15 @@ public ModelAndView getVehicleDetails(@RequestParam("id") String id,HttpSession 
 	//m.setViewName("index");
 	
 	ad_campaigns adDetail = ad_campaignsRepo.findByIdadDetails(id);
+	if (adDetail != null) {
+		logAdEvent(
+				sessionValue(session, "latitude"),
+				sessionValue(session, "longitude"),
+				request.getHeader("User-Agent"),
+				adDetail.getId(),
+				adDetail.getAdvertisementId(),
+				"AD_VIEW");
+	}
 	double lat=  Double.parseDouble((String)session.getAttribute("latitude"));	
 	double lng = Double.parseDouble((String) session.getAttribute("longitude"));
 	ArrayList<ad_campaigns> ul=new ArrayList<ad_campaigns>();
