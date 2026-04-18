@@ -38,7 +38,24 @@ public class JwtService {
                 .subject(admin.getEmail())
                 .claim("role", normalizedRole)
                 .claim("adminId", admin.getId())
+                .claim("type", "SUPER_ADMIN")
                 .claim("permissions", admin.getPermissions() == null ? Map.of() : admin.getPermissions())
+                .issuedAt(now)
+                .expiration(expiry)
+                .signWith(signingKey)
+                .compact();
+    }
+
+    public String generateToken(org.jackfruit.keliri.model.users user) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + expirationMs);
+
+        return Jwts.builder()
+                .subject(user.getEmailAddress() != null ? user.getEmailAddress() : user.getPhoneNumber().getDialNumber())
+                .claim("userId", user.getId())
+                .claim("role", user.getUserType())
+                .claim("type", "ADMIN")
+                .claim("name", user.getFullName())
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(signingKey)

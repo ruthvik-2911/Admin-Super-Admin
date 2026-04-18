@@ -14,6 +14,8 @@ import {
   Loader2,
   RefreshCw,
 } from 'lucide-react';
+import { adminApi } from '../../services/api';
+import { toast } from 'react-hot-toast';
 
 type RegistrationStatus = 'approved' | 'pending' | 'rejected';
 
@@ -67,21 +69,41 @@ const statusConfig = {
 
 export default function RegistrationStatus() {
   const navigate = useNavigate();
+  const [status, setStatus] = useState<RegistrationStatus>('pending');
+  const [reason, setReason] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState('');
+
+  const fetchStatus = async (emailToFetch: string) => {
+    try {
+      const response = await adminApi.checkRegistrationStatus(emailToFetch);
+      if (response.success) {
+        setStatus(response.status.toLowerCase() as RegistrationStatus);
+        setReason(response.rejectionReason);
+      }
+    } catch (error: any) {
+      console.error('Error fetching status:', error);
+      // If 404, might be a demo or wrong email
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('registrationEmail');
     const urlParams = new URLSearchParams(window.location.search);
     const emailParam = urlParams.get('email');
     const emailToUse = storedEmail || emailParam || '';
-    setEmail(emailToUse || 'demo@example.com');
-    setTimeout(() => setIsLoading(false), 1000);
+    
+    if (emailToUse) {
+      setEmail(emailToUse);
+      fetchStatus(emailToUse);
+    } else {
+      setIsLoading(false);
+      // Fallback
+      setEmail('No email found');
+    }
   }, []);
-
-  // Hardcoded approved status for demo
-  const status: RegistrationStatus = 'approved';
-  const reason = undefined;
 
   const handleGoToLogin = () => {
     localStorage.removeItem('registrationEmail');

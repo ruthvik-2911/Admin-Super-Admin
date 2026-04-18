@@ -27,6 +27,10 @@ public class users {
     private double latitude;
     private double longitude;
     
+    private String password;
+    private String companyName;
+    private String accountStatus; // ACTIVE, SUSPENDED, PENDING
+    
     
 	public double getLatitude() {
 		return latitude;
@@ -74,6 +78,30 @@ public class users {
 
 	public void setUserType(String userType) {
 		this.userType = userType;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getAccountStatus() {
+		return accountStatus;
+	}
+
+	public void setAccountStatus(String accountStatus) {
+		this.accountStatus = accountStatus;
 	}
 
 

@@ -34,16 +34,15 @@ import org.springframework.http.HttpStatus;
 public class SuperAdminManagementService {
     private static final ZoneId ZONE_ID = ZoneId.systemDefault();
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
-    private static final List<String> FALLBACK_STATUSES = List.of("Pending", "Active", "Rejected", "Suspended");
 
     private final usersRepository usersRepository;
     private final ad_campaignsRepository campaignsRepository;
     private final advertisementsRepository advertisementsRepository;
     private final txn_user_locationsRepository locationsRepository;
     private final hitRecordRepository hitRecordRepository;
+    private final org.jackfruit.keliri.repository.AdminRegistrationRepository registrationRepository;
+    private final org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder passwordEncoder = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
 
-    private final Map<String, String> adminStatusOverrides = new ConcurrentHashMap<>();
-    private final Map<String, String> adminRejectionReasons = new ConcurrentHashMap<>();
     private final List<SuperAdminManagementResponse.EmailNotificationRecord> emailNotifications = new CopyOnWriteArrayList<>();
     private final List<SuperAdminManagementResponse.AuditLogRecord> actionAuditLogs = new CopyOnWriteArrayList<>();
 
@@ -52,62 +51,134 @@ public class SuperAdminManagementService {
             ad_campaignsRepository campaignsRepository,
             advertisementsRepository advertisementsRepository,
             txn_user_locationsRepository locationsRepository,
-            hitRecordRepository hitRecordRepository) {
+            hitRecordRepository hitRecordRepository,
+            org.jackfruit.keliri.repository.AdminRegistrationRepository registrationRepository) {
         this.usersRepository = usersRepository;
         this.campaignsRepository = campaignsRepository;
         this.advertisementsRepository = advertisementsRepository;
         this.locationsRepository = locationsRepository;
         this.hitRecordRepository = hitRecordRepository;
+        this.registrationRepository = registrationRepository;
     }
 
     public List<SuperAdminManagementResponse.AdminRecord> getAdmins(String search, String status) {
-        List<SuperAdminManagementResponse.AdminRecord> admins = usersRepository.findbygivendor().stream()
+        List<SuperAdminManagementResponse.AdminRecord> admins = new ArrayList<>();
+        
+        // 1. Get real admins (Active/Suspended)
+        admins.addAll(usersRepository.findbygivendor().stream()
                 .map(this::toAdminRecord)
-                .sorted(Comparator.comparing(SuperAdminManagementResponse.AdminRecord::getRegisteredDate).reversed())
-                .toList();
+                .toList());
+        
+        // 2. Get pending/rejected registrations
+        admins.addAll(registrationRepository.findAll().stream()
+                .filter(reg -> !"APPROVED".equals(reg.getStatus())) // Approved registrations already have a users record
+                .map(this::registrationToAdminRecord)
+                .toList());
 
         return admins.stream()
                 .filter(admin -> matchesAdminFilters(admin, search, status))
+                .sorted(Comparator.comparing(SuperAdminManagementResponse.AdminRecord::getRegisteredDate).reversed())
                 .toList();
     }
 
     public SuperAdminManagementResponse.AdminDetail getAdminDetail(String adminId) {
+        // Try finding in active users
         users admin = usersRepository.findbygivendor().stream()
                 .filter(user -> Objects.equals(user.getId(), adminId))
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin not found"));
+                .orElse(null);
+
+        if (admin != null) {
+            SuperAdminManagementResponse.AdminDetail detail = new SuperAdminManagementResponse.AdminDetail();
+            SuperAdminManagementResponse.AdminRecord base = toAdminRecord(admin);
+            copyAdmin(base, detail);
+
+            List<SuperAdminManagementResponse.PublisherRecord> linkedPublishers = getPublishers(null, null, null, null).stream()
+                    .filter(publisher -> adminId.equals(publisher.getAdminId()))
+                    .toList();
+
+            List<SuperAdminManagementResponse.PublisherMini> minis = linkedPublishers.stream().map(publisher -> {
+                SuperAdminManagementResponse.PublisherMini mini = new SuperAdminManagementResponse.PublisherMini();
+                mini.setId(publisher.getId());
+                mini.setName(publisher.getName());
+                mini.setStatus(publisher.getStatus());
+                mini.setAdsPosted(publisher.getAdsPosted());
+                return mini;
+            }).toList();
+
+            detail.setPublishers(minis);
+            detail.setDocuments(buildDocuments(adminId));
+            detail.setPerformance(buildPerformance(linkedPublishers));
+            return detail;
+        }
+
+        // Try finding in registrations
+        org.jackfruit.keliri.model.AdminRegistration reg = registrationRepository.findById(adminId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin/Registration not found"));
 
         SuperAdminManagementResponse.AdminDetail detail = new SuperAdminManagementResponse.AdminDetail();
-        SuperAdminManagementResponse.AdminRecord base = toAdminRecord(admin);
+        SuperAdminManagementResponse.AdminRecord base = registrationToAdminRecord(reg);
         copyAdmin(base, detail);
+        detail.setPhone(reg.getMobileNumber()); // Ensure phone is set
 
-        List<SuperAdminManagementResponse.PublisherRecord> linkedPublishers = getPublishers(null, null, null, null).stream()
-                .filter(publisher -> adminId.equals(publisher.getAdminId()))
-                .toList();
-
-        List<SuperAdminManagementResponse.PublisherMini> minis = linkedPublishers.stream().map(publisher -> {
-            SuperAdminManagementResponse.PublisherMini mini = new SuperAdminManagementResponse.PublisherMini();
-            mini.setId(publisher.getId());
-            mini.setName(publisher.getName());
-            mini.setStatus(publisher.getStatus());
-            mini.setAdsPosted(publisher.getAdsPosted());
-            return mini;
-        }).toList();
-
-        detail.setPublishers(minis);
-        detail.setDocuments(buildDocuments(adminId));
-        detail.setPerformance(buildPerformance(linkedPublishers));
+        // Documents are hidden for now (mocked) to avoid S3 link errors
+        detail.setDocuments(new ArrayList<>());
+        detail.setPublishers(new ArrayList<>());
+        detail.setPerformance(new SuperAdminManagementResponse.PerformanceSummary());
+        
         return detail;
     }
 
+    private SuperAdminManagementResponse.DocumentItem newDocument(String name, String type, String url) {
+        SuperAdminManagementResponse.DocumentItem doc = new SuperAdminManagementResponse.DocumentItem();
+        doc.setName(name);
+        doc.setType(type);
+        doc.setUrl(url);
+        return doc;
+    }
+
     public SuperAdminManagementResponse.AdminActionResponse approveAdmin(String adminId) {
-        return applyAdminAction(adminId, "Active", null, "Admin registration approved", "Approval confirmation + access details delivered.", "Approval");
+        org.jackfruit.keliri.model.AdminRegistration registration = registrationRepository.findById(adminId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration not found"));
+
+        if (!"PENDING".equals(registration.getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only pending registrations can be approved");
+        }
+
+        registration.setStatus("APPROVED");
+        registration.setProcessedAt(Instant.now());
+        registrationRepository.save(registration);
+
+        // Create the user account
+        users user = usersRepository.findByEmailAddress(registration.getEmailId())
+                .orElse(new users());
+        
+        user.setEmailAddress(registration.getEmailId());
+        user.setFullName(registration.getAuthorizedPerson());
+        user.setCompanyName(registration.getCompanyName());
+        user.setPassword(registration.getPassword()); // Already hashed in registration controller
+        user.setGivendor(1);
+        user.setUserType("ADMIN");
+        user.setAccountStatus("ACTIVE");
+        
+        usersRepository.save(user);
+
+        return applyAdminAction(adminId, "Active", null, "Admin registration approved", 
+                "Approval confirmation + access details delivered.", "Approval");
     }
 
     public SuperAdminManagementResponse.AdminActionResponse rejectAdmin(String adminId, String reason) {
         if (reason == null || reason.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reason is mandatory for rejection");
         }
+
+        org.jackfruit.keliri.model.AdminRegistration registration = registrationRepository.findById(adminId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration not found"));
+
+        registration.setStatus("REJECTED");
+        registration.setRejectionReason(reason);
+        registration.setProcessedAt(Instant.now());
+        registrationRepository.save(registration);
 
         return applyAdminAction(
                 adminId,
@@ -119,11 +190,19 @@ public class SuperAdminManagementService {
     }
 
     public SuperAdminManagementResponse.AdminActionResponse suspendAdmin(String adminId) {
-        return applyAdminAction(adminId, "Suspended", null, null, null, "Approval");
+        users user = usersRepository.findById(adminId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin not found"));
+        user.setAccountStatus("SUSPENDED");
+        usersRepository.save(user);
+        return applyAdminAction(adminId, "Suspended", null, null, null, "Account");
     }
 
     public SuperAdminManagementResponse.AdminActionResponse reinstateAdmin(String adminId) {
-        return applyAdminAction(adminId, "Active", null, null, null, "Approval");
+        users user = usersRepository.findById(adminId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin not found"));
+        user.setAccountStatus("ACTIVE");
+        usersRepository.save(user);
+        return applyAdminAction(adminId, "Active", null, null, null, "Account");
     }
 
     public List<SuperAdminManagementResponse.EmailNotificationRecord> getEmailNotifications() {
@@ -158,23 +237,23 @@ public class SuperAdminManagementService {
 
         List<SuperAdminManagementResponse.PublisherRecord> records = new ArrayList<>();
         for (users publisher : publishers) {
-            String assignedAdminId = admins.get(Math.abs(publisher.getId().hashCode()) % admins.size()).getId();
-            SuperAdminManagementResponse.AdminRecord assignedAdmin = admins.stream()
-                    .filter(admin -> admin.getId().equals(assignedAdminId))
-                    .findFirst()
-                    .orElse(admins.get(0));
+            // Only show publishers that are NOT admins (givendor != 1)
+            if (publisher.getGivendor() == 1) continue;
+
+            // Simple assignment logic: find an admin that might be responsible or just list them
+            SuperAdminManagementResponse.AdminRecord assignedAdmin = admins.isEmpty() ? null : admins.get(0);
 
             List<ad_campaigns> publisherCampaigns = campaignsByPublisher.getOrDefault(publisher.getId(), List.of());
             long adsPosted = publisherCampaigns.size();
-            long impressions = adsPosted == 0 ? 0 : adsPosted * 4200L + Math.abs(publisher.getId().hashCode() % 10000);
-            long clicks = impressions == 0 ? 0 : Math.max(1, Math.round(impressions * (0.018 + (Math.abs(publisher.getId().hashCode() % 20) / 1000.0))));
+            long impressions = adsPosted == 0 ? 0 : adsPosted * 4200L;
+            long clicks = impressions == 0 ? 0 : Math.round(impressions * 0.02);
             double engagement = impressions == 0 ? 0 : roundToTwoDecimals((clicks * 100.0) / impressions);
 
             SuperAdminManagementResponse.PublisherRecord record = new SuperAdminManagementResponse.PublisherRecord();
             record.setId(publisher.getId());
             record.setName(defaultString(publisher.getFullName(), "Publisher"));
-            record.setAdminId(assignedAdmin.getId());
-            record.setAdminName(defaultString(assignedAdmin.getName(), "Admin"));
+            record.setAdminId(assignedAdmin != null ? assignedAdmin.getId() : "SYSTEM");
+            record.setAdminName(assignedAdmin != null ? assignedAdmin.getName() : "System");
             record.setLocation(resolveLocationLabel(publisher, locationsById));
             record.setAdsPosted(adsPosted);
             record.setImpressions(impressions);
@@ -284,9 +363,9 @@ public class SuperAdminManagementService {
             String entityType,
             String fromDate,
             String toDate) {
-        List<SuperAdminManagementResponse.AuditLogRecord> generated = buildGeneratedAuditLogs();
+        // List<SuperAdminManagementResponse.AuditLogRecord> generated = buildGeneratedAuditLogs();
         List<SuperAdminManagementResponse.AuditLogRecord> allLogs = new ArrayList<>();
-        allLogs.addAll(generated);
+        // allLogs.addAll(generated);
         allLogs.addAll(actionAuditLogs);
 
         LocalDate from = parseDate(fromDate);
@@ -309,11 +388,6 @@ public class SuperAdminManagementService {
                 .filter(record -> record.getId().equals(adminId))
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin not found"));
-
-        adminStatusOverrides.put(adminId, newStatus);
-        if (reason != null && !reason.isBlank()) {
-            adminRejectionReasons.put(adminId, reason.trim());
-        }
 
         SuperAdminManagementResponse.EmailNotificationRecord emailNotification = null;
         if (emailTrigger != null) {
@@ -363,6 +437,18 @@ public class SuperAdminManagementService {
         return List.of(gst, company);
     }
 
+    private SuperAdminManagementResponse.AdminRecord registrationToAdminRecord(org.jackfruit.keliri.model.AdminRegistration reg) {
+        SuperAdminManagementResponse.AdminRecord record = new SuperAdminManagementResponse.AdminRecord();
+        record.setId(reg.getId());
+        record.setName(reg.getAuthorizedPerson());
+        record.setEmail(reg.getEmailId());
+        record.setCompany(reg.getCompanyName());
+        record.setRegisteredDate(reg.getSubmittedAt().atZone(ZONE_ID).toLocalDate().format(DATE_FORMATTER));
+        record.setStatus(reg.getStatus().substring(0, 1).toUpperCase() + reg.getStatus().substring(1).toLowerCase());
+        record.setPhone(reg.getMobileNumber());
+        return record;
+    }
+
     private SuperAdminManagementResponse.PerformanceSummary buildPerformance(List<SuperAdminManagementResponse.PublisherRecord> linkedPublishers) {
         long totalAds = linkedPublishers.stream().mapToLong(SuperAdminManagementResponse.PublisherRecord::getAdsPosted).sum();
         long totalImpressions = linkedPublishers.stream().mapToLong(SuperAdminManagementResponse.PublisherRecord::getImpressions).sum();
@@ -382,7 +468,7 @@ public class SuperAdminManagementService {
         record.setEmail(defaultString(user.getEmailAddress(), "not-available@keliri.com"));
         record.setCompany(resolveCompanyName(user));
         record.setRegisteredDate(resolveDateFromObjectId(user.getId()));
-        record.setStatus(resolveAdminStatus(user.getId()));
+        record.setStatus(defaultString(user.getAccountStatus(), "Active"));
         record.setPhone(resolvePhone(user));
         return record;
     }
@@ -538,13 +624,6 @@ public class SuperAdminManagementService {
         }
     }
 
-    private String resolveAdminStatus(String adminId) {
-        if (adminStatusOverrides.containsKey(adminId)) {
-            return adminStatusOverrides.get(adminId);
-        }
-
-        return FALLBACK_STATUSES.get(Math.abs(adminId.hashCode()) % FALLBACK_STATUSES.size());
-    }
 
     private String resolvePublisherStatus(List<ad_campaigns> campaigns) {
         if (campaigns.isEmpty()) {

@@ -324,7 +324,10 @@ const AdminManagement = () => {
               <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Verification Documents</h4>
               <div className="space-y-2">
                 {documents.map((doc, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-xl hover:border-primary-200 transition-all cursor-pointer group">
+                  <div key={idx} 
+                    className="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-xl hover:border-primary-200 transition-all cursor-pointer group"
+                    onClick={() => doc.url && window.open(doc.url, '_blank')}
+                  >
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-red-50 text-red-500 rounded-lg">
                         <FileText size={18} />

@@ -29,4 +29,6 @@ public interface usersRepository extends MongoRepository<users, String>{
 	 @Query(value = "{'_id': { '$in': ?0 }}", fields = "{'fullName':1,'emailAddress':1,'lastKnownLocation':1,'profilePicPath':1}")
 	 List<users> findDashboardUsersByIds(List<String> ids);
 	 
+	 Optional<users> findByEmailAddress(String emailAddress);
+	 
 }

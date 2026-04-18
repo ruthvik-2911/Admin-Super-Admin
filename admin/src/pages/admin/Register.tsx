@@ -16,7 +16,12 @@ import {
   Upload,
   ArrowRight,
   Loader2,
+  Lock,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
+import { adminApi } from '../../services/api';
+import { toast } from 'react-hot-toast';
 
 export default function AdminRegister() {
   const navigate = useNavigate();
@@ -24,6 +29,8 @@ export default function AdminRegister() {
   const [gstCertFile, setGstCertFile] = useState<File | null>(null);
   const [companyDocFile, setCompanyDocFile] = useState<File | null>(null);
   const [idProofFile, setIdProofFile] = useState<File | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -35,12 +42,54 @@ export default function AdminRegister() {
   const gstNumber = watch('gstNumber');
   const showGstCertificate = Boolean(gstNumber?.trim());
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
+    if (data.password !== data.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (!companyDocFile || !idProofFile) {
+      toast.error('Please upload all required documents');
+      return;
+    }
+
+    if (showGstCertificate && !gstCertFile) {
+      toast.error('Please upload your GST certificate');
+      return;
+    }
+
     setIsSubmitting(true);
-    localStorage.setItem('registrationEmail', data.emailId);
-    setTimeout(() => {
-      navigate('/admin/status');
-    }, 1000);
+    try {
+      const formData = new FormData();
+      formData.append('companyName', data.companyName);
+      formData.append('authorizedPerson', data.authorizedPerson);
+      formData.append('businessAddress', data.businessAddress);
+      if (data.gstNumber) formData.append('gstNumber', data.gstNumber);
+      formData.append('mobileNumber', data.mobileNumber);
+      formData.append('emailId', data.emailId);
+      formData.append('password', data.password);
+      
+      formData.append('companyRegistrationDoc', companyDocFile);
+      formData.append('idProof', idProofFile);
+      if (gstCertFile) formData.append('gstCertificate', gstCertFile);
+
+      const response = await adminApi.register(formData);
+      
+      if (response.success) {
+        toast.success(response.message);
+        localStorage.setItem('registrationEmail', data.emailId);
+        setTimeout(() => {
+          navigate('/admin/status');
+        }, 1500);
+      } else {
+        toast.error(response.message || 'Registration failed');
+      }
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      toast.error(error.message || 'An unexpected error occurred');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClass =
@@ -298,6 +347,59 @@ export default function AdminRegister() {
                     />
                   </div>
                   {errors.emailId && <p className={errorClass}>{errors.emailId.message as string}</p>}
+                </div>
+
+                {/* Password */}
+                <div>
+                  <label className={labelClass}>Password <span className="text-red-500">*</span></label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                      <Lock className="w-[18px] h-[18px]" />
+                    </div>
+                    <input
+                      {...register('password', {
+                        required: 'Password is required',
+                        minLength: { value: 8, message: 'Password must be at least 8 characters' }
+                      })}
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      className={inputClass}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  {errors.password && <p className={errorClass}>{errors.password.message as string}</p>}
+                </div>
+
+                {/* Confirm Password */}
+                <div>
+                  <label className={labelClass}>Confirm Password <span className="text-red-500">*</span></label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                      <Lock className="w-[18px] h-[18px]" />
+                    </div>
+                    <input
+                      {...register('confirmPassword', {
+                        required: 'Please confirm your password'
+                      })}
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      className={inputClass}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && <p className={errorClass}>{errors.confirmPassword.message as string}</p>}
                 </div>
               </div>
             </div>
