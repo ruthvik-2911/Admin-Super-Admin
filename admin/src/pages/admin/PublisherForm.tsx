@@ -36,14 +36,28 @@ export default function PublisherForm() {
       const loadPublisher = async () => {
         try {
           const data = await getPublisherById(id)
+
+          // Parse lat/lng from "lat, lng" location string
+          let latitude: number | undefined
+          let longitude: number | undefined
+          if (data.location) {
+            const parts = data.location.split(',')
+            if (parts.length >= 2) {
+              const parsedLat = parseFloat(parts[0].trim())
+              const parsedLng = parseFloat(parts[1].trim())
+              if (!isNaN(parsedLat)) latitude = parsedLat
+              if (!isNaN(parsedLng)) longitude = parsedLng
+            }
+          }
+
           methods.reset({
             name: data.name,
             contactPerson: data.contactPerson,
             email: data.email,
-            mobile: data.mobile.replace(/[^0-9]/g, '').slice(-10), // Standardize to 10 digits for mock
-            address: (data as any).address || "",
-            latitude: (data as any).latitude,
-            longitude: (data as any).longitude,
+            mobile: data.mobile.replace(/[^0-9]/g, '').slice(-10),
+            address: data.address || '',
+            latitude,
+            longitude,
           })
         } catch (error) {
           toast.error("Failed to load publisher data")

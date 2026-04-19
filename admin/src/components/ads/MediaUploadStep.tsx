@@ -1,161 +1,126 @@
 import * as React from "react"
 import { useFormContext } from "react-hook-form"
-import { UploadCloud, X, Image as ImageIcon, Video, AlertCircle } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Type, AlertCircle } from "lucide-react"
 
-export function MediaUploadStep() {
-  const { register, watch, setValue, formState: { errors }, clearErrors } = useFormContext()
-  
-  const adType = watch("type")
-  const fileValue = watch("mediaFile")
-  
-  const [dragActive, setDragActive] = React.useState(false)
-  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null)
+import { BannerUploader } from "./BannerUploader"
+import { VideoUploader } from "./VideoUploader"
+import { ThumbnailUpload } from "./ThumbnailUpload"
 
-  const isVideo = adType === "Video"
-  const expectedFormat = isVideo ? "MP4 video" : "JPG/PNG image"
-  const maxSize = isVideo ? "50MB" : "10MB"
+// ─────────────────────────────────────────────
+// Types for local media state (stored outside RHF)
+// ─────────────────────────────────────────────
+export interface MediaState {
+  bannerFiles: File[]
+  videoFile: File | null
+  videoUrl: string
+  thumbnail: File | null
+}
 
-  React.useEffect(() => {
-    // If adType switches, maybe clear invalid files
-    if (fileValue instanceof File) {
-      const isActuallyVideo = fileValue.type.startsWith("video/")
-      if ((isVideo && !isActuallyVideo) || (!isVideo && isActuallyVideo)) {
-         handleRemove()
-      }
-    }
-  }, [adType])
+interface MediaUploadStepProps {
+  mediaState: MediaState
+  setMediaState: React.Dispatch<React.SetStateAction<MediaState>>
+  validationErrors: { [key: string]: string }
+}
 
-  const handleFile = (file: File) => {
-    // Basic validation
-    const isVideoFile = file.type.startsWith("video/")
-    const isImageFile = file.type.startsWith("image/")
+export function MediaUploadStep({ mediaState, setMediaState, validationErrors }: MediaUploadStepProps) {
+  const { watch } = useFormContext()
+  const adType: string = watch("type") // "Banner" | "Video" | "Thumbnail"
 
-    if (isVideo && !isVideoFile) {
-      setValue("mediaFile", null)
-      // Custom error logic or rely on Zod, but we'll reject via UI for smoothness
-      return
-    }
+  const isVideoAd   = adType === "Video"
+  const isBannerAd  = adType === "Banner"
+  const isTextAd    = adType === "Thumbnail" // Thumbnail = Text-only in this schema
 
-    if (!isVideo && !isImageFile) {
-      setValue("mediaFile", null)
-      return
-    }
-
-    // Set file
-    setValue("mediaFile", file, { shouldValidate: true })
-    clearErrors("mediaFile")
-    
-    // Create preview
-    const url = URL.createObjectURL(file)
-    setPreviewUrl(url)
-  }
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setDragActive(false)
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFile(e.dataTransfer.files[0])
-    }
-  }
-
-  const handleRemove = () => {
-    setValue("mediaFile", null, { shouldValidate: true })
-    if (previewUrl) URL.revokeObjectURL(previewUrl)
-    setPreviewUrl(null)
-  }
+  const adTypeLabel = isVideoAd ? "Video" : isBannerAd ? "Banner" : "Thumbnail (Text)"
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Upload Ad Media</h2>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-        Upload the creative asset for this ad. You selected a <strong>{adType}</strong> format, so please provide a {expectedFormat} under {maxSize}.
-      </p>
+      {/* Header */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Upload Ad Media</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          You selected a{" "}
+          <span className="font-bold text-brand-500">{adTypeLabel}</span> ad.{" "}
+          {isVideoAd && "Upload a video file or paste a URL, then add a thumbnail."}
+          {isBannerAd && "Upload 1–4 banner images and a thumbnail."}
+          {isTextAd && "No media upload needed for thumbnail/text ads."}
+        </p>
+      </div>
 
-      {!previewUrl ? (
-        <div 
-          className={`relative border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center text-center transition-all ${
-            dragActive 
-              ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10" 
-              : errors.mediaFile 
-                ? "border-red-300 bg-red-50 dark:border-red-900/50 dark:bg-red-500/10" 
-                : "border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#1C1F26] hover:border-gray-400 dark:hover:border-gray-600"
-          }`}
-          onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setDragActive(true) }}
-          onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setDragActive(false) }}
-          onDragOver={(e) => { e.preventDefault(); e.stopPropagation() }}
-          onDrop={handleDrop}
+      {/* ── Text / Thumbnail Ad — no upload needed ── */}
+      {isTextAd && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center justify-center gap-4 py-16 text-center"
         >
-          <div className="w-16 h-16 bg-white dark:bg-[#1A1D24] shadow-sm rounded-full flex items-center justify-center mb-4 text-brand-500">
-            {isVideo ? <Video className="w-8 h-8" /> : <ImageIcon className="w-8 h-8" />}
+          <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400">
+            <Type className="w-8 h-8" />
           </div>
-          
-          <p className="text-gray-900 dark:text-white font-semibold text-lg mb-1">
-            Drag & drop your {isVideo ? "video" : "image"} here
-          </p>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-            Files supported: {isVideo ? "MP4" : "JPEG, PNG"}. Max size: {maxSize}.
-          </p>
-          
-          <label className="cursor-pointer bg-white dark:bg-[#1A1D24] border border-gray-200 dark:border-gray-700 px-6 py-2.5 rounded-lg text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm">
-            Browse Files
-            <input 
-              type="file" 
-              className="hidden" 
-              accept={isVideo ? "video/mp4" : "image/jpeg,image/png"}
-              onChange={(e) => e.target.files && handleFile(e.target.files[0])}
-            />
-          </label>
-        </div>
-      ) : (
-        <div className="relative border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#1C1F26] rounded-2xl p-4 overflow-hidden">
-          <button 
-            onClick={handleRemove}
-            type="button"
-            className="absolute top-6 right-6 z-10 w-8 h-8 bg-black/50 hover:bg-red-500 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors shadow-sm"
+          <div>
+            <p className="font-bold text-gray-700 dark:text-gray-200 text-lg">No Media Required</p>
+            <p className="text-sm text-gray-400 mt-1">Thumbnail / Text ads are display-only. Click <strong>Continue</strong> to set geo-targeting.</p>
+          </div>
+        </motion.div>
+      )}
+
+      {/* ── Video Ad ── */}
+      <AnimatePresence mode="wait">
+        {isVideoAd && (
+          <motion.div
+            key="video"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-4"
           >
-            <X className="w-4 h-4" />
-          </button>
-          
-          <div className="w-full h-[300px] flex items-center justify-center bg-black/5 dark:bg-black/20 rounded-xl overflow-hidden">
-            {isVideo ? (
-              <video 
-                src={previewUrl} 
-                controls 
-                className="max-w-full max-h-full object-contain"
-              />
-            ) : (
-              <img 
-                src={previewUrl} 
-                alt="Ad Preview" 
-                className="max-w-full max-h-full object-contain"
-              />
-            )}
-          </div>
-          <div className="mt-4 flex items-center gap-3 px-2">
-            <UploadCloud className="w-5 h-5 text-gray-400" />
-            <div className="flex-1 overflow-hidden">
-              <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                {fileValue?.name || "Media File"}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {(fileValue?.size / (1024 * 1024)).toFixed(2)} MB
-              </p>
-            </div>
-            <div className="text-sm font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-3 py-1 rounded-full">
-              Ready
-            </div>
-          </div>
-        </div>
-      )}
+            <VideoUploader
+              videoFile={mediaState.videoFile}
+              videoUrl={mediaState.videoUrl}
+              onFileChange={(file) => setMediaState(s => ({ ...s, videoFile: file }))}
+              onUrlChange={(url) => setMediaState(s => ({ ...s, videoUrl: url }))}
+              error={validationErrors.video}
+            />
+            <ThumbnailUpload
+              thumbnail={mediaState.thumbnail}
+              onThumbnailChange={(file) => setMediaState(s => ({ ...s, thumbnail: file }))}
+              error={validationErrors.thumbnail}
+            />
+          </motion.div>
+        )}
 
-      {errors.mediaFile && (
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 mt-4 text-sm font-medium border border-red-100 dark:border-red-900/30">
+        {/* ── Banner Ad ── */}
+        {isBannerAd && (
+          <motion.div
+            key="banner"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-4"
+          >
+            <BannerUploader
+              files={mediaState.bannerFiles}
+              onFilesChange={(files) => setMediaState(s => ({ ...s, bannerFiles: files }))}
+              error={validationErrors.banner}
+            />
+            <ThumbnailUpload
+              thumbnail={mediaState.thumbnail}
+              onThumbnailChange={(file) => setMediaState(s => ({ ...s, thumbnail: file }))}
+              error={validationErrors.thumbnail}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Global error (fallback) */}
+      {validationErrors.general && (
+        <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 text-sm font-medium border border-red-100 dark:border-red-900/30">
           <AlertCircle className="w-5 h-5 flex-shrink-0" />
-          {errors.mediaFile.message as string}
+          {validationErrors.general}
         </div>
       )}
-
     </div>
   )
 }

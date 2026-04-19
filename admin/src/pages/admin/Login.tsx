@@ -14,6 +14,8 @@ import {
   ArrowRight
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { adminApi } from "../../services/api";
+import { AlertCircle } from "lucide-react";
 
 type TabType = "email" | "otp";
 
@@ -21,15 +23,32 @@ export default function AdminLogin() {
   const [activeTab, setActiveTab] = useState<TabType>("email");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     setIsSubmitting(true);
-    setTimeout(() => {
+    setError(null);
+    try {
+      if (activeTab === "email") {
+        const result = await adminApi.login(data.email, data.password);
+        if (result.success) {
+          localStorage.setItem('admin_token', result.token);
+          localStorage.setItem('admin_user', JSON.stringify(result.user));
+          navigate("/admin/dashboard");
+        } else {
+          setError(result.message || "Failed to sign in. Please check your credentials.");
+        }
+      } else {
+        // OTP login would go here
+        setError("OTP login is currently disabled for security reasons. Please use Email & Password.");
+      }
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred. Please try again later.");
+    } finally {
       setIsSubmitting(false);
-      navigate("/admin/dashboard");
-    }, 1000);
+    }
   };
 
   return (
@@ -128,6 +147,17 @@ export default function AdminLogin() {
               Phone & OTP
             </button>
           </div>
+
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 rounded-xl flex items-start gap-3 text-red-600 dark:text-red-400"
+            >
+              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+              <p className="text-sm font-medium">{error}</p>
+            </motion.div>
+          )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {activeTab === "email" ? (

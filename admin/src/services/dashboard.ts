@@ -1,3 +1,4 @@
+import { api } from './api'
 import type { Activity } from '../components/dashboard/RecentActivity'
 
 export interface DashboardStats {
@@ -32,68 +33,46 @@ export interface DashboardData {
   recentActivities: Activity[]
 }
 
-const randomDeviation = (base: number, percent: number) => {
-  const deviation = base * percent;
-  return Math.floor(base + (Math.random() * deviation * 2 - deviation));
-};
-
 export const fetchDashboardData = async (filter: string = "30"): Promise<DashboardData> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 800));
+  try {
+    const response = await api.get('/api/admin/dashboard');
+    const data = response.data;
 
-  // Base data to add randomness to
-  const baseStats = {
-    totalAds: randomDeviation(1250, 0.05),
-    activeAds: randomDeviation(840, 0.05),
-    expiredAds: randomDeviation(410, 0.05),
-    totalPublishers: randomDeviation(156, 0.05),
-    totalSpend: randomDeviation(145000, 0.05),
-    totalClicks: randomDeviation(1254000, 0.05)
-  }
-
-  // Create chart data
-  const performanceChart = Array.from({ length: 30 }).map((_, i) => ({
-    name: `D${i + 1}`,
-    impressions: randomDeviation(50000, 0.2),
-    clicks: randomDeviation(5000, 0.2)
-  }))
-
-  const engagementChart = Array.from({ length: 30 }).map((_, i) => ({
-    name: `D${i + 1}`,
-    clicks: randomDeviation(5000, 0.3)
-  }))
-
-  const spendChart = Array.from({ length: 7 }).map((_, i) => ({
-    name: `W${i + 1}`,
-    spend: randomDeviation(10000, 0.2),
-    clicks: randomDeviation(100000, 0.2)
-  }))
-
-  const statuses: Activity["status"][] = ["Active", "Draft", "Expired"];
-  
-  const recentActivities: Activity[] = Array.from({ length: 5 }).map((_, i) => ({
-    id: `ad-${Math.floor(Math.random() * 10000)}`,
-    title: `Campaign Alpha ${i + 1}`,
-    status: statuses[Math.floor(Math.random() * statuses.length)],
-    publisher: `Publisher ${Math.floor(Math.random() * 20) + 1}`,
-    date: new Date(Date.now() - Math.floor(Math.random() * 1000000000)).toLocaleDateString()
-  }))
-
-  return {
-    stats: {
-      ...baseStats,
-      trends: {
-        totalAds: 12,
-        activeAds: 8,
-        expiredAds: -5,
-        totalPublishers: 3,
-        totalSpend: 15,
-        totalClicks: 22
-      }
-    },
-    performanceChart,
-    engagementChart,
-    spendChart,
-    recentActivities
+    return {
+      stats: {
+        totalAds: data.totalAds || 0,
+        activeAds: data.activeAds || 0,
+        expiredAds: data.expiredAds || 0,
+        totalPublishers: data.totalPublishers || 0,
+        totalSpend: data.totalSpend || 0,
+        totalClicks: data.totalClicks || 0,
+        trends: {
+          totalAds: 12,
+          activeAds: 8,
+          expiredAds: -5,
+          totalPublishers: 3,
+          totalSpend: 15,
+          totalClicks: 22
+        }
+      },
+      performanceChart: data.performanceTrend ? data.performanceTrend.map((d: any) => ({
+        name: new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        impressions: d.impressions,
+        clicks: d.clicks
+      })) : [],
+      engagementChart: data.engagementTrend ? data.engagementTrend.map((d: any) => ({
+        name: new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        clicks: d.clicks
+      })) : [],
+      spendChart: data.spendVsPerformance ? data.spendVsPerformance.map((d: any) => ({
+        name: new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        spend: d.spend,
+        clicks: d.clicks
+      })) : [],
+      recentActivities: []
+    }
+  } catch (error) {
+    console.error("Failed to fetch dashboard data API", error);
+    throw error;
   }
 }

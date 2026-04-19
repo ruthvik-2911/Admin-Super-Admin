@@ -1,144 +1,111 @@
+import { api } from './api'
 import type { Ticket, Message, TicketStatus, TicketCategory } from "../types/ticket"
 
-let mockTickets: Ticket[] = [
-  {
-    id: "TKT-1001",
-    subject: "Payment failed for Summer Sale campaign",
-    description: "I tried to pay via Razorpay but the transaction failed even though money was deducted.",
-    category: "Payment Issue",
-    status: "Open",
-    createdAt: "2026-04-12T10:00:00Z",
-    updatedAt: "2026-04-12T10:00:00Z",
-    messages: [
-      {
-        id: "msg-1",
-        sender: "Admin",
-        content: "I tried to pay via Razorpay but the transaction failed even though money was deducted. Transaction ID: TXN12345.",
-        timestamp: "2026-04-12T10:00:00Z"
-      }
-    ]
-  },
-  {
-    id: "TKT-1002",
-    subject: "Video ad not playing on publishers",
-    description: "The video ad uploaded for 'Flash Deal' is showing a black screen.",
-    category: "Technical Issue",
-    status: "In Progress",
-    createdAt: "2026-04-13T14:30:00Z",
-    updatedAt: "2026-04-13T15:00:00Z",
-    messages: [
-      {
-        id: "msg-2",
-        sender: "Admin",
-        content: "The video ad uploaded for 'Flash Deal' is showing a black screen.",
-        timestamp: "2026-04-13T14:30:00Z"
-      },
-      {
-        id: "msg-3",
-        sender: "Super Admin",
-        content: "We are checking the transcoding logs. It seems the file format was not supported by some players. Can you re-upload as MP4?",
-        timestamp: "2026-04-13T15:00:00Z"
-      }
-    ]
-  },
-  {
-    id: "TKT-1003",
-    subject: "General Query regarding API",
-    description: "How do I integrate the tracker?",
-    category: "Other",
-    status: "Resolved",
-    createdAt: "2026-04-10T09:00:00Z",
-    updatedAt: "2026-04-11T12:00:00Z",
-    messages: [
-      {
-        id: "msg-4",
-        sender: "Admin",
-        content: "How do I integrate the tracker?",
-        timestamp: "2026-04-10T09:00:00Z"
-      },
-      {
-        id: "msg-5",
-        sender: "Super Admin",
-        content: "Please check our documentation at docs.keliri.com/tracker.",
-        timestamp: "2026-04-11T12:00:00Z"
-      }
-    ]
-  }
-]
+const formatStatus = (str: string): TicketStatus => {
+  if (!str) return 'Open';
+  const s = str.toUpperCase();
+  if (s === 'IN_PROGRESS') return 'In Progress';
+  if (s === 'RESOLVED') return 'Resolved';
+  return 'Open';
+};
+
+const formatCategory = (cat: string): TicketCategory => {
+  if (!cat) return 'Other';
+  const c = cat.toUpperCase();
+  if (c.includes('TECHNICAL')) return 'Technical Issue';
+  if (c.includes('PAYMENT')) return 'Payment Issue';
+  if (c.includes('AD')) return 'Ad Issue';
+  return 'Other';
+};
 
 export const fetchTickets = async (filters?: { status?: string; category?: string; query?: string }): Promise<Ticket[]> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-  let filtered = [...mockTickets]
+  const response = await api.get('/api/admin/tickets')
+  let tickets = response.data.tickets || []
   
   if (filters?.status && filters.status !== "All") {
-    filtered = filtered.filter(t => t.status === filters.status)
+    const rawStatus = filters.status === "In Progress" ? "IN_PROGRESS" : filters.status.toUpperCase()
+    tickets = tickets.filter((t: any) => t.status === rawStatus)
   }
   if (filters?.category && filters.category !== "All") {
-    filtered = filtered.filter(t => t.category === filters.category)
+    // If frontend filter sends "Technical Issue", backend might be "TECHNICAL"
+    const catSearch = filters.category.toUpperCase().replace(' ISSUE', '')
+    tickets = tickets.filter((t: any) => (t.category || '').toUpperCase().includes(catSearch))
   }
   if (filters?.query) {
     const q = filters.query.toLowerCase()
-    filtered = filtered.filter(t => t.subject.toLowerCase().includes(q) || t.id.toLowerCase().includes(q))
+    tickets = tickets.filter((t: any) => (t.subject || '').toLowerCase().includes(q) || t.id.toLowerCase().includes(q))
   }
   
-  return filtered
+  return tickets.map((t: any) => ({
+    id: t.id,
+    subject: t.subject,
+    description: "Support Ticket",
+    category: formatCategory(t.category),
+    status: formatStatus(t.status),
+    createdAt: t.createdAt,
+    updatedAt: t.updatedAt,
+    messages: []
+  }))
 }
 
 export const getTicketById = async (id: string): Promise<Ticket | null> => {
-  await new Promise(resolve => setTimeout(resolve, 500))
-  return mockTickets.find(t => t.id === id) || null
+  try {
+    const response = await api.get(`/api/admin/tickets/${id}`)
+    const { ticket, messages } = response.data.data
+    
+    return {
+      id: ticket.id,
+      subject: ticket.subject,
+      description: messages.length > 0 ? messages[0].message : "Support Ticket",
+      category: formatCategory(ticket.category),
+      status: formatStatus(ticket.status),
+      createdAt: ticket.createdAt,
+      updatedAt: ticket.updatedAt,
+      messages: messages.map((m: any) => ({
+        id: m.id,
+        sender: m.senderType === 'ADMIN' ? 'Admin' : 'Super Admin',
+        content: m.message,
+        timestamp: m.createdAt
+      }))
+    }
+  } catch (error) {
+    console.error("Failed to load ticket", error)
+    return null;
+  }
 }
 
 export const createTicket = async (data: { subject: string; category: TicketCategory; description: string }): Promise<Ticket> => {
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  const newTicket: Ticket = {
-    id: `TKT-${Math.floor(2000 + Math.random() * 8000)}`,
+  const response = await api.post('/api/admin/tickets', {
     subject: data.subject,
+    category: data.category.toUpperCase().replace(' ISSUE', '').replace(' ', '_'),
+    message: data.description
+  })
+  const t = response.data.ticket
+  return {
+    id: t.id,
+    subject: t.subject,
     description: data.description,
-    category: data.category,
-    status: "Open",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    messages: [
-      {
-        id: `msg-${Math.random()}`,
-        sender: "Admin",
-        content: data.description,
-        timestamp: new Date().toISOString()
-      }
-    ]
+    category: formatCategory(t.category),
+    status: formatStatus(t.status),
+    createdAt: t.createdAt,
+    updatedAt: t.updatedAt,
+    messages: []
   }
-  mockTickets = [newTicket, ...mockTickets]
-  return newTicket
 }
 
 export const replyToTicket = async (ticketId: string, content: string): Promise<Message> => {
-  await new Promise(resolve => setTimeout(resolve, 600))
-  const newMessage: Message = {
-    id: `msg-${Math.random()}`,
-    sender: "Admin",
-    content,
-    timestamp: new Date().toISOString()
+  const response = await api.post(`/api/admin/tickets/${ticketId}/reply`, {
+    message: content
+  })
+  const m = response.data.message
+  return {
+    id: m.id,
+    sender: m.senderType === 'ADMIN' ? 'Admin' : 'Super Admin',
+    content: m.message,
+    timestamp: m.createdAt
   }
-  
-  const ticketIndex = mockTickets.findIndex(t => t.id === ticketId)
-  if (ticketIndex > -1) {
-    mockTickets[ticketIndex].messages.push(newMessage)
-    mockTickets[ticketIndex].updatedAt = new Date().toISOString()
-    // If it was resolved, re-opening it
-    if (mockTickets[ticketIndex].status === "Resolved") {
-      mockTickets[ticketIndex].status = "In Progress"
-    }
-  }
-  
-  return newMessage
 }
 
 export const reopenTicket = async (ticketId: string): Promise<void> => {
-  await new Promise(resolve => setTimeout(resolve, 500))
-  const ticketIndex = mockTickets.findIndex(t => t.id === ticketId)
-  if (ticketIndex > -1) {
-    mockTickets[ticketIndex].status = "In Progress"
-    mockTickets[ticketIndex].updatedAt = new Date().toISOString()
-  }
+  await api.patch(`/api/admin/tickets/${ticketId}/reopen`)
 }

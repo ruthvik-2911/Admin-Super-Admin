@@ -20,6 +20,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ad_campaignsRepository extends MongoRepository<ad_campaigns, String>,AdCampaignRepositoryCustom {
 	
+    List<ad_campaigns> findByCreatedBy(String createdBy);
+	
     //@Query(value="{compaignsStatus:'ACTIVE'}", fields="{'location.lat':1,'location.lng':1,'compaignsStatus':1,'createdBy':1,'location.range':1,'dateRange':1,'campaignCategories':1,'advertisementId':1}")
     //@Query(value="{compaignsStatus:'ACTIVE'}")
    @Aggregation(pipeline= {

@@ -10,11 +10,12 @@ import { adSchema, type AdFormData } from "../../schemas/adSchema"
 import { getAdById, createAd, updateAd } from "../../services/ads"
 
 import { AdStepper } from "../../components/ads/AdStepper"
-import { AdDetailsStep } from "../../components/ads/AdDetailsStep"
-import { MediaUploadStep } from "../../components/ads/MediaUploadStep"
+import { AdDetailsStep } from "../../components/ads/AdDetailsStep" // Ad Options
+import { MediaUploadStep, type MediaState } from "../../components/ads/MediaUploadStep"
+import { AdFinalDetailsStep } from "../../components/ads/AdFinalDetailsStep"
 import { TargetingStep } from "../../components/ads/TargetingStep"
 
-const STEPS = ["Ad Options", "Media Upload", "Geo-Targeting"]
+const STEPS = ["Ad Options", "Media Upload", "Ad Details", "Geo-Targeting"]
 
 export default function AdForm() {
   const { id } = useParams()
@@ -24,6 +25,17 @@ export default function AdForm() {
   const [currentStep, setCurrentStep] = React.useState(0)
   const [loading, setLoading] = React.useState(isEditMode)
 
+  // ── Media state lives outside RHF since Files can't serialize ──
+  const [mediaState, setMediaState] = React.useState<MediaState>({
+    bannerFiles: [],
+    videoFile: null,
+    videoUrl: "",
+    thumbnail: null,
+  })
+
+  // Inline validation errors for Step 2
+  const [mediaErrors, setMediaErrors] = React.useState<{ [key: string]: string }>({})
+
   const methods = useForm<AdFormData>({
     resolver: zodResolver(adSchema),
     defaultValues: {
@@ -31,6 +43,10 @@ export default function AdForm() {
       description: "",
       type: "Banner" as const,
       mediaFile: null,
+      ctaType: "Redirect",
+      ctaLabel: "Learn More",
+      ctaActionValue: "",
+      customSections: [{ title: "", description: "" }],
       locationMode: "manual" as const,
       latitude: 0,
       longitude: 0,
@@ -38,19 +54,30 @@ export default function AdForm() {
     } as unknown as AdFormData
   })
 
-  const { handleSubmit, trigger, formState: { isSubmitting }, reset } = methods
+  const { handleSubmit, trigger, watch, formState: { isSubmitting }, reset } = methods
+  const adType = watch("type")
 
-  // Load draft ad if editing
+  React.useEffect(() => {
+    // Clear media state when ad type switches
+    if (currentStep < 1) { // Only clear if we haven't reached/passed media step potentially
+        setMediaState({ bannerFiles: [], videoFile: null, videoUrl: "", thumbnail: null })
+        setMediaErrors({})
+    }
+  }, [adType])
+
   React.useEffect(() => {
     async function load() {
       if (!id) return
       try {
         const ad = await getAdById(id)
-        // Since it's a mock, we just patch the generic data over
         reset({
           title: ad.title,
-          description: "This is a drafted description mock.",
+          description: "This is a drafted description.",
           type: "Banner",
+          ctaType: "Redirect",
+          ctaLabel: "Learn More",
+          ctaActionValue: "",
+          customSections: [{ title: "Welcome", description: "Hello world" }],
           locationMode: "manual",
           radius: 25,
           latitude: 19.0760,
@@ -66,15 +93,52 @@ export default function AdForm() {
     load()
   }, [id, reset, navigate])
 
+  // ── Step 2 Media Validation ──────────────────────────────
+  const validateMediaStep = (): boolean => {
+    const errors: { [key: string]: string } = {}
+
+    if (adType === "Video") {
+      if (!mediaState.videoFile && !mediaState.videoUrl.trim()) {
+        errors.video = "Please upload a video file or enter a video URL."
+      }
+      if (!mediaState.thumbnail) {
+        errors.thumbnail = "Thumbnail is required for Video ads."
+      }
+    } else if (adType === "Banner") {
+      if (mediaState.bannerFiles.length === 0) {
+        errors.banner = "At least 1 banner image is required."
+      } else if (mediaState.bannerFiles.length > 4) {
+        errors.banner = "Maximum 4 banner images allowed."
+      }
+      if (!mediaState.thumbnail) {
+        errors.thumbnail = "Thumbnail is required for Banner ads."
+      }
+    }
+
+    setMediaErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
   const handleNext = async () => {
-    // Determine which fields belong to current step
     let fieldsToValidate: any[] = []
-    if (currentStep === 0) fieldsToValidate = ["title", "description", "type"]
-    if (currentStep === 1) fieldsToValidate = ["mediaFile"]
-    if (currentStep === 2) fieldsToValidate = ["latitude", "longitude", "radius"]
+
+    if (currentStep === 0) {
+      fieldsToValidate = ["title", "description", "type"]
+    } else if (currentStep === 1) {
+      const isValid = validateMediaStep()
+      if (!isValid) {
+        toast.error("Please complete all required media fields.", { id: "media-err" })
+        return
+      }
+      setCurrentStep(curr => Math.min(curr + 1, STEPS.length - 1))
+      return
+    } else if (currentStep === 2) {
+      fieldsToValidate = ["ctaType", "ctaLabel", "ctaActionValue", "customSections"]
+    } else if (currentStep === 3) {
+      fieldsToValidate = ["latitude", "longitude", "radius"]
+    }
 
     const isValid = await trigger(fieldsToValidate)
-    
     if (isValid) {
       setCurrentStep(curr => Math.min(curr + 1, STEPS.length - 1))
     } else {
@@ -82,25 +146,51 @@ export default function AdForm() {
     }
   }
 
-  const handleBack = () => {
-    setCurrentStep(curr => Math.max(curr - 1, 0))
-  }
+  const handleBack = () => setCurrentStep(curr => Math.max(curr - 1, 0))
 
   const onSubmit = async (data: AdFormData, shouldPublish: boolean = false) => {
     try {
+      // Structure payload for backend as requested
+      const payload = {
+        title: data.title,
+        description: data.description,
+        type: data.type,
+        location: {
+            latitude: data.latitude,
+            longitude: data.longitude,
+            radius: data.radius,
+            mode: data.locationMode
+        },
+        cta: {
+          ctaType: "Button",
+          buttons: [
+            {
+              ctaId: data.ctaType.toUpperCase(),
+              content: {
+                label: data.ctaLabel,
+                action: data.ctaActionValue
+              }
+            }
+          ]
+        },
+        customTextSection: data.customSections,
+        media: {
+            url: data.mediaUrl,
+            // mediaState contains the actual files for multipart upload if needed
+        }
+      }
+
+      // In a real app we'd use FormData if uploading files
       if (isEditMode) {
-        await updateAd(id, data)
-        toast.success(`Draft successfully updated`)
+        await updateAd(id, payload)
+        toast.success("Draft successfully updated")
       } else {
-         await createAd(data)
-         toast.success(`Ad draft created successfully!`)
+        await createAd(payload)
+        toast.success("Ad draft created successfully!")
       }
       
-      if (shouldPublish) {
-        toast.success("Ad forwarded for Publication!", { icon: "🚀" })
-      }
-      
-      setTimeout(() => navigate('/admin/ads'), 800)
+      if (shouldPublish) toast.success("Ad forwarded for Publication!", { icon: "🚀" })
+      setTimeout(() => navigate("/admin/ads"), 800)
     } catch (err) {
       toast.error("Failed to save advertisement")
     }
@@ -109,8 +199,15 @@ export default function AdForm() {
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 0: return <AdDetailsStep />
-      case 1: return <MediaUploadStep />
-      case 2: return <TargetingStep />
+      case 1: return (
+        <MediaUploadStep
+          mediaState={mediaState}
+          setMediaState={setMediaState}
+          validationErrors={mediaErrors}
+        />
+      )
+      case 2: return <AdFinalDetailsStep />
+      case 3: return <TargetingStep />
       default: return null
     }
   }
@@ -126,7 +223,7 @@ export default function AdForm() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0E1117] pb-16 transition-colors duration-200">
       <Toaster position="top-right" />
-      
+
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#1C1F26]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -142,9 +239,9 @@ export default function AdForm() {
                 {isEditMode ? "Manage Advertisement Draft" : "Launch New Advertisement"}
               </h1>
             </div>
-            
+
             <div className="flex gap-3">
-              <button 
+              <button
                 type="button"
                 onClick={handleSubmit((d) => onSubmit(d, false))}
                 disabled={isSubmitting}
@@ -158,15 +255,15 @@ export default function AdForm() {
       </header>
 
       <main className="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        
+
         {/* Progress Stepper */}
         <AdStepper currentStep={currentStep} steps={STEPS} />
 
         {/* Form Area */}
-        <div className="bg-white dark:bg-[#1A1D24] shadow-sm border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden min-h-[400px] flex flex-col transition-colors">
+        <div className="bg-white dark:bg-[#1A1D24] shadow-sm border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden min-h-[480px] flex flex-col transition-colors">
           <FormProvider {...methods}>
             <form className="flex-1 flex flex-col">
-              <div className="flex-1 p-6 md:p-8 overflow-hidden">
+              <div className="flex-1 p-6 md:p-8 overflow-y-auto">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentStep}

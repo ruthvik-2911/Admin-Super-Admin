@@ -26,6 +26,7 @@ import org.jackfruit.keliri.repository.advertisementsRepository;
 import org.jackfruit.keliri.repository.hitRecordRepository;
 import org.jackfruit.keliri.repository.txn_user_locationsRepository;
 import org.jackfruit.keliri.repository.usersRepository;
+import org.jackfruit.keliri.repository.PublisherRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,7 @@ public class SuperAdminManagementService {
     private final txn_user_locationsRepository locationsRepository;
     private final hitRecordRepository hitRecordRepository;
     private final org.jackfruit.keliri.repository.AdminRegistrationRepository registrationRepository;
+    private final PublisherRepository publisherRepository;
     private final org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder passwordEncoder = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
 
     private final List<SuperAdminManagementResponse.EmailNotificationRecord> emailNotifications = new CopyOnWriteArrayList<>();
@@ -52,13 +54,15 @@ public class SuperAdminManagementService {
             advertisementsRepository advertisementsRepository,
             txn_user_locationsRepository locationsRepository,
             hitRecordRepository hitRecordRepository,
-            org.jackfruit.keliri.repository.AdminRegistrationRepository registrationRepository) {
+            org.jackfruit.keliri.repository.AdminRegistrationRepository registrationRepository,
+            PublisherRepository publisherRepository) {
         this.usersRepository = usersRepository;
         this.campaignsRepository = campaignsRepository;
         this.advertisementsRepository = advertisementsRepository;
         this.locationsRepository = locationsRepository;
         this.hitRecordRepository = hitRecordRepository;
         this.registrationRepository = registrationRepository;
+        this.publisherRepository = publisherRepository;
     }
 
     public List<SuperAdminManagementResponse.AdminRecord> getAdmins(String search, String status) {
@@ -218,30 +222,18 @@ public class SuperAdminManagementService {
             String location,
             String search) {
         List<SuperAdminManagementResponse.AdminRecord> admins = getAdmins(null, null);
-        if (admins.isEmpty()) {
-            return List.of();
-        }
 
-        List<users> publishers = usersRepository.findAll();
+        List<org.jackfruit.keliri.model.Publisher> publishers = publisherRepository.findAll();
         List<ad_campaigns> campaigns = campaignsRepository.findAll();
         Map<String, List<ad_campaigns>> campaignsByPublisher = campaigns.stream()
                 .collect(Collectors.groupingBy(this::resolvePublisherIdForCampaign));
 
-        Map<String, txn_user_locations> locationsById = publishers.stream()
-                .map(users::getLastKnownLocation)
-                .filter(Objects::nonNull)
-                .distinct()
-                .map(id -> locationsRepository.findById(id).orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(txn_user_locations::getId, l -> l));
-
         List<SuperAdminManagementResponse.PublisherRecord> records = new ArrayList<>();
-        for (users publisher : publishers) {
-            // Only show publishers that are NOT admins (givendor != 1)
-            if (publisher.getGivendor() == 1) continue;
-
-            // Simple assignment logic: find an admin that might be responsible or just list them
-            SuperAdminManagementResponse.AdminRecord assignedAdmin = admins.isEmpty() ? null : admins.get(0);
+        for (org.jackfruit.keliri.model.Publisher publisher : publishers) {
+            SuperAdminManagementResponse.AdminRecord assignedAdmin = admins.stream()
+                    .filter(a -> a.getId().equals(publisher.getAdminId()))
+                    .findFirst()
+                    .orElse(null);
 
             List<ad_campaigns> publisherCampaigns = campaignsByPublisher.getOrDefault(publisher.getId(), List.of());
             long adsPosted = publisherCampaigns.size();
@@ -251,18 +243,27 @@ public class SuperAdminManagementService {
 
             SuperAdminManagementResponse.PublisherRecord record = new SuperAdminManagementResponse.PublisherRecord();
             record.setId(publisher.getId());
-            record.setName(defaultString(publisher.getFullName(), "Publisher"));
+            record.setName(defaultString(publisher.getName(), "Publisher"));
             record.setAdminId(assignedAdmin != null ? assignedAdmin.getId() : "SYSTEM");
             record.setAdminName(assignedAdmin != null ? assignedAdmin.getName() : "System");
-            record.setLocation(resolveLocationLabel(publisher, locationsById));
+            record.setLocation(defaultString(publisher.getLocation(), "Unknown"));
             record.setAdsPosted(adsPosted);
             record.setImpressions(impressions);
             record.setClicks(clicks);
             record.setEngagement(engagement);
-            record.setStatus(resolvePublisherStatus(publisherCampaigns));
-            record.setEmail(defaultString(publisher.getEmailAddress(), "not-available@keliri.com"));
-            record.setPhone(resolvePhone(publisher));
-            record.setJoinDate(resolveDateFromObjectId(publisher.getId()));
+            
+            // Allow status override from new publisher DB, fallback to campaign logic
+            if (publisher.getStatus() != null && "INACTIVE".equalsIgnoreCase(publisher.getStatus())) {
+                record.setStatus("Inactive");
+            } else {
+                record.setStatus(resolvePublisherStatus(publisherCampaigns));
+            }
+            
+            record.setEmail(defaultString(publisher.getEmail(), "not-available@keliri.com"));
+            record.setPhone(defaultString(publisher.getMobile(), "N/A"));
+            record.setJoinDate(publisher.getCreatedAt() != null 
+                    ? publisher.getCreatedAt().atZone(ZONE_ID).toLocalDate().format(DATE_FORMATTER) 
+                    : resolveDateFromObjectId(publisher.getId()));
             records.add(record);
         }
 

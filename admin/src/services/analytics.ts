@@ -1,3 +1,5 @@
+import { api } from './api'
+
 export interface AnalyticsFilters {
   dateRange: string
   adId: string
@@ -44,67 +46,44 @@ export interface AnalyticsData {
   insights: string[]
 }
 
-const generateTrends = (days: number): TrendData[] => {
-  return Array.from({ length: days }).map((_, i) => {
-    const d = new Date()
-    d.setDate(d.getDate() - (days - i))
-    return {
-      time: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      impressions: Math.floor(Math.random() * 5000) + 1000,
-      clicks: Math.floor(Math.random() * 200) + 20,
-      spend: Math.floor(Math.random() * 1000) + 100
-    }
-  })
+const getDates = (range: string) => {
+  const end = new Date();
+  const start = new Date();
+  
+  switch (range) {
+    case "Today":
+      break;
+    case "Last 7 Days":
+      start.setDate(end.getDate() - 7);
+      break;
+    case "Last 30 Days":
+      start.setDate(end.getDate() - 30);
+      break;
+    default:
+      start.setDate(end.getDate() - 30);
+  }
+  
+  return {
+    startDate: start.toISOString().split('T')[0],
+    endDate: end.toISOString().split('T')[0]
+  }
 }
 
 export const fetchAnalytics = async (filters: AnalyticsFilters): Promise<AnalyticsData> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
+  const { startDate, endDate } = getDates(filters.dateRange)
   
-  // In a real app, these filters would be sent to the backend
-  console.log("Fetching analytics with filters:", filters)
-
-  const days = filters.dateRange === "Today" ? 1 : filters.dateRange === "Last 7 Days" ? 7 : 30
+  const response = await api.get('/api/admin/analytics', {
+    params: {
+      startDate,
+      endDate,
+      adId: filters.adId,
+      publisherId: filters.publisherId,
+      adType: filters.adType,
+      status: filters.status
+    }
+  })
   
-  return {
-    kpis: {
-      impressions: 124500,
-      clicks: 8420,
-      ctr: 6.76,
-      spend: 42500,
-      activeCampaigns: 12,
-      trends: {
-        impressions: 12,
-        clicks: 8,
-        ctr: 2.1,
-        spend: -5
-      }
-    },
-    trends: generateTrends(days),
-    breakdowns: {
-      byAd: [
-        { name: "Summer Sale 2026", value: 3400, percentage: 40 },
-        { name: "Winter Clearance", value: 2100, percentage: 25 },
-        { name: "New Store Hero", value: 1700, percentage: 20 },
-        { name: "Flash Deal", value: 1220, percentage: 15 }
-      ],
-      byPublisher: [
-        { name: "Phoenix Mall Mumbai", value: 4500, percentage: 45 },
-        { name: "High Street Bangalore", value: 3000, percentage: 30 },
-        { name: "Global Hub Delhi", value: 2500, percentage: 25 }
-      ],
-      byLocation: [
-        { name: "Mumbai", value: 5000, percentage: 50 },
-        { name: "Delhi", value: 3000, percentage: 30 },
-        { name: "Bangalore", value: 2000, percentage: 20 }
-      ]
-    },
-    insights: [
-      "Targeting Mumbai locations increased CTR by 15% this week.",
-      "Video ads are outperforming Banner ads by 2.4x in engagement.",
-      "Peak activity detected between 6 PM - 9 PM daily.",
-      "Cost per click (CPC) has dropped by 5% vs last month."
-    ]
-  }
+  return response.data
 }
 
 export const exportAnalyticsCSV = (data: AnalyticsData) => {

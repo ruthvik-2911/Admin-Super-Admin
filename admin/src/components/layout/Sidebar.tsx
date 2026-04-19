@@ -33,9 +33,14 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    // Mock logout logic
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
     navigate("/admin/login")
   }
+
+  // Get user info from localStorage
+  const userStr = localStorage.getItem('admin_user');
+  const user = userStr ? JSON.parse(userStr) : { name: 'System Admin', email: 'admin@keliri.com', role: 'ADMIN' };
 
   return (
     <>
@@ -128,13 +133,15 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           
           {isOpen && (
             <div className="mt-4 px-4 py-4 bg-gray-800/20 rounded-2xl border border-gray-800/50 animate-in fade-in zoom-in duration-500">
-               <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-500 to-amber-500" />
-                 <div>
-                    <p className="text-xs font-black text-white">System Admin</p>
-                    <p className="text-[10px] font-medium text-gray-500">Pro License</p>
-                 </div>
-               </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-500 to-amber-500 flex items-center justify-center text-[10px] font-black text-white">
+                    {user.name ? user.name.charAt(0).toUpperCase() : 'A'}
+                  </div>
+                  <div className="min-w-0">
+                     <p className="text-xs font-black text-white truncate">{user.name}</p>
+                     <p className="text-[10px] font-medium text-gray-500 truncate">{user.role || 'Admin'}</p>
+                  </div>
+                </div>
             </div>
           )}
         </div>

@@ -1,3 +1,9 @@
+import { api } from './api';
+
+// ─────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────
+
 export interface Publisher {
   id: string
   name: string
@@ -8,14 +14,12 @@ export interface Publisher {
   mobile: string
   email: string
   address?: string
-  latitude?: number
-  longitude?: number
 }
 
 export interface AdCampaign {
   id: string
   title: string
-  status: "Active" | "Expired" | "Draft"
+  status: string
   startDate: string
   endDate: string
   impressions: number
@@ -40,31 +44,6 @@ export interface PublisherAnalytics {
   campaigns: AdCampaign[]
 }
 
-const generateMockPublishers = (count: number): Publisher[] => {
-  const locations = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Surat"]
-  const names = ["Retail Hub", "Tech Solutions", "Fresh Mart", "Global Logistics", "Alpha Services", "Omega Trade", "Prime Electronics", "Star Foods"]
-  
-  return Array.from({ length: count }).map((_, index) => {
-    const id = `PUB${1000 + index}`
-    const location = locations[Math.floor(Math.random() * locations.length)]
-    const name = `${names[Math.floor(Math.random() * names.length)]} ${location}`
-    
-    return {
-      id,
-      name,
-      contactPerson: `Person ${index + 1}`,
-      mobile: `+91 9${Math.floor(100000000 + Math.random() * 900000000)}`,
-      email: `contact${index}@${name.toLowerCase().replace(/ /g, '')}.com`,
-      location,
-      status: Math.random() > 0.2 ? "Active" : "Inactive",
-      lastActive: new Date(Date.now() - Math.floor(Math.random() * 10000000000)).toLocaleDateString()
-    }
-  })
-}
-
-// Global mock state so it persists during navigation
-let mockPublishers = generateMockPublishers(45)
-
 export interface FetchPublishersArgs {
   page: number
   limit: number
@@ -78,167 +57,148 @@ export interface FetchPublishersResult {
   totalPages: number
 }
 
-export const fetchPublishers = async ({ page, limit, search, status }: FetchPublishersArgs): Promise<FetchPublishersResult> => {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 500))
-  
-  let filteredData = [...mockPublishers]
+// ─────────────────────────────────────────
+// Helper: map backend publisher to frontend type
+// ─────────────────────────────────────────
+const mapPublisher = (p: any): Publisher => ({
+  id: p.id,
+  name: p.name,
+  contactPerson: p.contactPerson || '',
+  location: p.location || 'Unknown',
+  status: p.status === 'ACTIVE' ? 'Active' : 'Inactive',
+  lastActive: p.createdAt
+    ? new Date(p.createdAt).toLocaleDateString('en-IN')
+    : new Date().toLocaleDateString('en-IN'),
+  mobile: p.mobile || '',
+  email: p.email || '',
+  address: p.address || '',
+})
 
-  if (search) {
-    const s = search.toLowerCase()
-    filteredData = filteredData.filter(p => 
-      p.name.toLowerCase().includes(s) || 
-      p.location.toLowerCase().includes(s) || 
-      p.contactPerson.toLowerCase().includes(s)
-    )
-  }
+// ─────────────────────────────────────────
+// Fetch All Publishers (with client-side search/filter/pagination)
+// ─────────────────────────────────────────
+export const fetchPublishers = async ({
+  page,
+  limit,
+  search,
+  status,
+}: FetchPublishersArgs): Promise<FetchPublishersResult> => {
+  try {
+    const response = await api.get('/api/admin/publishers')
+    let publishers: Publisher[] = (response.data?.publishers || []).map(mapPublisher)
 
-  if (status && status !== "All") {
-    filteredData = filteredData.filter(p => p.status === status)
-  }
+    if (search) {
+      const s = search.toLowerCase()
+      publishers = publishers.filter(
+        (p) =>
+          p.name.toLowerCase().includes(s) ||
+          p.location.toLowerCase().includes(s) ||
+          p.contactPerson.toLowerCase().includes(s)
+      )
+    }
 
-  const totalItems = filteredData.length
-  const totalPages = Math.ceil(totalItems / limit)
-  
-  const startIndex = (page - 1) * limit
-  const endIndex = startIndex + limit
-  
-  const paginatedData = filteredData.slice(startIndex, endIndex)
+    if (status && status !== 'All') {
+      publishers = publishers.filter((p) => p.status === status)
+    }
 
-  return {
-    data: paginatedData,
-    totalItems,
-    totalPages
+    const totalItems = publishers.length
+    const totalPages = Math.ceil(totalItems / limit)
+    const startIndex = (page - 1) * limit
+    const paginatedData = publishers.slice(startIndex, startIndex + limit)
+
+    return { data: paginatedData, totalItems, totalPages }
+  } catch (error) {
+    console.error('Error fetching publishers:', error)
+    return { data: [], totalItems: 0, totalPages: 0 }
   }
 }
 
-export const togglePublisherStatus = async (id: string): Promise<Publisher> => {
-  await new Promise(resolve => setTimeout(resolve, 500))
-  
-  const index = mockPublishers.findIndex(p => p.id === id)
-  if (index === -1) throw new Error("Publisher not found")
-  
-  const currentStatus = mockPublishers[index].status
-  const newStatus = currentStatus === "Active" ? "Inactive" : "Active"
-  
-  mockPublishers[index] = { ...mockPublishers[index], status: newStatus }
-  return mockPublishers[index]
-}
-
+// ─────────────────────────────────────────
+// Get Publisher by ID
+// ─────────────────────────────────────────
 export const getPublisherById = async (id: string): Promise<Publisher> => {
-  await new Promise(resolve => setTimeout(resolve, 300))
-  const publisher = mockPublishers.find(p => p.id === id)
-  if (!publisher) throw new Error("Publisher not found")
-  // Adding mock extra fields for the form that the base model didn't use initially
-  return {
-    ...publisher,
-    address: `${publisher.location} High Street, 123 Building`,
-    latitude: 19.0760 + (Math.random() * 0.1),
-    longitude: 72.8777 + (Math.random() * 0.1)
-  } as Publisher & { address: string; latitude: number; longitude: number }
+  const response = await api.get(`/api/admin/publishers/${id}`)
+  return mapPublisher(response.data.publisher)
 }
 
+// ─────────────────────────────────────────
+// Create Publisher
+// ─────────────────────────────────────────
 export const createPublisher = async (data: any): Promise<Publisher> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-  const newPub = {
-    id: `PUB${1000 + mockPublishers.length}`,
+  const payload = {
     name: data.name,
     contactPerson: data.contactPerson,
     mobile: data.mobile,
     email: data.email,
-    location: "New Location", // Derived locally in real app
-    status: "Active" as const,
-    lastActive: "Just now",
+    address: data.address || '',
+    location:
+      data.latitude && data.longitude
+        ? `${data.latitude}, ${data.longitude}`
+        : data.location || '',
   }
-  mockPublishers.unshift(newPub)
-  return newPub
+  const response = await api.post('/api/admin/publishers', payload)
+  return mapPublisher(response.data.publisher)
 }
 
+// ─────────────────────────────────────────
+// Update Publisher
+// ─────────────────────────────────────────
 export const updatePublisher = async (id: string, data: any): Promise<Publisher> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-  const index = mockPublishers.findIndex(p => p.id === id)
-  if (index === -1) throw new Error("Publisher not found")
-  
-  mockPublishers[index] = {
-    ...mockPublishers[index],
+  const payload = {
     name: data.name,
     contactPerson: data.contactPerson,
     mobile: data.mobile,
-    email: data.email
+    email: data.email,
+    address: data.address || '',
+    location:
+      data.latitude && data.longitude
+        ? `${data.latitude}, ${data.longitude}`
+        : data.location || '',
   }
-  return mockPublishers[index]
+  const response = await api.put(`/api/admin/publishers/${id}`, payload)
+  return mapPublisher(response.data.publisher)
 }
 
+// ─────────────────────────────────────────
+// Toggle Publisher Status (ACTIVE ↔ INACTIVE)
+// ─────────────────────────────────────────
+export const togglePublisherStatus = async (id: string): Promise<Publisher> => {
+  const response = await api.patch(`/api/admin/publishers/${id}/status`)
+  return mapPublisher(response.data.publisher)
+}
+
+// ─────────────────────────────────────────
+// Fetch Publisher Analytics (Real Data)
+// ─────────────────────────────────────────
 export const fetchPublisherAnalytics = async (id: string): Promise<PublisherAnalytics> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-  const pub = await getPublisherById(id)
-  
-  const trends = Array.from({ length: 14 }).map((_, i) => {
-    const date = new Date()
-    date.setDate(date.getDate() - (13 - i))
-    return {
-      date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      impressions: Math.floor(Math.random() * 5000) + 1000,
-      clicks: Math.floor(Math.random() * 200) + 20
-    }
-  })
+  const response = await api.get(`/api/admin/publishers/${id}/analytics`)
+  const { publisher: rawPub, analytics } = response.data
 
-  const totalImpressions = trends.reduce((acc, curr) => acc + curr.impressions, 0)
-  const totalClicks = trends.reduce((acc, curr) => acc + curr.clicks, 0)
-
-  const campaigns: AdCampaign[] = [
-    {
-      id: "CMP001",
-      title: "Summer Sale Display",
-      status: "Active",
-      startDate: "2026-04-01",
-      endDate: "2026-04-30",
-      impressions: 12500,
-      clicks: 420,
-      ctr: parseFloat(((420 / 12500) * 100).toFixed(1))
-    },
-    {
-      id: "CMP002",
-      title: "Weekend Special",
-      status: "Expired",
-      startDate: "2026-03-25",
-      endDate: "2026-03-28",
-      impressions: 8400,
-      clicks: 156,
-      ctr: parseFloat(((156 / 8400) * 100).toFixed(1))
-    },
-    {
-      id: "CMP003",
-      title: "New Outlet Launch",
-      status: "Active",
-      startDate: "2026-04-10",
-      endDate: "2026-05-10",
-      impressions: 4200,
-      clicks: 89,
-      ctr: parseFloat(((89 / 4200) * 100).toFixed(1))
-    },
-    {
-      id: "CMP004",
-      title: "Monsoon Pre-booking",
-      status: "Draft",
-      startDate: "-",
-      endDate: "-",
-      impressions: 0,
-      clicks: 0,
-      ctr: 0
-    }
-  ]
+  const publisher = mapPublisher(rawPub)
 
   return {
-    publisher: pub,
+    publisher,
     stats: {
-      totalAds: 12,
-      activeCampaigns: campaigns.filter(c => c.status === "Active").length,
-      impressions: totalImpressions,
-      clicks: totalClicks,
-      ctr: parseFloat(((totalClicks / totalImpressions) * 100).toFixed(1))
+      totalAds: analytics.stats.totalAds ?? 0,
+      activeCampaigns: analytics.stats.activeCampaigns ?? 0,
+      impressions: analytics.stats.impressions ?? 0,
+      clicks: analytics.stats.clicks ?? 0,
+      ctr: analytics.stats.ctr ?? 0,
     },
-    trends,
-    campaigns
+    trends: (analytics.trends ?? []).map((t: any) => ({
+      date: t.date,
+      impressions: t.impressions,
+      clicks: t.clicks,
+    })),
+    campaigns: (analytics.campaigns ?? []).map((c: any) => ({
+      id: c.id,
+      title: c.title,
+      status: c.status === 'ACTIVE' ? 'Active' : c.status === 'EXPIRED' ? 'Expired' : c.status ?? 'Draft',
+      startDate: c.startDate ?? '-',
+      endDate: c.endDate ?? '-',
+      impressions: c.impressions ?? 0,
+      clicks: c.clicks ?? 0,
+      ctr: c.ctr ?? 0,
+    })),
   }
 }

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Mail, MessageSquare, Clock, AlertTriangle, Send, Filter, CheckCircle, Search } from 'lucide-react';
 import PageHeader from '../components/shared/PageHeader';
@@ -7,53 +6,134 @@ import StatusBadge from '../components/shared/StatusBadge';
 import DetailDrawer from '../components/shared/DetailDrawer';
 import FilterBar from '../components/shared/FilterBar';
 import TicketThread from '../components/support/TicketThread';
-import { mockTickets } from '../data/mockData';
+import { getAuthSession, API_BASE_URL } from '../lib/auth';
+
+const formatStatus = (s: string) => {
+    if (s === 'IN_PROGRESS') return 'In Progress';
+    if (!s) return 'Open';
+    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+};
+
+const mapTicketFromServer = (t: any) => ({
+    id: t.id,
+    subject: t.subject,
+    category: t.category,
+    priority: 'Medium', // We use Medium universally given no explicit schema maps it yet
+    status: formatStatus(t.status),
+    userName: `Admin_${t.adminId?.substring(0, 4) || 'Unk'}`,
+    userType: 'Admin',
+    createdDate: new Date(t.createdAt).toLocaleDateString(),
+    lastUpdated: new Date(t.updatedAt).toLocaleDateString(),
+    messages: [] // Loaded lazily
+});
+
+interface TicketData {
+    id: string;
+    subject: string;
+    category: string;
+    priority: string;
+    status: string;
+    userName: string;
+    userType: string;
+    createdDate: string;
+    lastUpdated: string;
+    messages: any[];
+}
+
+interface TicketFilters {
+    status: string | null;
+    priority: string[] | null;
+    searchTerm: string;
+}
 
 const Tickets = () => {
-    const [tickets, setTickets] = useState([]);
+    const [tickets, setTickets] = useState<TicketData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedTicket, setSelectedTicket] = useState(null);
+    const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null);
+    const [isDrawerLoading, setIsDrawerLoading] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [replyText, setReplyText] = useState('');
-    const [activeFilters, setActiveFilters] = useState({ status: null, priority: null, searchTerm: '' });
+    const [activeFilters, setActiveFilters] = useState<TicketFilters>({ status: null, priority: null, searchTerm: '' });
+
+    const loadTickets = async () => {
+        setIsLoading(true);
+        try {
+            const session = getAuthSession();
+            const res = await fetch(`${API_BASE_URL}/api/superadmin/tickets`, {
+                headers: session ? { Authorization: `Bearer ${session.token}` } : {}
+            });
+            const data = await res.json();
+            if (data.success && data.tickets) {
+                setTickets(data.tickets.map(mapTicketFromServer));
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setTickets(mockTickets);
-            setIsLoading(false);
-        }, 800);
-        return () => clearTimeout(timer);
+        loadTickets();
     }, []);
+
+    const handleRowClick = async (row: any) => {
+        setIsDrawerOpen(true);
+        setIsDrawerLoading(true);
+        setSelectedTicket({ ...row, messages: [] });
+
+        try {
+            const session = getAuthSession();
+            const res = await fetch(`${API_BASE_URL}/api/superadmin/tickets/${row.id}`, {
+                headers: session ? { Authorization: `Bearer ${session.token}` } : {}
+            });
+            const data = await res.json();
+            if (data.success && data.data && data.data.messages) {
+                const activeMsgs = data.data.messages.map((m: any) => ({
+                    id: m.id,
+                    sender: m.senderType === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin',
+                    text: m.message,
+                    timestamp: new Date(m.createdAt).toLocaleString(),
+                    isMe: m.senderType === 'SUPER_ADMIN'
+                }));
+                setSelectedTicket(prev => prev ? { ...prev, messages: activeMsgs } : null);
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsDrawerLoading(false);
+        }
+    };
 
     const columns = [
         { key: 'id', label: 'ID', className: 'font-mono text-[10px] font-bold text-gray-400' },
-        { 
-            key: 'subject', 
-            label: 'Subject', 
-            render: (val, row) => (
+        {
+            key: 'subject',
+            label: 'Subject',
+            render: (val: any, row: any) => (
                 <div className="flex flex-col">
                     <span className="font-bold text-gray-900 line-clamp-1">{val}</span>
                     <span className="text-[10px] text-gray-400 font-medium">by {row.userName} ({row.userType})</span>
                 </div>
-            ) 
+            )
         },
         { key: 'category', label: 'Category', className: 'text-xs font-semibold' },
-        { key: 'priority', label: 'Priority', render: (val) => <StatusBadge status={val} /> },
-        { key: 'status', label: 'Status', render: (val) => <StatusBadge status={val} /> },
+        { key: 'priority', label: 'Priority', render: (val: string) => <StatusBadge status={val} /> },
+        { key: 'status', label: 'Status', render: (val: string) => <StatusBadge status={val} /> },
         { key: 'lastUpdated', label: 'Last Updated', className: 'text-xs font-medium text-gray-400' },
     ];
 
     const filterOptions = [
-        { 
-            key: 'searchTerm', 
-            label: 'Quick Search', 
+        {
+            key: 'searchTerm',
+            label: 'Quick Search',
             type: 'search',
             appliedValue: activeFilters.searchTerm
         },
-        { 
-            key: 'status', 
-            label: 'Status', 
-            type: 'select', 
+        {
+            key: 'status',
+            label: 'Status',
+            type: 'select',
             options: [
                 { label: 'Open', value: 'Open' },
                 { label: 'In Progress', value: 'In Progress' },
@@ -62,10 +142,10 @@ const Tickets = () => {
             ],
             appliedValue: activeFilters.status
         },
-        { 
-            key: 'priority', 
-            label: 'Priority', 
-            type: 'checkbox', 
+        {
+            key: 'priority',
+            label: 'Priority',
+            type: 'checkbox',
             options: [
                 { label: 'Urgent', value: 'Urgent' },
                 { label: 'High', value: 'High' },
@@ -83,33 +163,74 @@ const Tickets = () => {
         return true;
     });
 
-    const handleFilterChange = (key, value) => {
+    const handleFilterChange = (key: keyof TicketFilters, value: any) => {
         setActiveFilters(prev => ({ ...prev, [key]: value }));
     };
 
-    const handleSendReply = () => {
-        if (!replyText.trim()) return;
-        
-        const newMessage = {
-            id: Date.now().toString(),
-            sender: 'Super Admin',
-            text: replyText,
-            timestamp: 'Just now',
-            isMe: true
-        };
+    const handleSendReply = async () => {
+        if (!replyText.trim() || !selectedTicket) return;
 
-        const updatedTicket = {
-            ...selectedTicket,
-            messages: [...selectedTicket.messages, newMessage],
-            lastUpdated: 'Just now',
-            status: selectedTicket.status === 'Open' ? 'In Progress' : selectedTicket.status
-        };
+        try {
+            const session = getAuthSession();
+            const res = await fetch(`${API_BASE_URL}/api/superadmin/tickets/${selectedTicket.id}/reply`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session ? { Authorization: `Bearer ${session.token}` } : {})
+                },
+                body: JSON.stringify({ message: replyText })
+            });
 
-        setTickets(prev => prev.map(t => t.id === selectedTicket.id ? updatedTicket : t));
-        setSelectedTicket(updatedTicket);
-        setReplyText('');
-        
-        // Auto-scroll logic would go here
+            const data = await res.json();
+            if (data.success && data.message) {
+                const newMessage = {
+                    id: data.message.id,
+                    sender: 'Super Admin',
+                    text: data.message.message,
+                    timestamp: new Date(data.message.createdAt).toLocaleString(),
+                    isMe: true
+                };
+
+                const newStatus = selectedTicket.status === 'Open' ? 'In Progress' : selectedTicket.status;
+
+                const updatedTicket = {
+                    ...selectedTicket,
+                    messages: [...selectedTicket.messages, newMessage],
+                    lastUpdated: 'Just now',
+                    status: newStatus
+                };
+
+                setTickets(prev => prev.map(t => t.id === selectedTicket.id ? updatedTicket : t));
+                setSelectedTicket(updatedTicket);
+                setReplyText('');
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const handleStatusChange = async (newStatusText: string) => {
+        if (!selectedTicket) return;
+        try {
+            const serverStatus = newStatusText.replace(' ', '_').toUpperCase();
+            const session = getAuthSession();
+            const res = await fetch(`${API_BASE_URL}/api/superadmin/tickets/${selectedTicket.id}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session ? { Authorization: `Bearer ${session.token}` } : {})
+                },
+                body: JSON.stringify({ status: serverStatus })
+            });
+            const data = await res.json();
+            if (data.success) {
+                const updated = { ...selectedTicket, status: newStatusText };
+                setTickets(prev => prev.map(t => t.id === selectedTicket.id ? updated : t));
+                setSelectedTicket(updated);
+            }
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     const kpis = [
@@ -122,8 +243,8 @@ const Tickets = () => {
     return (
         <div className="pb-10 space-y-8 animate-fade-in px-4 sm:px-0">
             <div className="animate-fade-in-scale">
-                <PageHeader 
-                    title="Tickets & Support" 
+                <PageHeader
+                    title="Tickets & Support"
                     subtitle="Manage administrative queries and technical support requests from the KELIRI ecosystem"
                 />
             </div>
@@ -145,17 +266,17 @@ const Tickets = () => {
 
             {/* Main Content Card */}
             <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden animate-fade-in-scale delay-150">
-                <FilterBar 
-                    filters={filterOptions} 
-                    onFilterChange={handleFilterChange} 
-                    onReset={() => setActiveFilters({ status: null, priority: null, searchTerm: '' })} 
+                <FilterBar
+                    filters={filterOptions}
+                    onFilterChange={handleFilterChange}
+                    onReset={() => setActiveFilters({ status: null, priority: null, searchTerm: '' })}
                     activeFiltersCount={Object.values(activeFilters).filter(Boolean).length}
                 />
-                <DataTable 
-                    columns={columns} 
-                    data={filteredData} 
+                <DataTable
+                    columns={columns}
+                    data={filteredData}
                     isLoading={isLoading}
-                    onRowClick={(row) => { setSelectedTicket(row); setIsDrawerOpen(true); }}
+                    onRowClick={handleRowClick}
                 />
             </div>
 
@@ -165,15 +286,10 @@ const Tickets = () => {
                 onClose={() => setIsDrawerOpen(false)}
                 title={`Ticket: ${selectedTicket?.id}`}
                 footerActions={
-                    <select 
+                    <select
                         className="bg-gray-100 border-none rounded-xl px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-gray-700 focus:ring-0 cursor-pointer"
                         value={selectedTicket?.status}
-                        onChange={(e) => {
-                            const newStatus = e.target.value;
-                            const updated = { ...selectedTicket, status: newStatus };
-                            setTickets(prev => prev.map(t => t.id === selectedTicket.id ? updated : t));
-                            setSelectedTicket(updated);
-                        }}
+                        onChange={(e) => handleStatusChange(e.target.value)}
                     >
                         <option value="Open">Status: Open</option>
                         <option value="In Progress">Status: In Progress</option>
@@ -189,11 +305,11 @@ const Tickets = () => {
                             <div className="flex items-start justify-between">
                                 <div className="space-y-1">
                                     <h3 className="text-xl font-black text-gray-900 tracking-tight">{selectedTicket.subject}</h3>
-                                    <p className="text-xs font-semibold text-primary-500 uppercase tracking-wider">{selectedTicket.category} Query</p>
+                                    <p className="text-xs font-semibold text-primary-500 uppercase tracking-wider">{selectedTicket.category.replace('_', ' ')} Query</p>
                                 </div>
                                 <StatusBadge status={selectedTicket.priority} />
                             </div>
-                            
+
                             <div className="pt-4 border-t border-gray-50 flex items-center justify-between gap-4">
                                 <div className="flex items-center gap-2">
                                     <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-700 uppercase">
@@ -215,21 +331,25 @@ const Tickets = () => {
                         <div className="flex-1 space-y-4">
                             <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-1">Conversation History</h4>
                             <div className="bg-gray-50/50 rounded-[2rem] p-6 border border-gray-50">
-                                <TicketThread messages={selectedTicket.messages} />
+                                {isDrawerLoading ? (
+                                    <div className="text-center text-sm text-gray-400">Loading conversation...</div>
+                                ) : (
+                                    <TicketThread messages={selectedTicket.messages} />
+                                )}
                             </div>
                         </div>
 
                         {/* Quick Reply Box */}
                         <div className="bg-white p-4 rounded-[1.5rem] border border-gray-100 shadow-xl shadow-primary-500/5 sticky bottom-0">
                             <div className="relative">
-                                <textarea 
+                                <textarea
                                     className="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-primary-500/10 placeholder:text-gray-400 resize-none no-scrollbar"
                                     placeholder="Type your reply here..."
                                     rows={3}
                                     value={replyText}
                                     onChange={(e) => setReplyText(e.target.value)}
                                 />
-                                <button 
+                                <button
                                     onClick={handleSendReply}
                                     disabled={!replyText.trim()}
                                     className="absolute bottom-3 right-3 p-3 bg-primary-600 text-white rounded-xl shadow-lg shadow-primary-600/20 active:scale-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
